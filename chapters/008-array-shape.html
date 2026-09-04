@@ -6,7 +6,7 @@
   <title>Array Shape &amp; Dimensions — NN Academy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="/css/styles.css">
@@ -19,69 +19,65 @@
             sans: ['Inter', 'system-ui', 'sans-serif'],
             mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
           },
-          colors: {
-            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
-            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
-          }
         }
       }
     }
   </script>
 </head>
-<body data-slug="008-array-shape" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+<body data-slug="008-array-shape" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
 
   <!-- Mobile overlay -->
-  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
-    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
       <div class="flex items-center justify-between">
-        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
-          <span class="text-accent-400">📖</span>
-          <span class="text-sm">NN Academy</span>
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <span class="text-base">📖</span>
+          <span>NN Academy</span>
         </a>
-        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
       </div>
       <div class="mt-3">
-        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
           <span>Progress</span>
           <span id="progress-text">0/65</span>
         </div>
-        <div class="h-1.5 rounded-full bg-zinc-800">
-          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
         </div>
       </div>
     </div>
     <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
   </aside>
 
-  <!-- Main content area -->
+  <!-- Main content -->
   <main class="flex-1 lg:ml-72">
     <!-- Chapter header -->
-    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
-          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
-            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
-            <span>/</span>
-            <span class="text-zinc-300">Array Shape &amp; Dimensions</span>
+          <button id="mobile-menu-btn" class="rounded p-1.5 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Array Shape &amp; Dimensions</span>
           </nav>
         </div>
-        <div class="flex items-center gap-4 text-xs text-zinc-500">
-          <span class="flex items-center gap-1">🕐 10 min read</span>
-          <span class="hidden sm:flex items-center gap-1">💻 8 min code</span>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1">🕐 10 min</span>
+          <span class="hidden sm:flex items-center gap-1">💻 8 min</span>
         </div>
       </div>
     </header>
 
     <!-- Chapter content -->
     <article class="mx-auto max-w-3xl px-6 py-12">
-      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Array Shape &amp; Dimensions</h1>
-      <p class="text-zinc-400 mb-8">Deep dive into .shape, .ndim, .size, and how NumPy represents multi-dimensional data in flat memory.</p>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Array Shape &amp; Dimensions</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Deep dive into .shape, .ndim, .size, and how NumPy represents multi-dimensional data in flat memory.</p>
 
-      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
         
 <h1>Array Shape & Dimensions</h1>
 
@@ -115,10 +111,10 @@
 
       </div>
 
-      <!-- Prev / Next navigation -->
-      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
-        <a href="/chapters/007-copy-vs-view.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
-        <a href="/chapters/009-array-reshape.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/007-copy-vs-view.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/009-array-reshape.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
       </nav>
     </article>
   </main>

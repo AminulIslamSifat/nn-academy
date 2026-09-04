@@ -29,9 +29,9 @@ function renderSidebar() {
     const trackCompleted = track.chapters.filter(s => progress[s]?.completed).length
 
     const btn = document.createElement('button')
-    btn.className = 'sidebar-item flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-zinc-300 hover:bg-zinc-800/50 transition'
+    btn.className = 'sidebar-track-btn'
     btn.setAttribute('aria-expanded', 'true')
-    btn.innerHTML = `<span class="chevron text-zinc-500">▾</span><span class="mr-1">${track.icon}</span><span class="flex-1 text-left">${track.title}</span><span class="text-xs text-zinc-600">${trackCompleted}/${track.chapters.length}</span>`
+    btn.innerHTML = `<span class="chevron" style="color: var(--text-muted); font-size: 0.7rem;">▾</span><span>${track.icon}</span><span class="flex-1 text-left">${track.title}</span><span style="font-size: 0.7rem; color: var(--text-muted);">${trackCompleted}/${track.chapters.length}</span>`
 
     const chaptersDiv = document.createElement('div')
     chaptersDiv.className = 'ml-6 space-y-0.5 mt-1'
@@ -43,9 +43,7 @@ function renderSidebar() {
       const title = slug.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
       const link = document.createElement('a')
       link.href = `/chapters/${slug}.html`
-      link.className = `sidebar-item flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition ${
-        isActive ? 'bg-accent-500/10 text-accent-300 font-medium' : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/30'
-      }`
+      link.className = `sidebar-link ${isActive ? 'active' : ''}`
       link.innerHTML = `
         ${isDone
           ? '<span style="color:#10b981;flex-shrink:0">✓</span>'

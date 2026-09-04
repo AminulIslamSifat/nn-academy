@@ -263,10 +263,10 @@ for (const slug of allSlugs) {
     const nextSlug = idx < allSlugs.length - 1 ? allSlugs[idx + 1] : null
 
     const prevLink = prevSlug
-      ? `<a href="/chapters/${prevSlug}.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>`
+      ? `<a href="/chapters/${prevSlug}.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>`
       : '<div></div>'
     const nextLink = nextSlug
-      ? `<a href="/chapters/${nextSlug}.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>`
+      ? `<a href="/chapters/${nextSlug}.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>`
       : '<div></div>'
 
     // Fill template
