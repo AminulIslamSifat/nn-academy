@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set Operation ufuncs — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="027-ufunc-set-operations" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Set Operation ufuncs</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 8 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 6 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Set Operation ufuncs</h1>
+      <p class="text-zinc-400 mb-8">unique, intersect1d, union1d, setdiff1d, isin — set theory on arrays.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Set Operation ufuncs</h1>
+
+<h2>unique</h2>
+
+<div data-widget="pyrunner" data-cellid="027-cell-1" data-defaultcode="import numpy as np&#10;a = np.array([3, 1, 2, 3, 1, 4, 2, 5, 3])&#10;print(f&quot;unique:       {np.unique(a)}&quot;)&#10;print(f&quot;with counts:  {np.unique(a, return_counts=True)}&quot;)&#10;vals, inv = np.unique(a, return_inverse=True)&#10;print(f&quot;reconstruct:  {vals[inv]}&quot;)&#10;print(f&quot;match: {np.array_equal(vals[inv], a)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h2>Set Operations</h2>
+
+<div data-widget="pyrunner" data-cellid="027-cell-2" data-defaultcode="import numpy as np&#10;a = np.array([1, 2, 3, 4, 5])&#10;b = np.array([3, 4, 5, 6, 7])&#10;print(f&quot;intersect: {np.intersect1d(a, b)}&quot;)&#10;print(f&quot;union:     {np.union1d(a, b)}&quot;)&#10;print(f&quot;setdiff:   {np.setdiff1d(a, b)}&quot;)&#10;print(f&quot;setxor:    {np.setxor1d(a, b)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h2>Membership Testing</h2>
+
+<div data-widget="pyrunner" data-cellid="027-cell-3" data-defaultcode="import numpy as np&#10;a = np.array([1, 2, 3, 4, 5, 6, 7, 8])&#10;test = np.array([2, 4, 9, 1])&#10;mask = np.isin(a, test)&#10;print(f&quot;isin mask: {mask}&quot;)&#10;print(f&quot;matching:  {a[mask]}&quot;)&#10;print(f&quot;not in:    {a[~mask]}&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="027-ufunc-set-operations" data-quizid="quiz-027-ufunc-set-operations"></div>
+
+<script type="application/json" id="quiz-027-ufunc-set-operations">[{"id":"q1","type":"code-output","prompt":"np.intersect1d([1,2,3],[2,3,4]) returns:","code":"import numpy as np\nprint(np.intersect1d([1,2,3],[2,3,4]))","options":["[2 3]","[1 2 3 4]","[1 4]","[2]"],"correctIndex":0,"explanation":"Intersection: elements in both.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"np.unique(a, return_inverse=True) gives:","options":["Indices to reconstruct original","Counts","First occurrence","Nothing"],"correctIndex":0,"explanation":"inverse indices: unique[inverse]==original.","randomize":true},{"id":"q3","type":"code-output","prompt":"np.setdiff1d([1,2,3,4],[3,4,5]) returns:","code":"import numpy as np\nprint(np.setdiff1d([1,2,3,4],[3,4,5]))","options":["[1 2]","[3 4]","[5]","[1 2 5]"],"correctIndex":0,"explanation":"In first but not second: [1,2].","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/026-ufunc-hyperbolic.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/005-linear-layer.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

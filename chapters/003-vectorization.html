@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vectorization: Kill Your Loops — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="003-vectorization" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Vectorization: Kill Your Loops</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 15 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 12 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Vectorization: Kill Your Loops</h1>
+      <p class="text-zinc-400 mb-8">Replace Python loops with array operations. Understand why vectorized code is 100x faster and how to think in batches.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Vectorization: Kill Your Loops</h1>
+
+<p>The single most important mindset shift in NumPy: <strong>never loop over elements when an array operation can do it for you.</strong></p>
+
+<h2>The Problem with Loops</h2>
+
+<p>Python loops are slow because each iteration involves type checking, object allocation, and interpreter overhead. NumPy pushes the loop down to optimized C/Fortran.</p>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;# ❌ Slow: Python loop&#10;result = np.zeros(1000000)&#10;for i in range(1000000):&#10;    result[i] = np.sin(i) <em> np.cos(i)&#10;&#10;# ✅ Fast: Vectorized&#10;result = np.sin(np.arange(1000000)) </em> np.cos(np.arange(1000000))</code></pre>
+
+<div data-widget="pyrunner" data-cellid="003-cell-1" data-defaultcode="import numpy as np&#10;import time&#10;&#10;n = 1_000_000&#10;x = np.arange(n, dtype=np.float64)&#10;&#10;# Vectorized&#10;start = time.perf_counter()&#10;result = np.sin(x) * np.cos(x)&#10;vec_time = time.perf_counter() - start&#10;&#10;print(f&quot;Vectorized: {vec_time*1000:.2f}ms&quot;)&#10;print(f&quot;Result shape: {result.shape}&quot;)&#10;print(f&quot;First 5: {result[:5]}&quot;)&#10;" data-timeout="10000" data-title=""></div>
+
+<h2>Element-wise Operations</h2>
+
+<p>All arithmetic operators work element-wise on arrays:</p>
+
+<pre><code class="language-python">a = np.array([1, 2, 3])&#10;b = np.array([4, 5, 6])&#10;&#10;a + b    # [5, 7, 9]&#10;a <em> b    # [4, 10, 18]  (element-wise, NOT dot product!)&#10;a </em>* 2   # [1, 4, 9]&#10;np.exp(a)  # [e, e², e³]</code></pre>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="* is NOT matrix multiplication" data-content="`a * b` multiplies element-by-element. For dot products, use `a @ b` or `np.dot(a, b)`. This trips up everyone at first."></div>
+
+<h2>The Dot Product</h2>
+
+<p>The fundamental operation in neural networks:</p>
+
+<pre><code class="language-python">weights = np.random.randn(784, 128)  # layer weights&#10;x = np.random.randn(784)             # single input&#10;&#10;output = x @ weights  # shape (128,) — one forward pass</code></pre>
+
+<div data-widget="pyrunner" data-cellid="003-cell-2" data-defaultcode="import numpy as np&#10;&#10;# Simulate a single linear layer&#10;np.random.seed(42)&#10;weights = np.random.randn(4, 3)  # 4 inputs → 3 outputs&#10;bias = np.zeros(3)&#10;x = np.array([1.0, 2.0, 3.0, 4.0])&#10;&#10;output = x @ weights + bias&#10;print(&quot;Input shape:&quot;, x.shape)&#10;print(&quot;Weights shape:&quot;, weights.shape)&#10;print(&quot;Output shape:&quot;, output.shape)&#10;print(&quot;Output:&quot;, output.round(4))&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Batched Operations</h2>
+
+<p>Instead of looping over samples, stack them into a matrix:</p>
+
+<pre><code class="language-python"># ❌ Loop over batch&#10;for i in range(batch_size):&#10;    outputs[i] = X[i] @ W + b&#10;&#10;# ✅ Single matrix multiply&#10;outputs = X @ W + b  # X: (batch, features), W: (features, out)</code></pre>
+
+<div data-widget="pyrunner" data-cellid="003-cell-3" data-defaultcode="import numpy as np&#10;import time&#10;&#10;np.random.seed(0)&#10;batch_size = 256&#10;features = 512&#10;out_features = 128&#10;&#10;X = np.random.randn(batch_size, features)&#10;W = np.random.randn(features, out_features)&#10;b = np.random.randn(out_features)&#10;&#10;# Vectorized forward pass&#10;start = time.perf_counter()&#10;Y = X @ W + b&#10;elapsed = time.perf_counter() - start&#10;&#10;print(f&quot;Batch forward pass: {elapsed*1000:.3f}ms&quot;)&#10;print(f&quot;X: {X.shape} @ W: {W.shape} → Y: {Y.shape}&quot;)&#10;" data-timeout="10000" data-title=""></div>
+
+<div data-widget="visualizer" data-mode="matmul" data-shapea="3,1" data-shapeb="1,4" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="003-vectorization" data-quizid="quiz-003-vectorization"></div>
+
+<script type="application/json" id="quiz-003-vectorization">[{"id":"q1","type":"shape-prediction","prompt":"If X has shape (32, 784) and W has shape (784, 256), what is the shape of X @ W?","options":["(32, 256)","(784, 784)","(32, 784)","(256, 32)"],"correctIndex":0,"explanation":"Matrix multiply: (m, k) @ (k, n) → (m, n). So (32, 784) @ (784, 256) → (32, 256).","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What does a <em> b compute for two 1D arrays of the same length?","options":["Element-wise multiplication","Dot product","Cross product","Outer product"],"correctIndex":0,"explanation":"The </em> operator is always element-wise in NumPy. For dot product, use @ or np.dot().","randomize":true},{"id":"q3","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([2, 3, 4])\nprint(a <strong> 2)","options":["[4 9 16]","[2 3 4 2 3 4]","8","Error"],"correctIndex":0,"explanation":"</strong> is element-wise exponentiation. Each element is squared: 2²=4, 3²=9, 4²=16.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/015-array-filter.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/004-broadcasting.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

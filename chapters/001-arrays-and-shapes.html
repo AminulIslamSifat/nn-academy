@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrays &amp; Shapes — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="001-arrays-and-shapes" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Arrays &amp; Shapes</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 12 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 8 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Arrays &amp; Shapes</h1>
+      <p class="text-zinc-400 mb-8">The fundamental building block of NumPy — the ndarray. Learn how data lives in contiguous memory and why shape matters.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Arrays & Shapes</h1>
+
+<p>Everything in deep learning is a tensor. In NumPy, that tensor is the <code>ndarray</code> — a contiguous block of typed memory with a <em>shape</em> that tells you how to interpret it.</p>
+
+<h2>Why Not Python Lists?</h2>
+
+<p>Python lists store pointers to objects. NumPy arrays store raw values in contiguous memory. The difference is <strong>orders of magnitude</strong> in speed for numerical work.</p>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;# A simple 1D array&#10;a = np.array([1.0, 2.0, 3.0, 4.0])&#10;print(a)        # [1. 2. 3. 4.]&#10;print(a.shape)  # (4,)&#10;print(a.dtype)  # float64</code></pre>
+
+<div data-widget="pyrunner" data-cellid="001-cell-1" data-defaultcode="import numpy as np&#10;&#10;a = np.array([1.0, 2.0, 3.0, 4.0])&#10;print(&quot;Array:&quot;, a)&#10;print(&quot;Shape:&quot;, a.shape)&#10;print(&quot;Dtype:&quot;, a.dtype)&#10;print(&quot;Memory (bytes):&quot;, a.nbytes)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Shape: The Lens on Memory</h2>
+
+<p>The same 12 numbers can be viewed as a vector, a row, a column, or a matrix. Shape doesn't move data — it changes how you <em>index</em> into it.</p>
+
+<pre><code class="language-python">data = np.arange(12)  # 0 through 11&#10;&#10;as_row = data.reshape(1, 12)    # shape (1, 12)&#10;as_col = data.reshape(12, 1)    # shape (12, 1)&#10;as_mat = data.reshape(3, 4)     # shape (3, 4)</code></pre>
+
+<div data-widget="pyrunner" data-cellid="001-cell-2" data-defaultcode="import numpy as np&#10;&#10;data = np.arange(12)&#10;print(&quot;Flat:&quot;, data.shape)&#10;&#10;as_mat = data.reshape(3, 4)&#10;print(&quot;Matrix (3×4):&quot;)&#10;print(as_mat)&#10;&#10;as_3d = data.reshape(2, 2, 3)&#10;print(&quot;\n3D tensor (2×2×3):&quot;)&#10;print(as_3d)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Creating Arrays</h2>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Common constructors" data-content="Use `np.zeros`, `np.ones`, `np.full`, `np.arange`, `np.linspace`, and `np.random.randn` to create arrays without Python loops."></div>
+
+<pre><code class="language-python">zeros = np.zeros((3, 4))       # 3×4 matrix of 0s&#10;ones = np.ones((2, 2, 2))      # 2×2×2 tensor of 1s&#10;randn = np.random.randn(5, 3)  # 5×3 from standard normal</code></pre>
+
+<div data-widget="pyrunner" data-cellid="001-cell-3" data-defaultcode="import numpy as np&#10;&#10;zeros = np.zeros((3, 4))&#10;randn = np.random.randn(3, 3)&#10;&#10;print(&quot;Zeros:&quot;)&#10;print(zeros)&#10;print(&quot;\nRandom normal:&quot;)&#10;print(randn)&#10;print(&quot;\nMean ≈ 0?&quot;, randn.mean().round(2))&#10;" data-timeout="5" data-title=""></div>
+
+<h2>The ndim, size, nbytes Trinity</h2>
+
+<p>Every array has three properties you'll check constantly:</p>
+
+<table><tr><td>Property</td><td>Meaning</td></tr>
+</table>
+<table><tr><td><code>ndim</code></td><td>Number of axes (dimensions)</td></tr>
+<tr><td><code>shape</code></td><td>Tuple of axis lengths</td></tr>
+<tr><td><code>size</code></td><td>Total elements (<code>prod(shape)</code>)</td></tr>
+<tr><td><code>nbytes</code></td><td>Memory footprint (<code>size × itemsize</code>)</td></tr>
+</table>
+
+<div data-widget="quiz" data-chapterslug="001-arrays-and-shapes" data-quizid="quiz-001-arrays-and-shapes"></div>
+
+<script type="application/json" id="quiz-001-arrays-and-shapes">[{"id":"q1","type":"shape-prediction","prompt":"What is the shape of np.arange(24).reshape(2, 3, 4)?","options":["(2, 3, 4)","(24,)","(4, 3, 2)","(2, 12)"],"correctIndex":0,"explanation":"reshape(2, 3, 4) creates a 3D tensor with 2 blocks of 3 rows and 4 columns. Total elements: 2×3×4 = 24. ✓","randomize":true},{"id":"q2","type":"code-output","prompt":"What does np.zeros((2, 3)).size return?","code":"import numpy as np\nx = np.zeros((2, 3))\nprint(x.size)","options":["6","2","3","(2, 3)"],"correctIndex":0,"explanation":"size returns the total number of elements: 2 × 3 = 6.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"Which creates a 4×4 identity matrix?","options":["np.eye(4)","np.ones((4,4))","np.diag(4)","np.identity_matrix(4)"],"correctIndex":0,"explanation":"np.eye(n) creates an n×n identity matrix. np.ones creates all-ones, np.diag with a scalar creates a diagonal matrix with that value.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <div></div>
+        <a href="/chapters/002-indexing-and-slicing.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

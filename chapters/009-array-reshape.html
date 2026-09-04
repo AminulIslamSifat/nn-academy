@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reshape &amp; Transpose — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="009-array-reshape" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Reshape &amp; Transpose</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 12 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 10 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Reshape &amp; Transpose</h1>
+      <p class="text-zinc-400 mb-8">Change array shapes without copying data. Master reshape, ravel, flatten, transpose, and the -1 trick.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Reshape & Transpose</h1>
+
+<p>Reshaping reinterprets the same memory with a different shape — no data movement, instant operation.</p>
+
+<h2>Basic Reshape</h2>
+
+<div data-widget="pyrunner" data-cellid="009-cell-1" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12)&#10;print(f&quot;Original: shape={a.shape}, values={a}&quot;)&#10;&#10;b = a.reshape(3, 4)&#10;print(f&quot;Reshaped (3,4):&#10;{b}&quot;)&#10;&#10;c = a.reshape(2, 2, 3)&#10;print(f&quot;Reshaped (2,2,3): shape={c.shape}&quot;)&#10;&#10;# Total elements must match!&#10;try:&#10;    a.reshape(5, 3)  # 15 ≠ 12&#10;except ValueError as e:&#10;    print(f&quot;&#10;Error: {e}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>The -1 Trick</h2>
+
+<p>Use <code>-1</code> to let NumPy infer one dimension:</p>
+
+<div data-widget="pyrunner" data-cellid="009-cell-2" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(24)&#10;&#10;# Infer the last dimension&#10;b = a.reshape(4, -1)    # 24 / 4 = 6 → (4, 6)&#10;print(f&quot;reshape(4, -1):  {b.shape}&quot;)&#10;&#10;c = a.reshape(-1, 8)    # 24 / 8 = 3 → (3, 8)&#10;print(f&quot;reshape(-1, 8):  {c.shape}&quot;)&#10;&#10;d = a.reshape(2, 3, -1) # 24 / (2*3) = 4 → (2, 3, 4)&#10;print(f&quot;reshape(2,3,-1): {d.shape}&quot;)&#10;&#10;# Common pattern: flatten batch for processing, then restore&#10;batch = np.random.randn(32, 28, 28)  # 32 images of 28×28&#10;flat = batch.reshape(32, -1)          # (32, 784)&#10;restored = flat.reshape(32, 28, 28)   # back to images&#10;print(f&quot;&#10;Batch: {batch.shape} → Flat: {flat.shape} → Restored: {restored.shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Reshape Returns a View (Usually)</h2>
+
+<div data-widget="pyrunner" data-cellid="009-cell-3" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12).reshape(3, 4)&#10;b = a.reshape(4, 3)&#10;&#10;print(f&quot;Shares memory: {np.shares_memory(a, b)}&quot;)&#10;print(f&quot;b.base is a: {b.base is a}&quot;)&#10;&#10;# Modify b → a changes&#10;b[0, 0] = 999&#10;print(f&quot;&#10;a[0,0] after b[0,0]=999: {a[0,0]}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Transpose</h2>
+
+<p>Transpose swaps axes — also a view, no data copied:</p>
+
+<div data-widget="pyrunner" data-cellid="009-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(6).reshape(2, 3)&#10;print(f&quot;Original:&#10;{a}  shape={a.shape}&quot;)&#10;&#10;print(f&quot;&#10;.T (transpose):&#10;{a.T}  shape={a.T.shape}&quot;)&#10;&#10;# For higher dimensions, specify axis order&#10;t = np.zeros((2, 3, 4))&#10;print(f&quot;&#10;3D tensor: {t.shape}&quot;)&#10;print(f&quot;transpose(1,0,2): {t.transpose(1,0,2).shape}&quot;)&#10;print(f&quot;transpose(2,1,0): {t.transpose(2,1,0).shape}&quot;)&#10;&#10;# swapaxes for swapping two specific axes&#10;print(f&quot;swapaxes(0,2): {t.swapaxes(0,2).shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>ravel vs flatten</h2>
+
+<div data-widget="pyrunner" data-cellid="009-cell-5" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(6).reshape(2, 3)&#10;&#10;r = a.ravel()    # view when possible&#10;f = a.flatten()  # always a copy&#10;&#10;print(f&quot;ravel:   {r}, shares_memory={np.shares_memory(a, r)}&quot;)&#10;print(f&quot;flatten: {f}, shares_memory={np.shares_memory(a, f)}&quot;)&#10;&#10;# Order matters: &#39;C&#39; (row-major) vs &#39;F&#39; (column-major)&#10;print(f&quot;&#10;ravel(&#39;C&#39;): {a.ravel(&#39;C&#39;)}&quot;)&#10;print(f&quot;ravel(&#39;F&#39;): {a.ravel(&#39;F&#39;)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="009-array-reshape" data-quizid="quiz-009-array-reshape"></div>
+
+<script type="application/json" id="quiz-009-array-reshape">[{"id":"q1","type":"shape-prediction","prompt":"What is the shape of np.arange(24).reshape(2, -1, 4)?","options":["(2, 3, 4)","(2, 4, 3)","(2, 12)","Error"],"correctIndex":0,"explanation":"24 / (2 × 4) = 3, so -1 resolves to 3. Shape is (2, 3, 4).","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Does reshape always return a view?","options":["Usually yes, but may copy if memory isn't contiguous","Always yes","Always no","Only for 2D arrays"],"correctIndex":0,"explanation":"Reshape returns a view when the memory layout allows it. After transpose or non-contiguous slicing, it may need to copy.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What's the difference between ravel() and flatten()?","options":["ravel returns a view when possible; flatten always copies","They are identical","flatten is faster","ravel only works on 2D"],"correctIndex":0,"explanation":"ravel() tries to return a view (zero-copy), flatten() always allocates a new array.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/008-array-shape.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/010-array-iterating.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

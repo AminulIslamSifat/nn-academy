@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regularization — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="033-regularization" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Regularization</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 22 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 18 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Regularization</h1>
+      <p class="text-zinc-400 mb-8">Stop your network from memorizing training data. Implement L2 weight decay, dropout, and early stopping from scratch in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Regularization</h1>
+
+<p>Your MNIST network hits 97% on training but maybe 95% on test. That gap? ==Overfitting.== The network memorized noise instead of learning patterns. Regularization fights this by constraining what the network can learn.</p>
+
+<p>Three weapons: weight decay, dropout, and early stopping.</p>
+
+<h2>L2 Weight Decay</h2>
+
+<p>Add a penalty proportional to the squared magnitude of weights:</p>
+
+<div data-widget="katex" data-latex="L_{total} = L_{original} + \frac{\lambda}{2}\sum w^2" data-display="true"></div>
+
+<p>The gradient gets an extra term:</p>
+
+<div data-widget="katex" data-latex="\frac{\partial L_{total}}{\partial w} = \frac{\partial L_{original}}{\partial w} + \lambda w" data-display="true"></div>
+
+<p>This pushes weights toward zero. Smaller weights → smoother decision boundaries → better generalization.</p>
+
+<pre><code class="language-python">def add_weight_decay(grads, params, lam):&#10;    &quot;&quot;&quot;Add L2 regularization gradient to existing grads.&quot;&quot;&quot;&#10;    for key in grads:&#10;        grads[key] = grads[key] + lam * params[key]&#10;    return grads</code></pre>
+
+<div data-widget="pyrunner" data-cellid="033-cell-1" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;W = np.random.randn(5, 3) * 2.0  # large weights&#10;lam = 0.01&#10;&#10;# Original gradient (fake for demo)&#10;orig_grad = np.random.randn(5, 3) * 0.1&#10;&#10;# With weight decay&#10;wd_grad = orig_grad + lam * W&#10;&#10;print(&quot;Effect of L2 weight decay (λ=0.01):&quot;)&#10;print(f&quot;{&#39;&#39;:&gt;12} | {&#39;Original&#39;:&gt;10} | {&#39;With WD&#39;:&gt;10} | {&#39;Shift&#39;:&gt;10}&quot;)&#10;print(&quot;─&quot; * 52)&#10;for i in range(3):&#10;    og = orig_grad[i, 0]&#10;    wg = wd_grad[i, 0]&#10;    print(f&quot;  W[{i},0]={W[i,0]:+.3f} | {og:+10.6f} | {wg:+10.6f} | {wg-og:+10.6f}&quot;)&#10;&#10;print(f&quot;\n💡 Large weights get pushed harder toward zero&quot;)&#10;print(f&quot;   Weight norm before: {np.linalg.norm(W):.4f}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Weight Decay ≠ Learning Rate" data-content="λ controls how aggressively weights shrink. Too high → underfitting (weights collapse to zero). Too low → no effect. Start with λ=0.0001 and adjust."></div>
+
+<h2>Dropout</h2>
+
+<p>During training, randomly zero out neurons with probability <span data-widget="katex" data-latex="p" data-display="false"></span>. This forces the network to not rely on any single neuron — it must learn redundant representations.</p>
+
+<div data-widget="katex" data-latex="h_{train} = \frac{mask \odot h}{1 - p}" data-display="true"></div>
+
+<p>The division by <span data-widget="katex" data-latex="(1-p)" data-display="false"></span> is ==inverted dropout== — it scales activations UP during training so you don't need to scale DOWN during inference.</p>
+
+<pre><code class="language-python">def dropout(H, p_drop, training=True):&#10;    if not training or p_drop == 0:&#10;        return H, np.ones_like(H)&#10;    mask = (np.random.rand(<em>H.shape) &gt; p_drop).astype(float)&#10;    return H </em> mask / (1.0 - p_drop), mask</code></pre>
+
+<div data-widget="pyrunner" data-cellid="033-cell-2" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;H = np.ones((4, 8)) * 2.0  # all activations = 2.0&#10;p_drop = 0.5&#10;&#10;# Training mode&#10;mask = (np.random.rand(*H.shape) &gt; p_drop).astype(float)&#10;H_dropped = H * mask / (1.0 - p_drop)&#10;&#10;print(&quot;Dropout (p=0.5) on activations all equal to 2.0:&quot;)&#10;print(f&quot;Original:  {H[0]}&quot;)&#10;print(f&quot;Mask:      {mask[0].astype(int)}&quot;)&#10;print(f&quot;Dropped:   {H_dropped[0]}&quot;)&#10;print(f&quot;\nMean before dropout: {H.mean():.2f}&quot;)&#10;print(f&quot;Mean after dropout:  {H_dropped.mean():.2f} ← same! (inverted dropout)&quot;)&#10;print(f&quot;Active neurons: {mask.sum()}/{mask.size} ({mask.mean()*100:.0f}%)&quot;)&#10;&#10;# Inference mode: no dropout, no scaling&#10;print(f&quot;\nInference: use full activations, no mask needed ✅&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h3>Dropout in Backprop</h3>
+
+<p>During backward pass, apply the SAME mask used in forward:</p>
+
+<pre><code class="language-python"># Forward&#10;H_drop, mask = dropout(H, p_drop, training=True)&#10;&#10;# Backward&#10;dH = dH_drop * mask / (1.0 - p_drop)  # same mask!</code></pre>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Save the Mask" data-content="You MUST store the dropout mask from the forward pass and reuse it in backward. Generating a new random mask breaks the gradient computation entirely."></div>
+
+<h2>Early Stopping</h2>
+
+<p>The simplest regularizer: stop training when validation loss stops improving.</p>
+
+<pre><code class="language-python">class EarlyStopping:&#10;    def __init__(self, patience=5):&#10;        self.patience = patience&#10;        self.best_loss = float(&#39;inf&#39;)&#10;        self.counter = 0&#10;        self.best_params = None&#10;    &#10;    def step(self, val_loss, params):&#10;        if val_loss &lt; self.best_loss:&#10;            self.best_loss = val_loss&#10;            self.counter = 0&#10;            self.best_params = {k: v.copy() for k, v in params.items()}&#10;        else:&#10;            self.counter += 1&#10;        return self.counter &gt;= self.patience</code></pre>
+
+<div data-widget="pyrunner" data-cellid="033-cell-3" data-defaultcode="import numpy as np&#10;&#10;# Simulate training curves&#10;np.random.seed(42)&#10;epochs = 30&#10;train_loss = 2.0 * np.exp(-np.arange(epochs) * 0.15) + 0.1&#10;val_loss = 2.0 * np.exp(-np.arange(epochs) * 0.10) + 0.3 + np.random.randn(epochs) * 0.05&#10;&#10;# After epoch ~15, val_loss starts increasing while train_loss keeps dropping&#10;val_loss[15:] += np.arange(15) * 0.03&#10;&#10;patience = 5&#10;best_loss = float(&#39;inf&#39;)&#10;counter = 0&#10;stop_epoch = epochs&#10;&#10;print(f&quot;{&#39;Epoch&#39;:&gt;5} | {&#39;Train&#39;:&gt;7} | {&#39;Val&#39;:&gt;7} | {&#39;Status&#39;:&gt;12}&quot;)&#10;print(&quot;─&quot; * 40)&#10;for e in range(epochs):&#10;    status = &quot;&quot;&#10;    if val_loss[e] &lt; best_loss:&#10;        best_loss = val_loss[e]&#10;        counter = 0&#10;        status = &quot;✓ improved&quot;&#10;    else:&#10;        counter += 1&#10;        status = f&quot;no improve ({counter}/{patience})&quot;&#10;    &#10;    if counter &gt;= patience:&#10;        stop_epoch = e&#10;        status = &quot;🛑 STOPPED&quot;&#10;        print(f&quot;{e+1:5d} | {train_loss[e]:7.4f} | {val_loss[e]:7.4f} | {status}&quot;)&#10;        break&#10;    &#10;    if e % 5 == 0 or counter &gt; 0:&#10;        print(f&quot;{e+1:5d} | {train_loss[e]:7.4f} | {val_loss[e]:7.4f} | {status}&quot;)&#10;&#10;print(f&quot;\nBest validation loss: {best_loss:.4f} at epoch {stop_epoch - patience + 1}&quot;)&#10;print(f&quot;Training stopped at epoch {stop_epoch} (patience={patience})&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Putting It All Together</h2>
+
+<p>Here's how regularization integrates into the training loop from chapter 032:</p>
+
+<pre><code class="language-python"># In forward pass:&#10;Z1 = X @ W1 + b1&#10;H = np.maximum(0, Z1)&#10;H_drop, mask = dropout(H, p_drop=0.2, training=True)  # ← dropout&#10;Z2 = H_drop @ W2 + b2&#10;&#10;# In backward pass:&#10;dZ2 = (probs - y_oh) / N&#10;dW2 = H_drop.T @ dZ2  # ← use dropped-out activations&#10;db2 = np.sum(dZ2, axis=0)&#10;dH_drop = dZ2 @ W2.T&#10;dH = dH_drop <em> mask / (1.0 - 0.2)  # ← same mask&#10;dZ1 = dH </em> (Z1 &gt; 0).astype(float)&#10;dW1 = X.T @ dZ1&#10;db1 = np.sum(dZ1, axis=0)&#10;&#10;# Add weight decay to gradients:&#10;dW1 += lam <em> W1&#10;dW2 += lam </em> W2&#10;&#10;# After each epoch, check early stopping:&#10;if early_stopper.step(val_loss, {&quot;W1&quot;: W1, &quot;b1&quot;: b1, &quot;W2&quot;: W2, &quot;b2&quot;: b2}):&#10;    break</code></pre>
+
+<blockquote>[!IMPORTANT] Regularization Priority</blockquote>
+<blockquote>1. <strong>Start without regularization</strong> — establish baseline</blockquote>
+<blockquote>2. <strong>Add weight decay</strong> (λ=0.0001) if overfitting</blockquote>
+<blockquote>3. <strong>Add dropout</strong> (p=0.2–0.5) if still overfitting</blockquote>
+<blockquote>4. <strong>Use early stopping</strong> always — it's free insurance</blockquote>
+<blockquote>Don't stack everything at once. Diagnose first.</blockquote>
+
+<h2>Quick Reference</h2>
+
+<table><tr><td>Technique</td><td>When to Use</td><td>Typical Value</td><td>Cost</td></tr>
+</table>
+<table><tr><td>L2 Weight Decay</td><td>Default regularizer</td><td>λ = 0.0001</td><td>Negligible</td></tr>
+<tr><td>Dropout</td><td>Wide networks, overfitting</td><td>p = 0.2–0.5</td><td>Store mask per layer</td></tr>
+<tr><td>Early Stopping</td><td>Always</td><td>patience = 5–10</td><td>Save best params</td></tr>
+<tr><td>Data Augmentation</td><td>Image tasks</td><td>Varies</td><td>Preprocessing time</td></tr>
+</table>
+
+<div data-widget="quiz" data-chapterslug="033-regularization" data-quizid="quiz-033-regularization"></div>
+
+<script type="application/json" id="quiz-033-regularization">[{"id":"q1","type":"multiple-choice","prompt":"Why does inverted dropout divide by (1-p) during training?","options":["To increase the gradient signal","So that expected activation values stay the same, meaning no scaling is needed at inference time","To compensate for the reduced number of active neurons","It doesn't matter — it's just a convention"],"correctIndex":1,"explanation":"Without scaling, the expected value of dropped activations is (1-p)·h. Dividing by (1-p) restores the expected value to h. At inference, all neurons are active and no scaling is needed.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What happens if you use a different random mask in backward than in forward for dropout?","options":["Nothing — dropout is stochastic anyway","The gradient becomes noisy but still correct on average","The gradient computation is completely wrong — you're differentiating through a different function than the forward pass","It acts as additional regularization"],"correctIndex":2,"explanation":"Backprop computes the gradient of the EXACT function computed in forward. Using a different mask means you're computing the gradient of a different function. The saved mask ensures consistency.","randomize":false},{"id":"q3","type":"code-output","prompt":"What is the L2 regularization gradient for w = [3.0, -2.0] with λ = 0.1?","code":"import numpy as np\nw = np.array([3.0, -2.0])\nlam = 0.1\nreg_grad = lam * w\nprint(reg_grad)","options":["[0.3, -0.2]","[0.09, 0.04]","[3.0, -2.0]","[0.03, -0.02]"],"correctIndex":0,"explanation":"L2 gradient = λ·w = 0.1 × [3.0, -2.0] = [0.3, -0.2]. This pushes both weights toward zero proportionally to their magnitude.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/032-mnist-from-scratch.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/034-evaluation-metrics.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loss Functions — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="029-loss-functions" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Loss Functions</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 22 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 18 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Loss Functions</h1>
+      <p class="text-zinc-400 mb-8">How neural networks measure their mistakes. Implement MSE, cross-entropy, and softmax cross-entropy from scratch with numerically stable gradients.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Loss Functions</h1>
+
+<p>A loss function answers one question: ==how wrong is the network right now?== Without it, there's no signal for learning. The loss converts predictions and targets into a single scalar that backpropagation can differentiate.</p>
+
+<p>Choosing the wrong loss is like navigating with a broken compass — your network will train, but it won't arrive anywhere useful.</p>
+
+<h2>Mean Squared Error (Regression)</h2>
+
+<p>The default for continuous outputs:</p>
+
+<div data-widget="katex" data-latex="\text{MSE} = \frac{1}{N}\sum_{i=1}^{N}(y_i - \hat{y}_i)^2" data-display="true"></div>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def mse(y_true, y_pred):&#10;    return np.mean((y_true - y_pred) <em>* 2)&#10;&#10;def mse_gradient(y_true, y_pred):&#10;    &quot;&quot;&quot;d(MSE)/d(y_pred) — what backprop needs.&quot;&quot;&quot;&#10;    return 2.0 </em> (y_pred - y_true) / y_true.size</code></pre>
+
+<div data-widget="pyrunner" data-cellid="029-cell-1" data-defaultcode="import numpy as np&#10;&#10;def mse(y_true, y_pred):&#10;    return np.mean((y_true - y_pred) ** 2)&#10;&#10;def mse_grad(y_true, y_pred):&#10;    return 2.0 * (y_pred - y_true) / y_true.size&#10;&#10;np.random.seed(42)&#10;y_true = np.array([3.0, -1.5, 2.0, 0.5])&#10;y_pred = np.array([2.8, -1.0, 2.5, 0.0])&#10;&#10;loss = mse(y_true, y_pred)&#10;grad = mse_grad(y_true, y_pred)&#10;&#10;print(f&quot;MSE Loss: {loss:.4f}&quot;)&#10;print(f&quot;Gradient w.r.t. predictions: {grad}&quot;)&#10;print(f&quot;\nGradient points TOWARD the true values:&quot;)&#10;for yt, yp, g in zip(y_true, y_pred, grad):&#10;    direction = &quot;↓ decrease&quot; if g &gt; 0 else &quot;↑ increase&quot;&#10;    print(f&quot;  pred={yp:+.1f} → true={yt:+.1f}, grad={g:+.4f} ({direction})&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Why Square the Error?" data-content="Squaring makes the loss always positive and penalizes large errors more than small ones. It also makes the gradient smooth and proportional to the error — bigger mistakes produce bigger corrective signals."></div>
+
+<h2>Binary Cross-Entropy</h2>
+
+<p>For binary classification (sigmoid output). Measures the divergence between predicted probability and true label:</p>
+
+<div data-widget="katex" data-latex="\text{BCE} = -\frac{1}{N}\sum_{i=1}^{N}\left[y_i \log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)\right]" data-display="true"></div>
+
+<pre><code class="language-python">def binary_cross_entropy(y_true, y_pred, eps=1e-7):&#10;    &quot;&quot;&quot;Numerically stable BCE.&quot;&quot;&quot;&#10;    y_pred = np.clip(y_pred, eps, 1 - eps)&#10;    return -np.mean(&#10;        y_true <em> np.log(y_pred) + (1 - y_true) </em> np.log(1 - y_pred)&#10;    )&#10;&#10;def bce_gradient(y_true, y_pred, eps=1e-7):&#10;    &quot;&quot;&quot;d(BCE)/d(y_pred) before sigmoid derivative.&quot;&quot;&quot;&#10;    y_pred = np.clip(y_pred, eps, 1 - eps)&#10;    return -(y_true / y_pred - (1 - y_true) / (1 - y_pred)) / y_true.size</code></pre>
+
+<div data-widget="pyrunner" data-cellid="029-cell-2" data-defaultcode="import numpy as np&#10;&#10;def bce(y_true, y_pred, eps=1e-7):&#10;    y_pred = np.clip(y_pred, eps, 1 - eps)&#10;    return -np.mean(&#10;        y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred)&#10;    )&#10;&#10;# Perfect predictions vs terrible ones&#10;y_true = np.array([1, 1, 0, 0])&#10;good_pred = np.array([0.95, 0.90, 0.05, 0.10])&#10;bad_pred = np.array([0.30, 0.40, 0.60, 0.70])&#10;&#10;print(f&quot;Good predictions BCE: {bce(y_true, good_pred):.4f}&quot;)&#10;print(f&quot;Bad predictions BCE:  {bce(y_true, bad_pred):.4f}&quot;)&#10;print(f&quot;\nRatio: {bce(y_true, bad_pred) / bce(y_true, good_pred):.1f}x worse&quot;)&#10;&#10;# Edge case: what happens at exactly 0 or 1?&#10;try:&#10;    print(f&quot;Without clipping: {bce(np.array([1]), np.array([0.0]))}&quot;)&#10;except:&#10;    print(&quot;Without clipping: log(0) = -inf → NaN loss! 💥&quot;)&#10;&#10;print(f&quot;With clipping:    {bce(np.array([1]), np.array([0.0])):.4f} ✅&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<blockquote>[!IMPORTANT] Always Clip Predictions</blockquote>
+<blockquote><code>log(0)</code> is negative infinity. Even a single prediction of exactly 0.0 or 1.0 produces NaN loss. Always clip to <code>[ε, 1-ε]</code> where ε ≈ 1e-7.</blockquote>
+
+<h2>Categorical Cross-Entropy (Multi-Class)</h2>
+
+<p>For multi-class classification with softmax output. This is ==the loss you'll use for MNIST==:</p>
+
+<div data-widget="katex" data-latex="\text{CCE} = -\frac{1}{N}\sum_{i=1}^{N}\sum_{c=1}^{C} y_{ic} \log(\hat{y}_{ic})" data-display="true"></div>
+
+<p>where <span data-widget="katex" data-latex="y" data-display="false"></span> is one-hot encoded and <span data-widget="katex" data-latex="\hat{y}" data-display="false"></span> is the softmax output.</p>
+
+<pre><code class="language-python">def categorical_cross_entropy(y_true_onehot, y_pred, eps=1e-7):&#10;    &quot;&quot;&quot;y_true_onehot: (N, C), y_pred: (N, C) from softmax.&quot;&quot;&quot;&#10;    y_pred = np.clip(y_pred, eps, 1 - eps)&#10;    return -np.mean(np.sum(y_true_onehot * np.log(y_pred), axis=1))</code></pre>
+
+<div data-widget="pyrunner" data-cellid="029-cell-3" data-defaultcode="import numpy as np&#10;&#10;def softmax(z):&#10;    shifted = z - np.max(z, axis=-1, keepdims=True)&#10;    exp_z = np.exp(shifted)&#10;    return exp_z / np.sum(exp_z, axis=-1, keepdims=True)&#10;&#10;def cce(y_true_oh, y_pred, eps=1e-7):&#10;    y_pred = np.clip(y_pred, eps, 1 - eps)&#10;    return -np.mean(np.sum(y_true_oh * np.log(y_pred), axis=1))&#10;&#10;# Batch of 3 samples, 5 classes&#10;np.random.seed(42)&#10;logits = np.random.randn(3, 5)&#10;probs = softmax(logits)&#10;&#10;# True classes: 2, 0, 4&#10;y_true_oh = np.zeros((3, 5))&#10;y_true_oh[0, 2] = 1&#10;y_true_oh[1, 0] = 1&#10;y_true_oh[2, 4] = 1&#10;&#10;loss = cce(y_true_oh, probs)&#10;print(f&quot;Predicted probabilities for true class:&quot;)&#10;for i in range(3):&#10;    true_class = np.argmax(y_true_oh[i])&#10;    p = probs[i, true_class]&#10;    print(f&quot;  Sample {i}: class {true_class}, p={p:.4f}, -log(p)={-np.log(p):.4f}&quot;)&#10;&#10;print(f&quot;\nCCE Loss: {loss:.4f}&quot;)&#10;print(f&quot;Perfect prediction would give: {-np.log(1.0):.4f}&quot;)&#10;print(f&quot;Random guessing (5 classes):   {-np.log(0.2):.4f}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h3>The Beautiful Shortcut: Softmax + CCE Gradient</h3>
+
+<p>When softmax and cross-entropy are paired, the gradient simplifies dramatically:</p>
+
+<div data-widget="katex" data-latex="\frac{\partial \mathcal{L}}{\partial z_i} = \hat{y}_i - y_i" data-display="true"></div>
+
+<p>That's it. ==Predicted probability minus true label.== No chain rule through softmax and log separately. This is why they're almost always used together.</p>
+
+<pre><code class="language-python">def softmax_cce_gradient(y_true_onehot, softmax_output):&#10;    &quot;&quot;&quot;Combined gradient: just subtraction!&quot;&quot;&quot;&#10;    return (softmax_output - y_true_onehot) / y_true_onehot.shape[0]</code></pre>
+
+<div data-widget="pyrunner" data-cellid="029-cell-4" data-defaultcode="import numpy as np&#10;&#10;def softmax(z):&#10;    shifted = z - np.max(z, axis=-1, keepdims=True)&#10;    exp_z = np.exp(shifted)&#10;    return exp_z / np.sum(exp_z, axis=-1, keepdims=True)&#10;&#10;np.random.seed(42)&#10;logits = np.array([[2.0, 1.0, 0.1],&#10;                    [0.5, 3.0, 0.2]])&#10;probs = softmax(logits)&#10;&#10;y_true_oh = np.array([[1, 0, 0],&#10;                       [0, 1, 0]])&#10;&#10;grad = (probs - y_true_oh) / 2  # divide by batch size&#10;&#10;print(&quot;Softmax + CCE gradient = probs - labels&quot;)&#10;print(&quot;─&quot; * 44)&#10;for i in range(2):&#10;    true_class = np.argmax(y_true_oh[i])&#10;    print(f&quot;Sample {i} (true class {true_class}):&quot;)&#10;    for c in range(3):&#10;        marker = &quot; ← true class&quot; if c == true_class else &quot;&quot;&#10;        sign = &quot;↓ reduce&quot; if grad[i, c] &gt; 0 else &quot;↑ increase&quot;&#10;        print(f&quot;  class {c}: prob={probs[i,c]:.4f}, grad={grad[i,c]:+.4f} ({sign}){marker}&quot;)&#10;&#10;print(&quot;\nThe true class gets negative gradient (increase its prob)&quot;)&#10;print(&quot;Wrong classes get positive gradient (decrease their prob)&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<blockquote>[!NOTE] Why This Matters</blockquote>
+<blockquote>This combined gradient is numerically stable, computationally cheap, and avoids the vanishing gradient problem that plagues sigmoid + MSE combinations. ==Always pair softmax with cross-entropy, never with MSE.==</blockquote>
+
+<h2>Loss Cheat Sheet</h2>
+
+<table><tr><td>Task</td><td>Output Activation</td><td>Loss Function</td><td>Gradient</td></tr>
+</table>
+<table><tr><td>Regression</td><td>Linear (none)</td><td>MSE</td><td><span data-widget="katex" data-latex="2(\hat{y}-y)/N" data-display="false"></span></td></tr>
+<tr><td>Binary Classification</td><td>Sigmoid</td><td>BCE</td><td><span data-widget="katex" data-latex="(\hat{y}-y)/(\hat{y}(1-\hat{y})N)" data-display="false"></span></td></tr>
+<tr><td>Multi-Class</td><td>Softmax</td><td>CCE</td><td><span data-widget="katex" data-latex="(\hat{y}-y)/N" data-display="false"></span></td></tr>
+<tr><td>Multi-Label</td><td>Sigmoid (per class)</td><td>BCE (per class)</td><td>Same as binary</td></tr>
+</table>
+
+<div data-widget="quiz" data-chapterslug="029-loss-functions" data-quizid="quiz-029-loss-functions"></div>
+
+<script type="application/json" id="quiz-029-loss-functions">[{"id":"q1","type":"multiple-choice","prompt":"Why should you never pair softmax output with MSE loss?","options":["MSE doesn't work with probabilities","The gradient through softmax+MSE is complex and can vanish; softmax+CCE gives a clean (pred-true) gradient","MSE requires regression targets","Softmax outputs don't sum to 1 with MSE"],"correctIndex":1,"explanation":"Softmax + CCE has the elegant gradient (ŷ - y)/N. Softmax + MSE requires chaining through both softmax and squared error derivatives, producing messy gradients that can vanish when softmax saturates.","randomize":true},{"id":"q2","type":"code-output","prompt":"What is the CCE loss for a perfect prediction?","code":"import numpy as np\ny_true = np.array([[0, 1, 0]])\ny_pred = np.array([[0.0, 1.0, 0.0]])\ny_pred = np.clip(y_pred, 1e-7, 1-1e-7)\nloss = -np.sum(y_true * np.log(y_pred))\nprint(f'{loss:.6f}')","options":["0.000000","1.000000","-0.000000","NaN"],"correctIndex":0,"explanation":"When the predicted probability for the true class is 1.0 (clipped to ~1.0), -log(1.0) = 0. Perfect predictions have zero cross-entropy loss.","randomize":false},{"id":"q3","type":"multiple-choice","prompt":"In the softmax+CCE gradient (ŷ - y)/N, what does a POSITIVE gradient for class c mean?","options":["Increase the logit for class c","Decrease the logit for class c","Class c is the correct class","The model is confident about class c"],"correctIndex":1,"explanation":"Positive gradient means the loss increases when this logit increases. During gradient descent (which subtracts the gradient), a positive gradient causes the logit to decrease, reducing the predicted probability for this (incorrect) class.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/028-activation-functions.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/030-backpropagation.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

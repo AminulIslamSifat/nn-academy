@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What&#39;s Next: Beyond the Basics — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="055-whats-next" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">What&#39;s Next: Beyond the Basics</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 15 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 5 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">What&#39;s Next: Beyond the Basics</h1>
+      <p class="text-zinc-400 mb-8">Where to go from here: efficient architectures, multimodal models, agents, and the frontier of LLM research. Your roadmap for continued learning.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>What's Next: Beyond the Basics</h1>
+
+<p>You've built neural networks from scratch, from MNIST to mini-GPT. ==Here's where the field is going== and how to keep learning.</p>
+
+<h2>Efficient Architectures</h2>
+
+<p>The O(n²) attention bottleneck is being attacked:</p>
+
+<table><tr><td>Approach</td><td>Idea</td><td>Status</td></tr>
+</table>
+<table><tr><td>Sparse Attention</td><td>Attend to subset of tokens</td><td>Production (Longformer)</td></tr>
+<tr><td>Linear Attention</td><td>Replace softmax with kernel trick</td><td>Research</td></tr>
+<tr><td>State Space Models (Mamba)</td><td>Recurrent-like linear-time sequence modeling</td><td>Production-ready</td></tr>
+<tr><td>Ring Attention</td><td>Distribute attention across devices</td><td>Training infrastructure</td></tr>
+<tr><td>KV Cache Quantization</td><td>Compress cached keys/values</td><td>Inference optimization</td></tr>
+</table>
+<blockquote>[!NOTE] Mamba/SSM</blockquote>
+<blockquote>State space models achieve near-transformer quality with linear-time inference. Hybrid architectures (Transformer + SSM) may be the next dominant paradigm.</blockquote>
+
+<h2>Multimodal Models</h2>
+
+<p>Text + images + audio + video in one model:</p>
+
+<ul><li><strong>Vision-Language</strong>: CLIP, LLaVA, GPT-4V</li>
+<li><strong>Audio</strong>: Whisper, AudioLM</li>
+<li><strong>Video</strong>: Sora, Gen-3</li>
+<li><strong>Unified</strong>: Gemini, GPT-4o</li>
+</ul>
+<p>Key insight: align different modalities into shared embedding space, then let the transformer handle everything.</p>
+
+<h2>Agents & Tool Use</h2>
+
+<p>LLMs that act, not just generate:</p>
+
+<pre><code class="language-text">User: What&#39;s the weather in Dhaka?&#10;Agent: [calls weather API] → &quot;32°C, humid, chance of rain&quot;&#10;User: Book a flight to Rajshahi&#10;Agent: [searches flights] → [compares prices] → &quot;Best option: BG-452, ৳3200&quot;</code></pre>
+
+<p>Research frontiers: planning, self-correction, multi-step reasoning, memory.</p>
+
+<h2>Open Problems</h2>
+
+<table><tr><td>Problem</td><td>Why It Matters</td></tr>
+</table>
+<table><tr><td>Hallucination</td><td>Models confidently generate falsehoods</td></tr>
+<tr><td>Long context</td><td>Beyond 128K tokens, quality degrades</td></tr>
+<tr><td>Reasoning</td><td>Still brittle compared to humans</td></tr>
+<tr><td>Alignment</td><td>Ensuring models do what we actually want</td></tr>
+<tr><td>Efficiency</td><td>Making LLMs accessible without datacenter-scale compute</td></tr>
+<tr><td>Evaluation</td><td>We don't fully know how to measure intelligence</td></tr>
+</table>
+<h2>Your Learning Roadmap</h2>
+
+<h3>Immediate Next Steps</h3>
+<li><strong>Rebuild this curriculum in PyTorch</strong> — translate NumPy implementations to framework code</li>
+<li><strong>Read key papers</strong>: Attention Is All You Need, GPT-2/3, Chinchilla, DPO</li>
+<li><strong>Fine-tune an open model</strong>: LLaMA-3, Mistral, Qwen on your own data</li>
+<li><strong>Build something</strong>: Chatbot, code assistant, document QA, personal agent</li>
+
+<h3>Deeper Study</h3>
+<ul><li><strong>Math</strong>: Linear algebra, probability, optimization theory</li>
+<li><strong>Systems</strong>: CUDA, distributed training, inference optimization</li>
+<li><strong>Research</strong>: Follow arxiv, attend conferences, reproduce papers</li>
+<li><strong>Community</strong>: Contribute to open-source models, share your work</li>
+</ul>
+<blockquote>[!IMPORTANT] Final Words</blockquote>
+<blockquote>You now understand neural networks from first principles. Not from a library, not from a tutorial — from the math up. That foundation will serve you regardless of how the field evolves. Frameworks change. Architectures evolve. But the fundamentals you've built here are permanent.</blockquote>
+<p>></p>
+<blockquote>Now go build something that matters. 💛</blockquote>
+
+<div data-widget="quiz" data-chapterslug="055-whats-next" data-quizid="quiz-055-whats-next"></div>
+
+<script type="application/json" id="quiz-055-whats-next">[{"id":"q1","type":"multiple-choice","prompt":"What's the best way to solidify what you've learned in this curriculum?","options":["Read more textbooks","Rebuild key components in a framework like PyTorch and apply them to a real project","Memorize formulas","Watch more tutorials"],"correctIndex":1,"explanation":"Active application cements understanding. Translating NumPy implementations to PyTorch bridges theory and practice. Building a real project reveals gaps that passive study cannot.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why might state space models (Mamba) complement transformers?","options":["They're simpler to implement","They offer linear-time sequence processing vs transformers' quadratic attention, enabling much longer contexts efficiently","They don't need training","They replace attention entirely"],"correctIndex":1,"explanation":"Transformers excel at parallel training and rich attention patterns but scale quadratically. SSMs process sequences in linear time. Hybrids could get the best of both worlds.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/054-mini-llm-capstone.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/056-random-sampling.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Types — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="006-data-types" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Data Types</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 14 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 10 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Data Types</h1>
+      <p class="text-zinc-400 mb-8">NumPy&#39;s type system isn&#39;t just about correctness — it&#39;s about memory, speed, and not silently destroying your gradients.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Data Types</h1>
+
+<p>Okay so you know arrays have shapes. But every array also has a <strong>dtype</strong> — a single data type that every element shares. This isn't some boring metadata field. It's the reason NumPy is fast, and it's also the reason your neural network can silently produce garbage if you pick wrong.</p>
+
+<p>Let me show you what I mean.</p>
+
+<h2>The Type Family</h2>
+
+<p>NumPy has way more types than Python's built-in <code>int</code> and <code>float</code>. Each one uses a specific number of bytes:</p>
+
+<div data-widget="pyrunner" data-cellid="006-cell-1" data-defaultcode="import numpy as np&#10;&#10;# NumPy picks a default based on your input&#10;a = np.array([1, 2, 3])          # integers → int64 (on 64-bit)&#10;b = np.array([1.0, 2.0, 3.0])    # floats → float64&#10;c = np.array([True, False, True]) # bools → bool_&#10;&#10;print(f&quot;Integer array:  dtype={a.dtype}, {a.itemsize} bytes per element&quot;)&#10;print(f&quot;Float array:    dtype={b.dtype}, {b.itemsize} bytes per element&quot;)&#10;print(f&quot;Boolean array:  dtype={c.dtype}, {c.itemsize} byte per element&quot;)&#10;&#10;# But you can force a specific type&#10;small = np.array([1, 2, 3], dtype=np.int8)&#10;print(f&quot;\nForced int8:    dtype={small.dtype}, {small.itemsize} byte per element&quot;)&#10;print(f&quot;That&#39;s 8x less memory than int64 for the same values!&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<p>Here's the full family at a glance:</p>
+
+<table><tr><td>Category</td><td>Types</td><td>Bytes</td><td>When you'd use it</td></tr>
+</table>
+<table><tr><td>Boolean</td><td><code>bool_</code></td><td>1</td><td>Masks, dropout flags</td></tr>
+<tr><td>Integer</td><td><code>int8</code> → <code>int64</code></td><td>1–8</td><td>Indices, labels, counts</td></tr>
+<tr><td>Unsigned</td><td><code>uint8</code> → <code>uint64</code></td><td>1–8</td><td>Image pixels (0–255)</td></tr>
+<tr><td>Float</td><td><code>float16</code>, <code>float32</code>, <code>float64</code></td><td>2–8</td><td><strong>Weights, activations, gradients</strong></td></tr>
+<tr><td>Complex</td><td><code>complex64</code>, <code>complex128</code></td><td>8–16</td><td>Signal processing, Fourier stuff</td></tr>
+</table>
+<p>Notice I bolded the float row? That's where your neural network lives. Weights are <code>float32</code> or <code>float64</code>. Almost never anything else.</p>
+
+<h2>Why dtype Matters for Memory</h2>
+
+<p>Let's say you're training on ImageNet — 1.2 million images, each 224×224×3 pixels. How much RAM does that take?</p>
+
+<div data-widget="pyrunner" data-cellid="006-cell-2" data-defaultcode="import numpy as np&#10;&#10;n_images = 1_200_000&#10;pixels_per_image = 224 * 224 * 3&#10;&#10;# If you naively load everything as float64...&#10;f64_bytes = n_images * pixels_per_image * 8  # 8 bytes per float64&#10;print(f&quot;float64: {f64_bytes / 1e9:.1f} GB 😱&quot;)&#10;&#10;# As float32 (what PyTorch/TensorFlow actually use)...&#10;f32_bytes = n_images * pixels_per_image * 4&#10;print(f&quot;float32: {f32_bytes / 1e9:.1f} GB&quot;)&#10;&#10;# As uint8 (raw pixel values are 0-255 anyway)...&#10;u8_bytes = n_images * pixels_per_image * 1&#10;print(f&quot;uint8:   {u8_bytes / 1e9:.1f} GB ← store as this, convert to float32 per batch&quot;)&#10;&#10;print(f&quot;\nLesson: dtype choice = {f64_bytes/u8_bytes:.0f}x memory difference&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<p>See? Same data, 8x memory difference just from picking the right type. This is why every ML framework defaults to <code>float32</code> — it's the sweet spot between precision and memory. <code>float64</code> is almost never worth it for training.</p>
+
+<h2>Type Promotion: When Types Mix</h2>
+
+<p>When you combine arrays of different dtypes, NumPy automatically promotes to the "safer" type. The hierarchy goes: <code>bool < int < uint < float < complex</code>.</p>
+
+<div data-widget="pyrunner" data-cellid="006-cell-3" data-defaultcode="import numpy as np&#10;&#10;int_arr = np.array([1, 2, 3], dtype=np.int32)&#10;float_arr = np.array([1.5, 2.5, 3.5], dtype=np.float32)&#10;&#10;result = int_arr + float_arr&#10;print(f&quot;int32 + float32 → {result.dtype}&quot;)  # float32 wins&#10;&#10;# You can check what NumPy would promote to without actually doing it&#10;print(f&quot;\nnp.result_type(np.int8, np.float32) = {np.result_type(np.int8, np.float32)}&quot;)&#10;print(f&quot;np.result_type(np.float32, np.float64) = {np.result_type(np.float32, np.float64)}&quot;)&#10;&#10;# In neural networks, this matters when mixing integer labels with float weights&#10;labels = np.array([0, 1, 2], dtype=np.int64)    # class labels&#10;weights = np.random.randn(3).astype(np.float32)  # model weights&#10;combined = labels + weights&#10;print(f&quot;\nint64 labels + float32 weights → {combined.dtype}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>The Silent Killer: Integer Overflow</h2>
+
+<p>This one bites everyone eventually. Integer types in NumPy <strong>silently wrap around</strong> when they overflow. No error, no warning — just wrong numbers.</p>
+
+<div data-widget="pyrunner" data-cellid="006-cell-4" data-defaultcode="import numpy as np&#10;&#10;# uint8 can hold 0-255. What happens at 256?&#10;print(f&quot;np.uint8(255) + 1 = {np.uint8(255) + np.uint8(1)}&quot;)  # 0?! &#10;&#10;# int8 can hold -128 to 127&#10;print(f&quot;np.int8(127) + 1 = {np.int8(127) + np.int8(1)}&quot;)    # -128?!&#10;&#10;# This is INSANE if it happens in your gradient computation&#10;# Imagine your loss counter overflowing mid-training 💀&#10;loss_sum = np.array(0, dtype=np.int32)&#10;for i in range(100_000):&#10;    loss_sum = loss_sum + np.int32(50_000)&#10;print(f&quot;\nSum of 100k × 50k as int32: {loss_sum}&quot;)&#10;print(f&quot;Expected: {100_000 * 50_000}&quot;)&#10;print(f&quot;Overflowed by: {100_000 * 50_000 - int(loss_sum):,}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="Rule for Neural Networks" data-content="Always use `float32` or `float64` for anything involving gradients, losses, or weights. Integer types are fine for indices and labels, but never for computation that accumulates."></div>
+
+<h2>Converting Types with .astype()</h2>
+
+<code>.astype()</code> creates a copy with the new type. It truncates floats to ints (doesn't round!):
+
+<div data-widget="pyrunner" data-cellid="006-cell-5" data-defaultcode="import numpy as np&#10;&#10;probabilities = np.array([0.9, 0.1, 0.8, 0.3, 0.6])&#10;&#10;# Convert probabilities to binary predictions (threshold at 0.5)&#10;predictions = (probabilities &gt; 0.5).astype(np.int32)&#10;print(f&quot;Probabilities: {probabilities}&quot;)&#10;print(f&quot;Predictions:   {predictions}&quot;)&#10;&#10;# float64 → float32 (common before feeding to a model)&#10;weights_f64 = np.random.randn(1000, 1000)&#10;weights_f32 = weights_f64.astype(np.float32)&#10;print(f&quot;\nMemory saved: {weights_f64.nbytes/1e6:.1f} MB → {weights_f32.nbytes/1e6:.1f} MB&quot;)&#10;&#10;# Watch out: astype truncates, doesn&#39;t round!&#10;values = np.array([1.7, 2.9, 3.1])&#10;print(f&quot;\n{values} → int: {values.astype(np.int32)}&quot;)  # [1, 2, 3] not [2, 3, 3]!&#10;print(f&quot;If you want rounding: {np.round(values).astype(np.int32)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>What ML Frameworks Actually Use</h2>
+
+<div data-widget="pyrunner" data-cellid="006-cell-6" data-defaultcode="import numpy as np&#10;&#10;# Simulating a tiny neural network layer&#10;rng = np.random.default_rng(42)&#10;&#10;# Inputs: float32 (standard for training)&#10;X = rng.standard_normal((32, 784)).astype(np.float32)  # batch of 32 MNIST images&#10;&#10;# Weights: float32&#10;W = rng.standard_normal((784, 128)).astype(np.float32) * 0.01&#10;b = np.zeros(128, dtype=np.float32)&#10;&#10;# Forward pass&#10;Z = X @ W + b&#10;print(f&quot;Input:   {X.dtype}, {X.nbytes/1e3:.0f} KB&quot;)&#10;print(f&quot;Weights: {W.dtype}, {W.nbytes/1e3:.0f} KB&quot;)&#10;print(f&quot;Output:  {Z.dtype}, {Z.nbytes/1e3:.0f} KB&quot;)&#10;&#10;# Labels: int64 (class indices)&#10;y = rng.integers(0, 10, size=32).astype(np.int64)&#10;print(f&quot;Labels:  {y.dtype} (just indices, no computation needed)&quot;)&#10;&#10;print(f&quot;\nTotal for one batch: {(X.nbytes + W.nbytes + Z.nbytes)/1e3:.0f} KB&quot;)&#10;print(f&quot;With float64 it would be: {(X.nbytes + W.nbytes + Z.nbytes)*2/1e3:.0f} KB&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<p>See the pattern? <strong>float32 for computation, int64 for labels</strong>. That's the convention across PyTorch, TensorFlow, JAX — all of them. Now you know why.</p>
+
+<div data-widget="quiz" data-chapterslug="006-data-types" data-quizid="quiz-006-data-types"></div>
+
+<script type="application/json" id="quiz-006-data-types">[{"id":"q1","type":"multiple-choice","prompt":"Why do ML frameworks default to float32 instead of float64?","options":["Half the memory with negligible precision loss for training","float64 is slower to compute","float32 is more accurate","GPU hardware only supports float32"],"correctIndex":0,"explanation":"float32 uses 4 bytes vs 8 for float64. The precision difference (~7 vs ~16 decimal digits) doesn't matter for gradient descent — but the memory savings are huge at scale.","randomize":true},{"id":"q2","type":"code-output","prompt":"What does np.uint8(255) + np.uint8(1) return?","code":"import numpy as np\nprint(np.uint8(255) + np.uint8(1))","options":["0","256","OverflowError","-1"],"correctIndex":0,"explanation":"uint8 wraps around silently: 255 + 1 = 256 mod 256 = 0. No error, no warning. This is why you never accumulate gradients in integer types.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What does .astype(np.int32) do to np.array([1.7, 2.9])?","options":["Truncates to [1, 2]","Rounds to [2, 3]","Raises an error","Returns [1.7, 2.9] unchanged"],"correctIndex":0,"explanation":"astype truncates toward zero — it chops off the decimal. Use np.round() first if you want proper rounding.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/002-indexing-and-slicing.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/007-copy-vs-view.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

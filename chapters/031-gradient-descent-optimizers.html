@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gradient Descent &amp; Optimizers — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="031-gradient-descent-optimizers" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Gradient Descent &amp; Optimizers</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 25 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 20 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Gradient Descent &amp; Optimizers</h1>
+      <p class="text-zinc-400 mb-8">From vanilla SGD to Momentum, AdaGrad, RMSProp, and Adam. Understand why each optimizer exists and implement them all in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Gradient Descent & Optimizers</h1>
+
+<p>Backprop tells you ==which direction== to move. The optimizer decides ==how far and how smartly== to move. Vanilla gradient descent works, but it's slow, gets stuck in ravines, and treats every parameter identically. Modern optimizers fix these problems.</p>
+
+<h2>Vanilla SGD</h2>
+
+<p>The simplest update rule:</p>
+
+<div data-widget="katex" data-latex="w \leftarrow w - \eta \cdot \nabla_w L" data-display="true"></div>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def sgd_update(params, grads, lr):&#10;    for key in params:&#10;        params[key] -= lr * grads[key]</code></pre>
+
+<p>Problems:</p>
+<ul><li>Same learning rate for all parameters</li>
+<li>Oscillates in narrow valleys</li>
+<li>No memory of past gradients</li>
+<li>Sensitive to feature scaling</li>
+</ul>
+
+<div data-widget="pyrunner" data-cellid="031-cell-1" data-defaultcode="import numpy as np&#10;&#10;# Visualize SGD on a loss landscape&#10;def loss_fn(x, y):&#10;    return x**2 + 10*y**2  # elongated valley&#10;&#10;def grad_fn(x, y):&#10;    return np.array([2*x, 20*y])&#10;&#10;lr = 0.05&#10;pos = np.array([3.0, 3.0])&#10;trajectory = [pos.copy()]&#10;&#10;for _ in range(30):&#10;    g = grad_fn(*pos)&#10;    pos = pos - lr * g&#10;    trajectory.append(pos.copy())&#10;&#10;print(&quot;Vanilla SGD on elongated valley (x² + 10y²):&quot;)&#10;print(f&quot;{&#39;Step&#39;:&gt;4} | {&#39;x&#39;:&gt;7} | {&#39;y&#39;:&gt;7} | {&#39;Loss&#39;:&gt;9}&quot;)&#10;print(&quot;─&quot; * 38)&#10;for i, p in enumerate(trajectory[::5]):&#10;    print(f&quot;{i*5:4d} | {p[0]:+7.4f} | {p[1]:+7.4f} | {loss_fn(*p):9.4f}&quot;)&#10;&#10;print(&quot;\n⚠️ y converges fast (steep), x crawls (shallow)&quot;)&#10;print(&quot;   This is the conditioning problem of vanilla SGD&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Momentum</h2>
+
+<p>Idea: accumulate velocity. If gradients keep pointing the same way, go faster. If they oscillate, dampen.</p>
+
+<div data-widget="katex" data-latex="v \leftarrow \beta v + (1-\beta)\nabla_w L, \quad w \leftarrow w - \eta \cdot v" data-display="true"></div>
+
+<pre><code class="language-python">class MomentumSGD:&#10;    def __init__(self, params, lr=0.01, beta=0.9):&#10;        self.params = params&#10;        self.lr = lr&#10;        self.beta = beta&#10;        self.velocity = {k: np.zeros_like(v) for k, v in params.items()}&#10;    &#10;    def step(self, grads):&#10;        for key in self.params:&#10;            self.velocity[key] = (&#10;                self.beta <em> self.velocity[key] + &#10;                (1 - self.beta) </em> grads[key]&#10;            )&#10;            self.params[key] -= self.lr * self.velocity[key]</code></pre>
+
+<div data-widget="pyrunner" data-cellid="031-cell-2" data-defaultcode="import numpy as np&#10;&#10;def loss_fn(x, y):&#10;    return x**2 + 10*y**2&#10;&#10;def grad_fn(x, y):&#10;    return np.array([2*x, 20*y])&#10;&#10;# Compare SGD vs Momentum&#10;results = {}&#10;for name, use_momentum in [(&quot;SGD&quot;, False), (&quot;Momentum&quot;, True)]:&#10;    pos = np.array([3.0, 3.0])&#10;    vel = np.array([0.0, 0.0])&#10;    lr, beta = 0.05, 0.9&#10;    traj = [pos.copy()]&#10;    &#10;    for _ in range(30):&#10;        g = grad_fn(*pos)&#10;        if use_momentum:&#10;            vel = beta * vel + (1 - beta) * g&#10;            pos = pos - lr * vel&#10;        else:&#10;            pos = pos - lr * g&#10;        traj.append(pos.copy())&#10;    results[name] = traj&#10;&#10;print(f&quot;{&#39;Step&#39;:&gt;4} | {&#39;SGD Loss&#39;:&gt;10} | {&#39;Momentum Loss&#39;:&gt;14}&quot;)&#10;print(&quot;─&quot; * 36)&#10;for i in range(0, 31, 5):&#10;    sg = results[&quot;SGD&quot;][i]&#10;    mo = results[&quot;Momentum&quot;][i]&#10;    print(f&quot;{i:4d} | {loss_fn(*sg):10.4f} | {loss_fn(*mo):14.4f}&quot;)&#10;&#10;print(&quot;\n✅ Momentum accelerates through consistent gradients&quot;)&#10;print(&quot;   and dampens oscillation in noisy directions&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<blockquote>[!NOTE] Why β = 0.9?</blockquote>
+<blockquote>With β=0.9, the effective window is roughly 1/(1-β) = 10 steps. The velocity averages the last ~10 gradients. Higher β = more smoothing but slower adaptation.</blockquote>
+
+<h2>AdaGrad: Adaptive Learning Rates</h2>
+
+<p>Problem: some parameters need big updates, others need tiny ones. AdaGrad scales the learning rate per-parameter based on historical gradient magnitude:</p>
+
+<div data-widget="katex" data-latex="s \leftarrow s + (\nabla_w L)^2, \quad w \leftarrow w - \frac{\eta}{\sqrt{s} + \epsilon}\nabla_w L" data-display="true"></div>
+
+<p>Parameters with consistently large gradients get smaller effective learning rates. Parameters with small gradients get boosted.</p>
+
+<pre><code class="language-python">class AdaGrad:&#10;    def __init__(self, params, lr=0.01, eps=1e-8):&#10;        self.params = params&#10;        self.lr = lr&#10;        self.eps = eps&#10;        self.cache = {k: np.zeros_like(v) for k, v in params.items()}&#10;    &#10;    def step(self, grads):&#10;        for key in self.params:&#10;            self.cache[key] += grads[key] <em>* 2&#10;            self.params[key] -= self.lr </em> grads[key] / (&#10;                np.sqrt(self.cache[key]) + self.eps&#10;            )</code></pre>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="AdaGrad&#39;s Fatal Flaw" data-content="The cache only grows, never shrinks. Over time, the denominator keeps increasing and the effective learning rate → 0. Training stalls. This is why AdaGrad was superseded by RMSProp."></div>
+
+<h2>RMSProp: Fixing AdaGrad</h2>
+
+<p>Replace the cumulative sum with an exponential moving average:</p>
+
+<div data-widget="katex" data-latex="s \leftarrow \beta s + (1-\beta)(\nabla_w L)^2, \quad w \leftarrow w - \frac{\eta}{\sqrt{s} + \epsilon}\nabla_w L" data-display="true"></div>
+
+<p>Now old squared gradients decay. The effective learning rate stays alive throughout training.</p>
+
+<pre><code class="language-python">class RMSProp:&#10;    def __init__(self, params, lr=0.001, beta=0.999, eps=1e-8):&#10;        self.params = params&#10;        self.lr = lr&#10;        self.beta = beta&#10;        self.eps = eps&#10;        self.cache = {k: np.zeros_like(v) for k, v in params.items()}&#10;    &#10;    def step(self, grads):&#10;        for key in self.params:&#10;            self.cache[key] = (&#10;                self.beta <em> self.cache[key] + &#10;                (1 - self.beta) </em> grads[key] <em>* 2&#10;            )&#10;            self.params[key] -= self.lr </em> grads[key] / (&#10;                np.sqrt(self.cache[key]) + self.eps&#10;            )</code></pre>
+
+<h2>Adam: Best of Both Worlds</h2>
+
+<p>==The default optimizer for most deep learning.== Combines momentum (first moment) with RMSProp (second moment), plus bias correction:</p>
+
+<div data-widget="katex" data-latex="m \leftarrow \beta_1 m + (1-\beta_1)\nabla_w L" data-display="true"></div>
+
+<div data-widget="katex" data-latex="v \leftarrow \beta_2 v + (1-\beta_2)(\nabla_w L)^2" data-display="true"></div>
+
+<div data-widget="katex" data-latex="\hat{m} = \frac{m}{1-\beta_1^t}, \quad \hat{v} = \frac{v}{1-\beta_2^t}" data-display="true"></div>
+
+<div data-widget="katex" data-latex="w \leftarrow w - \frac{\eta}{\sqrt{\hat{v}} + \epsilon}\hat{m}" data-display="true"></div>
+
+<div data-widget="pyrunner" data-cellid="031-cell-3" data-defaultcode="import numpy as np&#10;&#10;class Adam:&#10;    def __init__(self, params, lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8):&#10;        self.params = params&#10;        self.lr = lr&#10;        self.beta1 = beta1&#10;        self.beta2 = beta2&#10;        self.eps = eps&#10;        self.t = 0&#10;        self.m = {k: np.zeros_like(v) for k, v in params.items()}&#10;        self.v = {k: np.zeros_like(v) for k, v in params.items()}&#10;    &#10;    def step(self, grads):&#10;        self.t += 1&#10;        for key in self.params:&#10;            # Update biased moments&#10;            self.m[key] = self.beta1 * self.m[key] + (1 - self.beta1) * grads[key]&#10;            self.v[key] = self.beta2 * self.v[key] + (1 - self.beta2) * grads[key]**2&#10;            &#10;            # Bias correction (critical for early training!)&#10;            m_hat = self.m[key] / (1 - self.beta1**self.t)&#10;            v_hat = self.v[key] / (1 - self.beta2**self.t)&#10;            &#10;            # Update&#10;            self.params[key] -= self.lr * m_hat / (np.sqrt(v_hat) + self.eps)&#10;&#10;# Demo: train a simple model with Adam&#10;np.random.seed(42)&#10;params = {&quot;W&quot;: np.random.randn(10, 5) * 0.5, &quot;b&quot;: np.zeros(5)}&#10;optimizer = Adam(params, lr=0.01)&#10;&#10;X = np.random.randn(32, 10)&#10;y = np.random.randint(0, 5, 32)&#10;y_oh = np.zeros((32, 5)); y_oh[np.arange(32), y] = 1&#10;&#10;print(&quot;Training with Adam optimizer:&quot;)&#10;print(f&quot;{&#39;Step&#39;:&gt;4} | {&#39;Loss&#39;:&gt;8} | {&#39;|grad_W|&#39;:&gt;10}&quot;)&#10;print(&quot;─&quot; * 30)&#10;&#10;for step in range(50):&#10;    # Forward&#10;    logits = X @ params[&quot;W&quot;] + params[&quot;b&quot;]&#10;    shifted = logits - logits.max(axis=1, keepdims=True)&#10;    probs = np.exp(shifted) / np.exp(shifted).sum(axis=1, keepdims=True)&#10;    loss = -np.mean(np.sum(y_oh * np.log(np.clip(probs, 1e-7, 1)), axis=1))&#10;    &#10;    # Backward&#10;    dZ = (probs - y_oh) / 32&#10;    grads = {&quot;W&quot;: X.T @ dZ, &quot;b&quot;: dZ.sum(axis=0)}&#10;    &#10;    if step % 10 == 0:&#10;        gnorm = np.linalg.norm(grads[&quot;W&quot;])&#10;        print(f&quot;{step:4d} | {loss:8.4f} | {gnorm:10.6f}&quot;)&#10;    &#10;    optimizer.step(grads)&#10;&#10;print(f&quot;\n✅ Adam adapts learning rates per-parameter&quot;)&#10;print(f&quot;   Default hyperparams (lr=0.001, β₁=0.9, β₂=0.999) work well out of the box&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h3>Why Bias Correction?</h3>
+
+<p>At step 1 with β₁=0.9: <span data-widget="katex" data-latex="m = 0.1 \cdot g" data-display="false"></span>. The momentum estimate is biased toward zero. Dividing by <span data-widget="katex" data-latex="(1 - 0.9^1) = 0.1" data-display="false"></span> corrects this. Without bias correction, Adam takes tiny steps at the start of training.</p>
+
+<h2>Optimizer Comparison</h2>
+
+<table><tr><td>Optimizer</td><td>Adaptive LR</td><td>Momentum</td><td>Memory/Param</td><td>Best For</td></tr>
+</table>
+<table><tr><td>SGD</td><td>❌</td><td>❌</td><td>0×</td><td>Simple problems, fine-tuning</td></tr>
+<tr><td>Momentum</td><td>❌</td><td>✅</td><td>1×</td><td>Consistent gradient directions</td></tr>
+<tr><td>AdaGrad</td><td>✅</td><td>❌</td><td>1×</td><td>Sparse gradients (NLP)</td></tr>
+<tr><td>RMSProp</td><td>✅</td><td>❌</td><td>1×</td><td>Non-stationary problems</td></tr>
+<tr><td>Adam</td><td>✅</td><td>✅</td><td>2×</td><td>==Default choice for most tasks==</td></tr>
+</table>
+<blockquote>[!IMPORTANT] Practical Advice</blockquote>
+<blockquote>Start with Adam (lr=0.001). If your model isn't training, check your loss and gradients before switching optimizers. Only switch to SGD+momentum if you need better generalization and have time to tune the learning rate schedule.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="031-gradient-descent-optimizers" data-quizid="quiz-031-gradient-descent-optimizers"></div>
+
+<script type="application/json" id="quiz-031-gradient-descent-optimizers">[{"id":"q1","type":"multiple-choice","prompt":"Why does Adam need bias correction?","options":["To prevent division by zero","Because m and v are initialized to zero, their early estimates are biased toward zero; correction rescales them","To normalize across different batch sizes","To prevent gradient explosion"],"correctIndex":1,"explanation":"At t=1 with β₁=0.9, m = 0.1·g which severely underestimates the true first moment. Dividing by (1-β₁ᵗ) corrects this bias. Without it, Adam's initial steps are too small.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What problem does RMSProp solve that AdaGrad cannot?","options":["RMSProp uses momentum","AdaGrad's cumulative sum of squared gradients only grows, causing the learning rate to shrink to zero over time","RMSProp handles sparse gradients better","AdaGrad doesn't support batches"],"correctIndex":1,"explanation":"AdaGrad accumulates ALL past squared gradients. In long training runs, the denominator grows without bound and the effective learning rate → 0. RMSProp uses exponential moving average instead, allowing old gradients to decay.","randomize":false},{"id":"q3","type":"code-output","prompt":"After 1 step of Adam with β₁=0.9, what is the bias-corrected first moment if the gradient is [2.0]?","code":"import numpy as np\nbeta1 = 0.9\ng = np.array([2.0])\nm = beta1 <em> 0 + (1 - beta1) </em> g  # m after step 1\nt = 1\nm_hat = m / (1 - beta1**t)\nprint(f'{m_hat[0]:.1f}')","options":["0.2","2.0","1.8","0.0"],"correctIndex":1,"explanation":"m = 0.1 × 2.0 = 0.2. Bias correction: m_hat = 0.2 / (1 - 0.9¹) = 0.2 / 0.1 = 2.0. The correction perfectly recovers the true gradient value at step 1.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/030-backpropagation.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/032-mnist-from-scratch.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

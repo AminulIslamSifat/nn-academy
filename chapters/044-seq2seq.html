@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequence-to-Sequence Models — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="044-seq2seq" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Sequence-to-Sequence Models</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 25 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 20 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Sequence-to-Sequence Models</h1>
+      <p class="text-zinc-400 mb-8">Map variable-length input sequences to variable-length output sequences. Build encoder-decoder architecture with teacher forcing in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Sequence-to-Sequence Models</h1>
+
+<p>Many tasks map sequences to sequences: translation, summarization, chat. ==Seq2seq uses an encoder to compress the input and a decoder to generate the output==, connected by a context vector.</p>
+
+<h2>Architecture</h2>
+
+<pre><code class="language-text">Encoder (LSTM):  x₁ x₂ x₃ <code>[EOS]</code> → context vector c&#10;Decoder (LSTM):  c → ŷ₁ ŷ₂ ŷ₃ <code>[EOS]</code></code></pre>
+
+<p>The encoder reads the entire input into a fixed-size context vector. The decoder generates output one token at a time, conditioned on the context and previous outputs.</p>
+
+<h2>Encoder</h2>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def encoder_forward(X, h0, c0, params):&#10;    &quot;&quot;&quot;Process input sequence, return final hidden state as context.&#10;    X: (T_in, N, D)&#10;    Returns: context_h (N, H), context_c (N, H)&#10;    &quot;&quot;&quot;&#10;    T, N, D = X.shape&#10;    H = params[&quot;Wf&quot;].shape[1]&#10;    &#10;    h, c = h0, c0&#10;    for t in range(T):&#10;        h, c = lstm_cell(X[t], h, c, params)&#10;    &#10;    return h, c  # final state = context</code></pre>
+
+<h2>Decoder with Teacher Forcing</h2>
+
+<p>During training, feed the TRUE previous token (not the predicted one). This stabilizes early training:</p>
+
+<pre><code class="language-python">def decoder_forward(y_true, context_h, context_c, params, embed_W):&#10;    &quot;&quot;&quot;y_true: (T_out, N) target token IDs (shifted right).&#10;    Returns: logits (T_out, N, V)&#10;    &quot;&quot;&quot;&#10;    T, N = y_true.shape&#10;    H = context_h.shape[1]&#10;    V = embed_W.shape[0]&#10;    &#10;    h, c = context_h, context_c&#10;    all_logits = []&#10;    &#10;    for t in range(T):&#10;        # Embed the true previous token (teacher forcing)&#10;        x_t = embed_W[y_true[t]]  # (N, D)&#10;        &#10;        # LSTM step&#10;        h, c = lstm_cell(x_t, h, c, params)&#10;        &#10;        # Project to vocabulary&#10;        logits = h @ params[&quot;Wy&quot;] + params[&quot;by&quot;]  # (N, V)&#10;        all_logits.append(logits)&#10;    &#10;    return np.stack(all_logits)  # (T_out, N, V)</code></pre>
+
+<div data-widget="pyrunner" data-cellid="044-cell-1" data-defaultcode="import numpy as np&#10;np.random.seed(42)&#10;&#10;# Simulate seq2seq for simple reversal task&#10;# Input: [1,2,3] → Output: [3,2,1]&#10;V, D, H = 10, 4, 8&#10;&#10;print(&quot;Seq2Seq Architecture:&quot;)&#10;print(f&quot;  Vocab size: {V}&quot;)&#10;print(f&quot;  Embedding dim: {D}&quot;)&#10;print(f&quot;  Hidden dim: {H}&quot;)&#10;&#10;# Simulated encoding&#10;T_in = 3&#10;input_seq = [1, 2, 3]&#10;print(f&quot;\n  Input:  {input_seq}&quot;)&#10;&#10;# Encoder processes input → context&#10;context = np.random.randn(H) * 0.5  # simulated final hidden state&#10;print(f&quot;  Context vector shape: ({H},)&quot;)&#10;print(f&quot;  Context encodes entire input into fixed representation&quot;)&#10;&#10;# Decoder generates output from context&#10;T_out = 3&#10;output_seq = [3, 2, 1]&#10;print(f&quot;  Output: {output_seq}&quot;)&#10;&#10;print(f&quot;\n💡 Bottleneck: ALL input info compressed into {H}-dim vector&quot;)&#10;print(f&quot;   This limits performance for long sequences&quot;)&#10;print(f&quot;   Solution: Attention mechanism (next chapter!)&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Training with Cross-Entropy</h2>
+
+<pre><code class="language-python">def seq2seq_loss(logits, y_true):&#10;    &quot;&quot;&quot;logits: (T, N, V), y_true: (T, N)&#10;    Returns: scalar loss&#10;    &quot;&quot;&quot;&#10;    T, N, V = logits.shape&#10;    &#10;    # Softmax&#10;    shifted = logits - np.max(logits, axis=2, keepdims=True)&#10;    exp_z = np.exp(shifted)&#10;    probs = exp_z / np.sum(exp_z, axis=2, keepdims=True)&#10;    &#10;    # Cross-entropy&#10;    loss = 0.0&#10;    for t in range(T):&#10;        for n in range(N):&#10;            loss -= np.log(probs[t, n, y_true[t, n]] + 1e-7)&#10;    &#10;    return loss / (T * N)</code></pre>
+
+<blockquote>[!IMPORTANT] Teacher Forcing Trade-off</blockquote>
+<blockquote>Teacher forcing makes training faster and more stable, but creates a train/test mismatch: during inference, the decoder sees its OWN predictions, not ground truth. Solutions: scheduled sampling, professor forcing.</blockquote>
+
+<h2>Inference: Greedy vs Beam Search</h2>
+
+<h3>Greedy Decoding</h3>
+<p>Pick the most likely token at each step:</p>
+
+<pre><code class="language-python">def greedy_decode(encoder_context, decoder_params, embed_W, max_len=50, eos_id=0):&#10;    h, c = encoder_context&#10;    tokens = []&#10;    token_id = 1  # start token&#10;    &#10;    for _ in range(max_len):&#10;        x = embed_W[token_id]&#10;        h, c = lstm_cell(x, h, c, decoder_params)&#10;        logits = h @ decoder_params[&quot;Wy&quot;] + decoder_params[&quot;by&quot;]&#10;        token_id = np.argmax(logits)&#10;        if token_id == eos_id:&#10;            break&#10;        tokens.append(token_id)&#10;    &#10;    return tokens</code></pre>
+
+<h3>Beam Search</h3>
+<p>Maintain K best partial sequences. Better quality than greedy:</p>
+
+<div data-widget="pyrunner" data-cellid="044-cell-2" data-defaultcode="import numpy as np&#10;np.random.seed(42)&#10;&#10;# Demonstrate beam search concept&#10;V = 6&#10;beam_width = 3&#10;max_len = 4&#10;&#10;print(&quot;Beam Search (k=3) Demo:&quot;)&#10;print(f&quot;{&#39;Step&#39;:&gt;4} | Active Beams&quot;)&#10;print(&quot;─&quot; * 50)&#10;&#10;# Simulated beam search&#10;beams = [([1], 0.0)]  # (tokens, log_prob)&#10;&#10;for step in range(max_len):&#10;    candidates = []&#10;    for tokens, score in beams:&#10;        # Simulate next-token probabilities&#10;        probs = np.random.dirichlet(np.ones(V))&#10;        for v in range(V):&#10;            if v == 0:  # EOS&#10;                candidates.append((tokens + [v], score + np.log(probs[v])))&#10;            else:&#10;                candidates.append((tokens + [v], score + np.log(probs[v])))&#10;    &#10;    # Keep top-k&#10;    candidates.sort(key=lambda x: -x[1])&#10;    beams = candidates[:beam_width]&#10;    &#10;    display = [f&quot;{b[0]}({b[1]:.2f})&quot; for b in beams]&#10;    print(f&quot;{step+1:4d} | {&#39;, &#39;.join(display)}&quot;)&#10;&#10;best = beams[0]&#10;print(f&quot;\nBest sequence: {best[0]}, score: {best[1]:.2f}&quot;)&#10;print(f&quot;\n✅ Beam search explores multiple hypotheses&quot;)&#10;print(f&quot;   Greedy would only follow the single best path&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>The Context Vector Bottleneck</h2>
+
+<p>The biggest limitation: ==everything must fit in one fixed vector==. For long inputs, information is lost. This motivated attention mechanisms (chapter 046).</p>
+
+<table><tr><td>Sequence Length</td><td>Encoder Capacity</td><td>Information Loss</td></tr>
+</table>
+<table><tr><td>Short (under 20)</td><td>Sufficient</td><td>Minimal</td></tr>
+<tr><td>Medium (20-50)</td><td>Strained</td><td>Noticeable</td></tr>
+<tr><td>Long (>50)</td><td>Insufficient</td><td>Severe</td></tr>
+</table>
+
+<div data-widget="quiz" data-chapterslug="044-seq2seq" data-quizid="quiz-044-seq2seq"></div>
+
+<script type="application/json" id="quiz-044-seq2seq">[{"id":"q1","type":"multiple-choice","prompt":"What is teacher forcing and why is it used?","options":["Forcing the model to predict correctly","Feeding ground-truth previous tokens during training instead of predicted ones, preventing error accumulation in early training","Using a stronger optimizer","Training the encoder and decoder separately"],"correctIndex":1,"explanation":"Without teacher forcing, early-training predictions are garbage, and feeding garbage back produces more garbage. Teacher forcing provides clean inputs so the decoder learns correct patterns first.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is the main limitation of basic seq2seq?","options":["It can't handle variable-length sequences","The fixed-size context vector is a bottleneck — long inputs lose information because everything must be compressed into one vector","It requires too many parameters","It only works for translation"],"correctIndex":1,"explanation":"A 256-dim context vector can't faithfully encode a 100-token sentence. Attention solves this by letting the decoder access ALL encoder states directly, not just the final one.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/043-word-embeddings.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/045-crnn-ocr-capstone.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

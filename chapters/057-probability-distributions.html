@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probability Distributions — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="057-probability-distributions" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Probability Distributions</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 20 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 15 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Probability Distributions</h1>
+      <p class="text-zinc-400 mb-8">Sample from uniform, normal, Bernoulli, categorical, and more. Understand which distribution to use for weight initialization, noise, and data generation.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Probability Distributions</h1>
+
+<p>Every random operation in deep learning draws from a distribution. ==Choosing the right one matters== — wrong initialization distributions cause vanishing/exploding gradients.</p>
+
+<h2>Uniform Distribution</h2>
+
+<p>Equal probability across a range:</p>
+
+<div data-widget="katex" data-latex="X \sim U(a, b), \quad f(x) = \frac{1}{b-a}" data-display="true"></div>
+
+<pre><code class="language-python">rng.uniform(low=0, high=1, size=1000)</code></pre>
+
+<p>Used for: Xavier/Glorot initialization, random crops, dropout masks.</p>
+
+<h2>Normal (Gaussian) Distribution</h2>
+
+<p>The bell curve. Most important distribution in ML:</p>
+
+<div data-widget="katex" data-latex="X \sim \mathcal{N}(\mu, \sigma^2), \quad f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}" data-display="true"></div>
+
+<div data-widget="pyrunner" data-cellid="057-cell-1" data-defaultcode="import numpy as np&#10;&#10;rng = np.random.default_rng(42)&#10;&#10;# Standard normal&#10;samples = rng.standard_normal(10000)&#10;print(f&quot;Standard Normal N(0,1):&quot;)&#10;print(f&quot;  Mean: {samples.mean():.4f} (expect 0)&quot;)&#10;print(f&quot;  Std:  {samples.std():.4f} (expect 1)&quot;)&#10;print(f&quot;  Min:  {samples.min():.2f}, Max: {samples.max():.2f}&quot;)&#10;&#10;# Custom mean and std&#10;weights = rng.normal(loc=0, scale=0.01, size=(100, 50))&#10;print(f&quot;\nWeight init N(0, 0.01):&quot;)&#10;print(f&quot;  Shape: {weights.shape}&quot;)&#10;print(f&quot;  Mean: {weights.mean():.6f}&quot;)&#10;print(f&quot;  Std:  {weights.std():.4f}&quot;)&#10;&#10;# He initialization for ReLU networks&#10;fan_in = 784&#10;he_weights = rng.normal(0, np.sqrt(2.0/fan_in), size=(fan_in, 256))&#10;print(f&quot;\nHe init for 784→256 ReLU layer:&quot;)&#10;print(f&quot;  Std: {he_weights.std():.4f} (expect {np.sqrt(2.0/fan_in):.4f})&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<blockquote>[!IMPORTANT] Why Normal for Weights?</blockquote>
+<blockquote>The central limit theorem: sums of many small random values tend toward normal. Since each neuron computes a weighted sum, normal initialization keeps activations well-behaved.</blockquote>
+
+<h2>Bernoulli Distribution</h2>
+
+<p>Binary outcome (0 or 1) with probability p:</p>
+
+<pre><code class="language-python">rng.binomial(n=1, p=0.5, size=100)  # coin flips</code></pre>
+
+<p>Used for: dropout masks, binary classification targets.</p>
+
+<h2>Categorical Distribution</h2>
+
+<p>Pick from K categories with given probabilities:</p>
+
+<div data-widget="pyrunner" data-cellid="057-cell-2" data-defaultcode="import numpy as np&#10;&#10;rng = np.random.default_rng(42)&#10;&#10;# Simulate softmax output → sample a class&#10;logits = np.array([2.0, 1.0, 0.5, 0.1])&#10;probs = np.exp(logits) / np.exp(logits).sum()&#10;&#10;samples = rng.choice(len(probs), size=10000, p=probs)&#10;counts = np.bincount(samples, minlength=len(probs))&#10;&#10;print(&quot;Categorical sampling from softmax logits:&quot;)&#10;print(f&quot;  Logits: {logits}&quot;)&#10;print(f&quot;  Probs:  {probs.round(3)}&quot;)&#10;print(f&quot;  Samples (10K): {counts}&quot;)&#10;print(f&quot;  Empirical:     {(counts/10000).round(3)}&quot;)&#10;print(f&quot;\n✅ Empirical frequencies match theoretical probabilities&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Distribution Cheat Sheet for Deep Learning</h2>
+
+<table><tr><td>Use Case</td><td>Distribution</td><td>Parameters</td></tr>
+</table>
+<table><tr><td>He init (ReLU)</td><td>Normal</td><td><span data-widget="katex" data-latex="\sigma = \sqrt{2/n_{in}}" data-display="false"></span></td></tr>
+<tr><td>Xavier init (tanh)</td><td>Normal/Uniform</td><td><span data-widget="katex" data-latex="\sigma = \sqrt{2/(n_{in}+n_{out})}" data-display="false"></span></td></tr>
+<tr><td>Dropout mask</td><td>Bernoulli</td><td>p = keep_prob</td></tr>
+<tr><td>Data augmentation noise</td><td>Normal</td><td><span data-widget="katex" data-latex="\sigma = 0.01-0.1" data-display="false"></span></td></tr>
+<tr><td>GAN latent vector</td><td>Normal</td><td>N(0, 1)</td></tr>
+<tr><td>Exploration (RL)</td><td>Categorical/Normal</td><td>Varies</td></tr>
+</table>
+
+<div data-widget="quiz" data-chapterslug="057-probability-distributions" data-quizid="quiz-057-probability-distributions"></div>
+
+<script type="application/json" id="quiz-057-probability-distributions">[{"id":"q1","type":"multiple-choice","prompt":"Why does He initialization use std = sqrt(2/fan_in) specifically for ReLU networks?","options":["It's arbitrary","ReLU zeros out half the activations, so the variance needs to be doubled to compensate; sqrt(2/fan_in) maintains unit variance through ReLU layers","It prevents overflow","It matches the uniform distribution"],"correctIndex":1,"explanation":"ReLU sets negative values to zero, halving the variance. He initialization compensates by scaling up by sqrt(2), keeping activation variance stable across layers.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Which distribution generates dropout masks?","options":["Normal","Uniform","Bernoulli (each neuron independently kept with probability p)","Poisson"],"correctIndex":2,"explanation":"Dropout independently keeps each neuron with probability p. That's exactly a Bernoulli trial per neuron: 1 (keep) with prob p, 0 (drop) with prob 1-p.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/056-random-sampling.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/058-monte-carlo-methods.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splitting Arrays — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="012-array-split" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Splitting Arrays</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 8 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 6 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Splitting Arrays</h1>
+      <p class="text-zinc-400 mb-8">Break arrays apart with split, hsplit, vsplit, dsplit, and array_split for uneven divisions.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Splitting Arrays</h1>
+
+<p>The inverse of joining — break one array into multiple sub-arrays.</p>
+
+<h2>Basic Split</h2>
+
+<div data-widget="pyrunner" data-cellid="012-cell-1" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12).reshape(3, 4)&#10;print(f&quot;Original:&#10;{a}&#10;&quot;)&#10;&#10;# Split into 2 along axis 1 (columns)&#10;left, right = np.split(a, 2, axis=1)&#10;print(f&quot;Left:&#10;{left}&quot;)&#10;print(f&quot;Right:&#10;{right}&quot;)&#10;&#10;# Split into 3 along axis 0 (rows)&#10;parts = np.split(a, 3, axis=0)&#10;for i, p in enumerate(parts):&#10;    print(f&quot;Part {i}: {p.flatten()}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Split at Specific Indices</h2>
+
+<div data-widget="pyrunner" data-cellid="012-cell-2" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(10)&#10;&#10;# Split at indices [3, 7]&#10;p1, p2, p3 = np.split(a, [3, 7])&#10;print(f&quot;[0:3]  = {p1}&quot;)&#10;print(f&quot;[3:7]  = {p2}&quot;)&#10;print(f&quot;[7:10] = {p3}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>array_split: Uneven Divisions</h2>
+
+<code>np.split</code> requires even division. <code>np.array_split</code> handles remainders:
+
+<div data-widget="pyrunner" data-cellid="012-cell-3" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(10)&#10;&#10;# 10 elements into 3 parts → uneven!&#10;try:&#10;    np.split(a, 3)&#10;except ValueError as e:&#10;    print(f&quot;split error: {e}&quot;)&#10;&#10;parts = np.array_split(a, 3)&#10;for i, p in enumerate(parts):&#10;    print(f&quot;Part {i}: {p} (len={len(p)})&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>hsplit, vsplit, dsplit</h2>
+
+<div data-widget="pyrunner" data-cellid="012-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12).reshape(3, 4)&#10;&#10;# hsplit = split along axis 1&#10;left, right = np.hsplit(a, 2)&#10;print(f&quot;hsplit: left={left.shape}, right={right.shape}&quot;)&#10;&#10;# vsplit = split along axis 0&#10;top, mid, bot = np.vsplit(a, 3)&#10;print(f&quot;vsplit: top={top.shape}, mid={mid.shape}, bot={bot.shape}&quot;)&#10;&#10;# dsplit for 3D&#10;b = np.arange(24).reshape(2, 3, 4)&#10;parts = np.dsplit(b, 2)&#10;print(f&quot;dsplit: {[p.shape for p in parts]}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Practical: Train/Test Split</h2>
+
+<div data-widget="pyrunner" data-cellid="012-cell-5" data-defaultcode="import numpy as np&#10;&#10;# Simple train/test split without sklearn&#10;X = np.random.randn(100, 5)&#10;y = np.random.randint(0, 2, 100)&#10;&#10;split_idx = 80&#10;X_train, X_test = np.split(X, [split_idx])&#10;y_train, y_test = np.split(y, [split_idx])&#10;&#10;print(f&quot;Train: X={X_train.shape}, y={y_train.shape}&quot;)&#10;print(f&quot;Test:  X={X_test.shape}, y={y_test.shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="012-array-split" data-quizid="quiz-012-array-split"></div>
+
+<script type="application/json" id="quiz-012-array-split">[{"id":"q1","type":"multiple-choice","prompt":"What happens when you np.split an array of 10 elements into 3 parts?","options":["ValueError — uneven split","Returns 3 parts of sizes 4,3,3","Returns 3 parts of sizes 3,3,4","Pads with zeros"],"correctIndex":0,"explanation":"np.split requires even division. Use np.array_split for uneven splits.","randomize":true},{"id":"q2","type":"code-output","prompt":"What does np.split(np.arange(6), [2, 4]) return?","code":"import numpy as np\nparts = np.split(np.arange(6), [2, 4])\nprint([list(p) for p in parts])","options":["[[0,1], [2,3], [4,5]]","[[0,1,2], [3,4,5]]","[[0,1], [2,3,4,5]]","Error"],"correctIndex":0,"explanation":"Split at indices 2 and 4: [0:2], [2:4], [4:6] → three equal parts.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"np.hsplit is equivalent to np.split with axis=?","options":["axis=1","axis=0","axis=2","axis=-1"],"correctIndex":0,"explanation":"hsplit splits horizontally, which means along axis 1 (columns).","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/011-array-join.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/013-array-search.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

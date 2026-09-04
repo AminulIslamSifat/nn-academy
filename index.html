@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NumPy Neural Network Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: {
+              950: '#09090b',
+              900: '#18181b',
+              800: '#27272a',
+            },
+            accent: {
+              300: '#6ee7b7',
+              400: '#34d399',
+              500: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen">
+  <!-- Hero -->
+  <header class="border-b border-zinc-800/50">
+    <div class="mx-auto max-w-5xl px-6 py-20 text-center">
+      <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-accent-500/20 bg-accent-500/5 px-4 py-1.5 text-sm text-accent-400">
+        ⚡ Pure NumPy. Zero frameworks.
+      </div>
+      <h1 class="text-4xl font-bold tracking-tight text-zinc-50 sm:text-5xl">
+        NumPy Neural Network Academy
+      </h1>
+      <p class="mt-4 text-lg text-zinc-400 max-w-2xl mx-auto">
+        Master deep learning from the ground up. Interactive chapters with
+        in-browser Python execution, tensor visualizers, and rigorous assessments.
+      </p>
+      <div class="mt-8 flex items-center justify-center gap-4">
+        <a href="/chapters/001-arrays-and-shapes.html"
+           class="inline-flex items-center gap-2 rounded-lg bg-accent-500 px-6 py-3 font-medium text-surface-950 hover:bg-accent-400 transition">
+          Start Learning →
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tracks grid -->
+  <main class="mx-auto max-w-5xl px-6 py-16">
+    <h2 class="text-xl font-semibold text-zinc-200 mb-8">Curriculum Tracks</h2>
+    <div id="tracks-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <!-- Features -->
+    <div class="mt-20 grid gap-8 sm:grid-cols-3">
+      <div class="text-center">
+        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10">
+          <span class="text-accent-400 text-xl">🖥️</span>
+        </div>
+        <h3 class="font-medium text-zinc-200">Live Python</h3>
+        <p class="mt-1 text-sm text-zinc-500">Execute NumPy code in-browser via WebAssembly. No server needed.</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10">
+          <span class="text-accent-400 text-xl">🧠</span>
+        </div>
+        <h3 class="font-medium text-zinc-200">From Scratch</h3>
+        <p class="mt-1 text-sm text-zinc-500">Build backprop, optimizers, and architectures with raw array math.</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10">
+          <span class="text-accent-400 text-xl">📖</span>
+        </div>
+        <h3 class="font-medium text-zinc-200">65 Chapters</h3>
+        <p class="mt-1 text-sm text-zinc-500">Structured curriculum from arrays to advanced architectures.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-zinc-800/50 py-8 text-center text-sm text-zinc-600">
+    NumPy Neural Network Academy — Learn by building.
+  </footer>
+
+  <script type="module" src="/js/home.js"></script>
+</body>
+</html>

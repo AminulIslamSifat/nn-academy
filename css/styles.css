@@ -1,0 +1,71 @@
+/* Exact copy of src/styles/globals.css from old Next.js site */
+
+:root {
+  --scrollbar-track: #18181b;
+  --scrollbar-thumb: #3f3f46;
+  --scrollbar-thumb-hover: #52525b;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+/* Firefox scrollbar */
+* { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); }
+
+/* Selection */
+::selection { background: rgba(16, 185, 129, 0.2); }
+
+/* KaTeX overrides for dark theme */
+.katex { color: #e4e4e7; font-size: 1.05em; }
+.katex-display { margin: 1.5rem 0; overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+
+/* CodeMirror dark theme adjustments */
+.cm-editor { background: #18181b !important; border-radius: 0.5rem; font-size: 0.875rem; }
+.cm-editor .cm-gutters { background: #09090b; border-right: 1px solid #27272a; }
+.cm-editor.cm-focused { outline: 1px solid rgba(16, 185, 129, 0.3); }
+
+/* Smooth transitions for sidebar */
+.sidebar-item { transition: background-color 150ms ease, color 150ms ease; }
+
+/* Prose overrides for code blocks */
+.prose pre { background: #18181b; border: 1px solid #27272a; border-radius: 0.75rem; padding: 1.25rem 1.5rem; font-size: 1rem; line-height: 1.7; overflow-x: auto; }
+.prose pre code { font-size: 1rem; line-height: 1.7; }
+.prose :not(pre) > code { color: #34d399; font-weight: 500; font-size: 0.9em; padding: 0.15em 0.4em; background: rgba(16, 185, 129, 0.08); border-radius: 0.25rem; }
+.prose code::before, .prose code::after { content: none; }
+
+/* PyRunner widget */
+.pyrunner-widget { background: #18181b; border: 1px solid #27272a; border-radius: 0.75rem; overflow: hidden; margin: 1.5rem 0; }
+.pyrunner-header { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-bottom: 1px solid #27272a; background: #09090b; }
+.pyrunner-dots { display: flex; gap: 6px; }
+.pyrunner-dot { width: 10px; height: 10px; border-radius: 50%; }
+.pyrunner-textarea { width: 100%; min-height: 120px; padding: 1rem; background: transparent; color: #e4e4e7; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; line-height: 1.7; border: none; outline: none; resize: vertical; tab-size: 4; }
+.pyrunner-output { padding: 0.75rem 1rem; border-top: 1px solid #27272a; font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; white-space: pre-wrap; word-break: break-word; }
+.pyrunner-output.success { color: #34d399; }
+.pyrunner-output.error { color: #f87171; }
+.pyrunner-actions { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-top: 1px solid #27272a; }
+.pyrunner-btn { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; border-radius: 0.375rem; font-size: 0.8125rem; font-weight: 500; cursor: pointer; transition: all 150ms; border: none; }
+.pyrunner-btn-run { background: #10b981; color: #09090b; }
+.pyrunner-btn-run:hover { background: #34d399; }
+.pyrunner-btn-reset { background: transparent; color: #71717a; border: 1px solid #3f3f46; }
+.pyrunner-btn-reset:hover { color: #e4e4e7; border-color: #52525b; }
+
+/* Quiz widget */
+.quiz-widget { background: #18181b; border: 1px solid #27272a; border-radius: 0.75rem; padding: 1.5rem; margin: 1.5rem 0; }
+.quiz-option { display: block; width: 100%; text-align: left; padding: 0.625rem 1rem; border-radius: 0.5rem; border: 1px solid #3f3f46; background: #09090b; color: #d4d4d8; font-size: 0.875rem; cursor: pointer; transition: all 150ms; }
+.quiz-option:hover:not(:disabled) { border-color: #10b981; background: rgba(16, 185, 129, 0.05); color: #e4e4e7; }
+.quiz-option.selected { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #34d399; }
+.quiz-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.quiz-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
+.quiz-option.dimmed { opacity: 0.4; }
+.quiz-option:disabled { cursor: default; }
+.submit-btn:hover:not(:disabled) { background: #34d399 !important; }
+.retry-btn:hover { color: #e4e4e7 !important; }
+.expl-toggle:hover { color: #e4e4e7 !important; }
+
+/* Table styling for prose */
+.prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #27272a; color: #a1a1aa; font-weight: 500; font-size: 0.875rem; }
+.prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #27272a; color: #d4d4d8; font-size: 0.875rem; }

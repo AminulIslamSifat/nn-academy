@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pooling &amp; Batch Normalization — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="037-pooling-batchnorm" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Pooling &amp; Batch Normalization</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 25 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 20 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Pooling &amp; Batch Normalization</h1>
+      <p class="text-zinc-400 mb-8">Downsample spatial dimensions and stabilize training. Implement max pooling, average pooling, and batch normalization with forward and backward passes in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Pooling & Batch Normalization</h1>
+
+<p>Two essential CNN building blocks. ==Pooling reduces spatial size== (less computation, more invariance). ==Batch norm stabilizes training== (faster convergence, less sensitivity to initialization).</p>
+
+<h2>Max Pooling</h2>
+
+<p>Take the maximum value in each window. Captures the strongest activation:</p>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def max_pool_forward(X, pool_size=2, stride=2):&#10;    &quot;&quot;&quot;X: (N, C, H, W) → output: (N, C, H//stride, W//stride)&quot;&quot;&quot;&#10;    N, C, H, W = X.shape&#10;    out_H = (H - pool_size) // stride + 1&#10;    out_W = (W - pool_size) // stride + 1&#10;    &#10;    output = np.zeros((N, C, out_H, out_W))&#10;    mask = np.zeros_like(X)  # remember which positions were max&#10;    &#10;    for i in range(out_H):&#10;        for j in range(out_W):&#10;            h_start = i <em> stride&#10;            w_start = j </em> stride&#10;            window = X[:, :, h_start:h_start+pool_size, w_start:w_start+pool_size]&#10;            output[:, :, i, j] = np.max(window, axis=(2, 3))&#10;            &#10;            # Store mask for backward pass&#10;            max_vals = output[:, :, i:i+1, j:j+1]&#10;            mask[:, :, h_start:h_start+pool_size, w_start:w_start+pool_size] += (&#10;                window == max_vals&#10;            ).astype(float)&#10;    &#10;    return output, mask</code></pre>
+
+<div data-widget="pyrunner" data-cellid="037-cell-1" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;X = np.array([[[[1, 3, 2, 4],&#10;                 [5, 1, 6, 2],&#10;                 [3, 7, 1, 8],&#10;                 [2, 4, 9, 1]]]])  # (1, 1, 4, 4)&#10;&#10;def max_pool(X, ps=2, s=2):&#10;    N, C, H, W = X.shape&#10;    oH = (H-ps)//s+1; oW = (W-ps)//s+1&#10;    out = np.zeros((N,C,oH,oW))&#10;    for i in range(oH):&#10;        for j in range(oW):&#10;            hs, ws = i*s, j*s&#10;            out[:,:,i,j] = np.max(X[:,:,hs:hs+ps,ws:ws+ps], axis=(2,3))&#10;    return out&#10;&#10;result = max_pool(X)&#10;print(&quot;Input (4×4):&quot;)&#10;print(X[0,0])&#10;print(f&quot;\nMax Pool 2×2, stride 2 → Output (2×2):&quot;)&#10;print(result[0,0])&#10;print(f&quot;\n💡 Each 2×2 region → its maximum value&quot;)&#10;print(f&quot;   Spatial size halved, channels unchanged&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h3>Max Pool Backward</h3>
+
+<p>Gradient flows ONLY through the positions that were selected as max:</p>
+
+<pre><code class="language-python">def max_pool_backward(dout, mask, input_shape, pool_size=2, stride=2):&#10;    &quot;&quot;&quot;Route gradients back through the max positions.&quot;&quot;&quot;&#10;    N, C, H, W = input_shape&#10;    dX = np.zeros(input_shape)&#10;    _, _, out_H, out_W = dout.shape&#10;    &#10;    for i in range(out_H):&#10;        for j in range(out_W):&#10;            h_start = i <em> stride&#10;            w_start = j </em> stride&#10;            # Distribute gradient only to max positions&#10;            dX[:, :, h_start:h_start+pool_size, w_start:w_start+pool_size] += (&#10;                dout[:, :, i:i+1, j:j+1] * &#10;                mask[:, :, h_start:h_start+pool_size, w_start:w_start+pool_size]&#10;            )&#10;    return dX</code></pre>
+
+<blockquote>[!NOTE] Average Pooling</blockquote>
+<blockquote>Simpler than max pool: every position in the window gets equal gradient <span data-widget="katex" data-latex="\frac{1}{k^2}" data-display="false"></span>. Less commonly used in modern architectures except for global average pooling before the classifier.</blockquote>
+
+<h2>Batch Normalization</h2>
+
+<p>The problem: as earlier layers update, the distribution of their outputs shifts. Later layers constantly chase a moving target. ==Batch norm fixes this by normalizing each layer's inputs to zero mean and unit variance==, then applying learnable scale and shift:</p>
+
+<div data-widget="katex" data-latex="\hat{x} = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}, \quad y = \gamma \hat{x} + \beta" data-display="true"></div>
+
+<p>where <span data-widget="katex" data-latex="\mu_B" data-display="false"></span> and <span data-widget="katex" data-latex="\sigma_B^2" data-display="false"></span> are computed per-batch, and <span data-widget="katex" data-latex="\gamma, \beta" data-display="false"></span> are learned parameters.</p>
+
+<pre><code class="language-python">class BatchNorm:&#10;    def __init__(self, num_features, eps=1e-5, momentum=0.1):&#10;        self.gamma = np.ones(num_features)&#10;        self.beta = np.zeros(num_features)&#10;        self.eps = eps&#10;        self.momentum = momentum&#10;        &#10;        # Running stats for inference&#10;        self.running_mean = np.zeros(num_features)&#10;        self.running_var = np.ones(num_features)&#10;        &#10;        # Cache for backward&#10;        self.cache = None&#10;    &#10;    def forward(self, X, training=True):&#10;        if training:&#10;            # For dense layers: X is (N, D), normalize over axis=0&#10;            # For conv layers: X is (N, C, H, W), normalize over axis=(0,2,3)&#10;            if X.ndim == 2:&#10;                mu = np.mean(X, axis=0)&#10;                var = np.var(X, axis=0)&#10;                self.cache = (X, mu, var)&#10;            else:  # conv&#10;                mu = np.mean(X, axis=(0, 2, 3), keepdims=True)&#10;                var = np.var(X, axis=(0, 2, 3), keepdims=True)&#10;                self.cache = (X, mu, var)&#10;            &#10;            # Update running stats&#10;            self.running_mean = (1 - self.momentum) <em> self.running_mean + self.momentum </em> mu.ravel()&#10;            self.running_var = (1 - self.momentum) <em> self.running_var + self.momentum </em> var.ravel()&#10;        else:&#10;            mu = self.running_mean&#10;            var = self.running_var&#10;            if X.ndim == 4:&#10;                mu = mu.reshape(1, -1, 1, 1)&#10;                var = var.reshape(1, -1, 1, 1)&#10;        &#10;        x_norm = (X - mu) / np.sqrt(var + self.eps)&#10;        &#10;        if X.ndim == 4:&#10;            gamma = self.gamma.reshape(1, -1, 1, 1)&#10;            beta = self.beta.reshape(1, -1, 1, 1)&#10;        else:&#10;            gamma, beta = self.gamma, self.beta&#10;        &#10;        return gamma * x_norm + beta</code></pre>
+
+<div data-widget="pyrunner" data-cellid="037-cell-2" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;&#10;# Simulate activations with weird distribution&#10;X = np.random.randn(64, 128) * 5 + 10  # mean=10, std=5&#10;&#10;print(&quot;Before Batch Norm:&quot;)&#10;print(f&quot;  Mean: {X.mean(axis=0).mean():.2f}&quot;)&#10;print(f&quot;  Std:  {X.std(axis=0).mean():.2f}&quot;)&#10;&#10;# Apply batch norm&#10;mu = X.mean(axis=0)&#10;var = X.var(axis=0)&#10;x_norm = (X - mu) / np.sqrt(var + 1e-5)&#10;gamma = np.ones(128)&#10;beta = np.zeros(128)&#10;out = gamma * x_norm + beta&#10;&#10;print(f&quot;\nAfter Batch Norm:&quot;)&#10;print(f&quot;  Mean: {out.mean(axis=0).mean():.6f} ≈ 0&quot;)&#10;print(f&quot;  Std:  {out.std(axis=0).mean():.4f} ≈ 1&quot;)&#10;&#10;print(f&quot;\n✅ Every feature now has ~zero mean, ~unit variance&quot;)&#10;print(f&quot;   γ and β let the network UNDO normalization if needed&quot;)&#10;print(f&quot;   This is what makes BN so powerful — it&#39;s adaptive&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h3>Why Batch Norm Works</h3>
+
+<li><strong>Reduces internal covariate shift</strong> — layer inputs stay stable</li>
+<li><strong>Allows higher learning rates</strong> — normalized inputs prevent explosion</li>
+<li><strong>Acts as mild regularizer</strong> — batch statistics add noise</li>
+<li><strong>Reduces sensitivity to initialization</strong> — normalization compensates for bad init</li>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Training vs Inference" data-content="During training: use batch statistics. During inference: use running mean/variance accumulated during training. Forgetting this distinction is the #1 batch norm bug."></div>
+
+<h3>Batch Norm Placement</h3>
+
+<p>Convention: ==Conv → BN → ReLU== (not Conv → ReLU → BN). Normalizing before the nonlinearity keeps the pre-activation distribution stable.</p>
+
+<h2>Combined: Conv Block Pattern</h2>
+
+<p>The standard building block of modern CNNs:</p>
+
+<pre><code class="language-python">def conv_block(X, kernels, bn, stride=1, pad=1, training=True):&#10;    &quot;&quot;&quot;Conv → BatchNorm → ReLU&quot;&quot;&quot;&#10;    # Conv forward (from chapter 036)&#10;    conv_out = conv2d_forward(X, kernels, stride=stride, pad=pad)&#10;    # Batch norm&#10;    bn_out = bn.forward(conv_out, training=training)&#10;    # ReLU&#10;    relu_out = np.maximum(0, bn_out)&#10;    return relu_out</code></pre>
+
+<blockquote>[!IMPORTANT] Key Takeaways</blockquote>
+<blockquote>- <strong>Max pooling</strong>: downsamples spatially, routes gradients through max positions only</blockquote>
+<blockquote>- <strong>Batch norm</strong>: normalizes layer inputs, dramatically improves training stability</blockquote>
+<blockquote>- <strong>Always use BN</strong> in modern CNNs — there's almost no reason not to</blockquote>
+<blockquote>- <strong>Global average pooling</strong> before classifier replaces flatten+dense in many architectures</blockquote>
+
+<div data-widget="quiz" data-chapterslug="037-pooling-batchnorm" data-quizid="quiz-037-pooling-batchnorm"></div>
+
+<script type="application/json" id="quiz-037-pooling-batchnorm">[{"id":"q1","type":"multiple-choice","prompt":"In max pool backward, why do gradients only flow through max positions?","options":["For computational efficiency","Because max is non-differentiable at non-max positions — changing those values doesn't change the output","It's an approximation","To act as regularization"],"correctIndex":1,"explanation":"max(a,b,c,d) only depends on the largest value. Perturbing non-max values doesn't change the output, so their partial derivatives are zero. The gradient routes entirely through whichever position was selected.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why does batch norm use running mean/variance at inference instead of batch statistics?","options":["Batch statistics are always wrong","At inference, you may have a single sample (batch size 1), making batch statistics meaningless. Running averages provide stable estimates from training.","Running stats are faster to compute","It prevents overfitting"],"correctIndex":1,"explanation":"With batch_size=1, variance is zero and mean equals the single sample. Running statistics accumulated over training provide meaningful normalization regardless of inference batch size.","randomize":false},{"id":"q3","type":"code-output","prompt":"After batch norm with γ=2, β=1, what's the output for a normalized value of 0.5?","code":"gamma, beta, x_norm = 2.0, 1.0, 0.5\nout = gamma * x_norm + beta\nprint(f'{out:.1f}')","options":["2.0","1.5","3.0","0.5"],"correctIndex":0,"explanation":"y = γ·x̂ + β = 2 × 0.5 + 1 = 2.0. The learnable γ and β allow the network to scale and shift the normalized distribution as needed.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/036-conv2d-from-scratch.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/038-dropout-data-augmentation.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>

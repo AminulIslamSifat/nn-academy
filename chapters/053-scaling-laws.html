@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scaling Laws &amp; Emergent Abilities — NN Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            surface: { 950: '#09090b', 900: '#18181b', 800: '#27272a' },
+            accent: { 300: '#6ee7b7', 400: '#34d399', 500: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="053-scaling-laws" data-slug="{{SLUG}}" class="font-sans antialiased bg-surface-950 text-zinc-100 min-h-screen flex">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 border-r border-zinc-800 bg-surface-950 overflow-y-auto hidden lg:block" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 border-b border-zinc-800 bg-surface-950 px-4 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 font-semibold text-zinc-100">
+          <span class="text-accent-400">📖</span>
+          <span class="text-sm">NN Academy</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 text-zinc-500 hover:text-white transition lg:hidden" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs text-zinc-500 mb-1">
+          <span>Progress</span>
+          <span id="progress-text">0/65</span>
+        </div>
+        <div class="h-1.5 rounded-full bg-zinc-800">
+          <div id="progress-bar" class="h-1.5 rounded-full bg-accent-500 transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content area -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 border-b border-zinc-800 bg-surface-950/80 backdrop-blur-sm px-6 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-1.5 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 transition lg:hidden" aria-label="Open sidebar">☰</button>
+          <nav class="flex items-center gap-2 text-sm text-zinc-500" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-zinc-300 transition">Academy</a>
+            <span>/</span>
+            <span class="text-zinc-300">Scaling Laws &amp; Emergent Abilities</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs text-zinc-500">
+          <span class="flex items-center gap-1">🕐 20 min read</span>
+          <span class="hidden sm:flex items-center gap-1">💻 10 min code</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-3xl font-bold text-zinc-100 mb-4">Scaling Laws &amp; Emergent Abilities</h1>
+      <p class="text-zinc-400 mb-8">Predictable relationships between compute, data, parameters, and performance. Understand why bigger models suddenly unlock new capabilities.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-accent-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Scaling Laws & Emergent Abilities</h1>
+
+<p>The most surprising finding in deep learning: ==performance follows predictable power laws==. Double the compute → predictable improvement. No architectural changes needed.</p>
+
+<h2>Neural Scaling Laws</h2>
+
+<p>Kaplan et al. (2020) discovered:</p>
+
+<div data-widget="katex" data-latex="L(N) \propto N^{-\alpha_N}, \quad L(D) \propto D^{-\alpha_D}, \quad L(C) \propto C^{-\alpha_C}" data-display="true"></div>
+
+<p>where <span data-widget="katex" data-latex="L" data-display="false"></span> is loss, <span data-widget="katex" data-latex="N" data-display="false"></span> is parameters, <span data-widget="katex" data-latex="D" data-display="false"></span> is dataset size, <span data-widget="katex" data-latex="C" data-display="false"></span> is compute.</p>
+
+<div data-widget="pyrunner" data-cellid="053-cell-1" data-defaultcode="import numpy as np&#10;&#10;# Simulate scaling law: L(N) = (N_c / N)^alpha&#10;N_c = 8.8e13  # critical parameter count&#10;alpha = 0.076&#10;&#10;params = [1e6, 1e7, 1e8, 1e9, 1e10, 1e11]&#10;losses = [(N_c / N)**alpha for N in params]&#10;&#10;print(&quot;Neural Scaling Law: L(N) ∝ N^(-α)&quot;)&#10;print(f&quot;{&#39;Parameters&#39;:&gt;12} | {&#39;Loss&#39;:&gt;8} | Improvement&quot;)&#10;print(&quot;─&quot; * 45)&#10;prev = None&#10;for N, L in zip(params, losses):&#10;    imp = f&quot;{(prev/L):.2f}×&quot; if prev else &quot;—&quot;&#10;    label = {1e6:&quot;1M&quot;,1e7:&quot;10M&quot;,1e8:&quot;100M&quot;,1e9:&quot;1B&quot;,1e10:&quot;10B&quot;,1e11:&quot;100B&quot;}[N]&#10;    print(f&quot;{label:&gt;12} | {L:8.3f} | {imp}&quot;)&#10;    prev = L&#10;&#10;print(f&quot;\n💡 Each 10× increase in params → ~{(10**alpha):.2f}× lower loss&quot;)&#10;print(f&quot;   Predictable, smooth, no surprises... until emergent abilities!&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Chinchilla Scaling</h2>
+
+<p>Hoffmann et al. (2022) refined: ==parameters and data should scale together==. Most models were under-trained (too many params, too little data).</p>
+
+<p>Optimal ratio: ~20 tokens per parameter.</p>
+
+<table><tr><td>Model</td><td>Params</td><td>Tokens</td><td>Ratio</td><td>Efficient?</td></tr>
+</table>
+<table><tr><td>GPT-3</td><td>175B</td><td>300B</td><td>1.7</td><td>❌ Over-parameterized</td></tr>
+<tr><td>Chinchilla</td><td>70B</td><td>1.4T</td><td>20</td><td>✅ Optimal</td></tr>
+<tr><td>LLaMA-2</td><td>70B</td><td>2T</td><td>28</td><td>✅ Slightly over-data</td></tr>
+</table>
+<blockquote>[!IMPORTANT] Practical Implication</blockquote>
+<blockquote>For a fixed compute budget, it's better to train a smaller model on more data than a larger model on less data. This changed how every major lab designs models.</blockquote>
+
+<h2>Emergent Abilities</h2>
+
+<p>Some capabilities appear ==suddenly== at specific scales:</p>
+
+<table><tr><td>Ability</td><td>Emerges At</td><td>Example</td></tr>
+</table>
+<table><tr><td>Arithmetic</td><td>~1B params</td><td>Multi-digit addition</td></tr>
+<tr><td>Chain-of-thought</td><td>~10B params</td><td>Step-by-step reasoning</td></tr>
+<tr><td>In-context learning</td><td>~10B params</td><td>Few-shot from examples</td></tr>
+<tr><td>Code generation</td><td>~30B params</td><td>Functional programs</td></tr>
+<tr><td>Instruction following</td><td>~50B+ params</td><td>Zero-shot task completion</td></tr>
+</table>
+
+<div data-widget="pyrunner" data-cellid="053-cell-2" data-defaultcode="import numpy as np&#10;&#10;# Simulate emergent ability (sharp phase transition)&#10;scales = np.logspace(6, 11, 50)  # 1M to 100B&#10;threshold = 1e10  # 10B params&#10;&#10;# Smooth scaling + sharp emergence&#10;smooth_perf = 0.3 * np.log10(scales / 1e6) / 5&#10;emergent = 1 / (1 + np.exp(-(np.log10(scales) - np.log10(threshold)) * 3))&#10;total = np.clip(smooth_perf + 0.5 * emergent, 0, 1)&#10;&#10;print(&quot;Emergent Ability Simulation:&quot;)&#10;print(f&quot;{&#39;Scale&#39;:&gt;10} | {&#39;Performance&#39;:&gt;11} | Note&quot;)&#10;print(&quot;─&quot; * 42)&#10;checkpoints = [1e6, 1e7, 1e8, 1e9, 5e9, 1e10, 5e10, 1e11]&#10;for s in checkpoints:&#10;    idx = np.argmin(np.abs(scales - s))&#10;    p = total[idx]&#10;    note = &quot;🔥 EMERGENCE&quot; if abs(s - threshold)/threshold &lt; 0.5 else &quot;&quot;&#10;    label = f&quot;{s/1e9:.0f}B&quot; if s &gt;= 1e9 else f&quot;{s/1e6:.0f}M&quot;&#10;    print(f&quot;{label:&gt;10} | {p:11.3f} | {note}&quot;)&#10;&#10;print(f&quot;\n⚡ Performance jumps sharply around {threshold/1e9:.0f}B parameters&quot;)&#10;print(f&quot;   Below threshold: gradual improvement&quot;)&#10;print(f&quot;   Above threshold: qualitatively new capabilities&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Why Do Emergent Abilities Appear?</h2>
+
+<p>Leading hypotheses:</p>
+
+<li><strong>Phase transitions</strong>: Sufficient capacity enables compositional reasoning</li>
+<li><strong>Metric artifacts</strong>: Smooth underlying improvement crosses task-specific thresholds</li>
+<li><strong>Data coverage</strong>: Larger models see enough examples of rare patterns</li>
+<li><strong>Representation richness</strong>: More dimensions enable disentangled concepts</li>
+
+<blockquote>[!NOTE] Debate</blockquote>
+<blockquote>Some researchers argue emergence is partly an artifact of discrete evaluation metrics. Continuous metrics often show smooth improvement. But the practical reality remains: certain USEFUL capabilities only appear above specific scales.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="053-scaling-laws" data-quizid="quiz-053-scaling-laws"></div>
+
+<script type="application/json" id="quiz-053-scaling-laws">[{"id":"q1","type":"multiple-choice","prompt":"What did Chinchilla scaling reveal about GPT-3?","options":["GPT-3 was too small","GPT-3 had too many parameters relative to its training data; a smaller model with more data would perform equally well at lower cost","GPT-3 used the wrong architecture","GPT-3 needed more layers"],"correctIndex":1,"explanation":"GPT-3 (175B params, 300B tokens) was severely over-parameterized. Chinchilla showed a 70B model trained on 1.4T tokens matches GPT-3 performance at a fraction of the inference cost.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What are emergent abilities?","options":["Features added by fine-tuning","Capabilities that appear suddenly at specific model scales, absent in smaller models regardless of training","Marketing terms","Architectural innovations"],"correctIndex":1,"explanation":"Chain-of-thought reasoning, in-context learning, and arithmetic appear abruptly around 10B+ parameters. Smaller models trained on the same data simply cannot perform these tasks.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next navigation -->
+      <nav class="mt-16 flex items-center justify-between border-t border-zinc-800 pt-8" aria-label="Chapter navigation">
+        <a href="/chapters/052-rlhf-alignment.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">← Previous</a>
+        <a href="/chapters/054-mini-llm-capstone.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-accent-400 transition">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+</body>
+</html>
