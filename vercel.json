@@ -1,0 +1,5 @@
+{
+  "buildCommand": "node build.mjs && mkdir -p dist && cp index.html dist/ && cp -r css js content chapters dist/",
+  "outputDirectory": "dist",
+  "framework": null
+}
