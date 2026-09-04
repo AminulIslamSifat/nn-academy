@@ -1,0 +1,43 @@
+{
+  "name": "numpy-nn-academy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/validate-content.mjs && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "validate": "node scripts/validate-content.mjs"
+  },
+  "dependencies": {
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "next-mdx-remote": "^5.0.0",
+    "gray-matter": "^4.0.3",
+    "zustand": "^4.5.5",
+    "dexie": "^4.0.8",
+    "katex": "^0.16.11",
+    "lucide-react": "^0.441.0",
+    "framer-motion": "^11.5.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.2",
+    "@types/node": "^22.5.4",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "tailwindcss": "^3.4.10",
+    "postcss": "^8.4.45",
+    "autoprefixer": "^10.4.20",
+    "@tailwindcss/typography": "^0.5.15",
+    "@codemirror/lang-python": "^6.1.6",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.33.0",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/autocomplete": "^6.18.0",
+    "@codemirror/commands": "^6.6.0",
+    "@codemirror/search": "^6.5.6",
+    "codemirror": "^6.0.1",
+    "monaco-editor": "^0.52.0"
+  }
+}

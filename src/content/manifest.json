@@ -1,0 +1,141 @@
+{
+  "version": 3,
+  "totalChapters": 65,
+  "tracks": [
+    {
+      "id": "numpy-foundations",
+      "title": "NumPy Foundations",
+      "icon": "\ud83d\udcd0",
+      "chapters": [
+        "001-arrays-and-shapes",
+        "002-indexing-and-slicing",
+        "006-data-types",
+        "007-copy-vs-view",
+        "008-array-shape",
+        "009-array-reshape",
+        "010-array-iterating",
+        "011-array-join",
+        "012-array-split",
+        "013-array-search",
+        "014-array-sort",
+        "015-array-filter"
+      ]
+    },
+    {
+      "id": "vectorization",
+      "title": "Vectorization & Broadcasting",
+      "icon": "\u26a1",
+      "chapters": [
+        "003-vectorization",
+        "004-broadcasting"
+      ]
+    },
+    {
+      "id": "ufuncs",
+      "title": "Universal Functions (ufunc)",
+      "icon": "\ud83d\udd27",
+      "chapters": [
+        "016-ufunc-intro",
+        "017-ufunc-create-function",
+        "018-ufunc-arithmetic",
+        "019-ufunc-rounding",
+        "020-ufunc-logs",
+        "021-ufunc-summations",
+        "022-ufunc-products",
+        "023-ufunc-differences",
+        "024-ufunc-lcm-gcd",
+        "025-ufunc-trigonometric",
+        "026-ufunc-hyperbolic",
+        "027-ufunc-set-operations"
+      ]
+    },
+    {
+      "id": "nn-primitives",
+      "title": "Neural Network Primitives",
+      "icon": "\ud83e\udde0",
+      "chapters": [
+        "005-linear-layer"
+      ]
+    },
+    {
+      "id": "nn-beginner",
+      "title": "Neural Networks: Beginner",
+      "icon": "\ud83c\udf31",
+      "chapters": [
+        "028-activation-functions",
+        "029-loss-functions",
+        "030-backpropagation",
+        "031-gradient-descent-optimizers",
+        "032-mnist-from-scratch",
+        "033-regularization",
+        "034-evaluation-metrics",
+        "035-learning-rate-schedules"
+      ]
+    },
+    {
+      "id": "nn-intermediate",
+      "title": "Neural Networks: Intermediate",
+      "icon": "\ud83d\udd25",
+      "chapters": [
+        "036-conv2d-from-scratch",
+        "037-pooling-batchnorm",
+        "038-dropout-data-augmentation",
+        "039-cnn-mnist",
+        "040-ocr-text-recognition",
+        "041-rnn-from-scratch",
+        "042-lstm-gru",
+        "043-word-embeddings",
+        "044-seq2seq",
+        "045-crnn-ocr-capstone"
+      ]
+    },
+    {
+      "id": "nn-advanced",
+      "title": "Neural Networks: Advanced",
+      "icon": "\ud83d\ude80",
+      "chapters": [
+        "046-attention-mechanism",
+        "047-multihead-attention",
+        "048-transformer-architecture",
+        "049-tokenization",
+        "050-gpt-from-scratch",
+        "051-pretraining-finetuning",
+        "052-rlhf-alignment",
+        "053-scaling-laws",
+        "054-mini-llm-capstone",
+        "055-whats-next"
+      ]
+    },
+    {
+      "id": "random",
+      "title": "Random & Distributions",
+      "icon": "\ud83c\udfb2",
+      "chapters": [
+        "056-random-sampling",
+        "057-probability-distributions",
+        "058-monte-carlo-methods",
+        "059-noise-and-data-augmentation"
+      ]
+    },
+    {
+      "id": "calculus-autodiff",
+      "title": "Calculus & Autodiff",
+      "icon": "\u2202",
+      "chapters": [
+        "060-derivatives-and-gradients",
+        "061-chain-rule",
+        "062-computational-graphs"
+      ]
+    },
+    {
+      "id": "training",
+      "title": "Training & Optimization",
+      "icon": "\ud83c\udfcb\ufe0f",
+      "chapters": [
+        "063-mini-batch-training",
+        "064-gradient-clipping",
+        "065-initialization-strategies"
+      ]
+    }
+  ]
+}
