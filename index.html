@@ -10,6 +10,7 @@
   <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -52,15 +53,15 @@
       <!-- Stats row -->
       <div class="animate-in mt-16 flex items-center justify-center gap-8 text-sm" style="color: var(--text-muted); animation-delay: 320ms;">
         <div class="flex items-center gap-2">
-          <span class="text-lg">📖</span>
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
           <span><strong style="color: var(--text-primary);">65</strong> chapters</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-lg">🖥️</span>
+          <i data-lucide="terminal" style="width:16px;height:16px;color:var(--accent);"></i>
           <span><strong style="color: var(--text-primary);">Live</strong> Python</span>
         </div>
         <div class="flex items-center gap-2">
-          <span class="text-lg">🧠</span>
+          <i data-lucide="brain" style="width:16px;height:16px;color:var(--accent);"></i>
           <span><strong style="color: var(--text-primary);">10</strong> tracks</span>
         </div>
       </div>
@@ -84,21 +85,21 @@
       <div class="grid gap-12 sm:grid-cols-3">
         <div class="text-center">
           <div class="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl" style="background: var(--accent-glow);">
-            <span class="text-lg">⚡</span>
+            <i data-lucide="zap" style="width:18px;height:18px;color:var(--accent);"></i>
           </div>
           <h3 class="text-sm font-medium" style="color: var(--text-primary);">In-Browser Execution</h3>
           <p class="mt-2 text-xs leading-relaxed" style="color: var(--text-muted);">Run real NumPy code via WebAssembly. No server, no setup, instant feedback.</p>
         </div>
         <div class="text-center">
           <div class="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl" style="background: var(--accent-glow);">
-            <span class="text-lg">🔬</span>
+            <i data-lucide="microscope" style="width:18px;height:18px;color:var(--accent);"></i>
           </div>
           <h3 class="text-sm font-medium" style="color: var(--text-primary);">From Scratch</h3>
           <p class="mt-2 text-xs leading-relaxed" style="color: var(--text-muted);">Build backprop, optimizers, CNNs, and transformers with raw array math.</p>
         </div>
         <div class="text-center">
           <div class="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl" style="background: var(--accent-glow);">
-            <span class="text-lg">📐</span>
+            <i data-lucide="compass" style="width:18px;height:18px;color:var(--accent);"></i>
           </div>
           <h3 class="text-sm font-medium" style="color: var(--text-primary);">Rigorous Math</h3>
           <p class="mt-2 text-xs leading-relaxed" style="color: var(--text-muted);">Every concept grounded in calculus, linear algebra, and probability theory.</p>
@@ -112,5 +113,6 @@
   </footer>
 
   <script type="module" src="/js/home.js"></script>
+  <script>lucide.createIcons()</script>
 </body>
 </html>

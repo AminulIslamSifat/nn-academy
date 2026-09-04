@@ -5,7 +5,7 @@
     {
       "id": "numpy-foundations",
       "title": "NumPy Foundations",
-      "icon": "\ud83d\udcd0",
+      "icon": "grid-3x3",
       "chapters": [
         "001-arrays-and-shapes",
         "002-indexing-and-slicing",
@@ -24,7 +24,7 @@
     {
       "id": "vectorization",
       "title": "Vectorization & Broadcasting",
-      "icon": "\u26a1",
+      "icon": "zap",
       "chapters": [
         "003-vectorization",
         "004-broadcasting"
@@ -33,7 +33,7 @@
     {
       "id": "ufuncs",
       "title": "Universal Functions (ufunc)",
-      "icon": "\ud83d\udd27",
+      "icon": "wrench",
       "chapters": [
         "016-ufunc-intro",
         "017-ufunc-create-function",
@@ -52,7 +52,7 @@
     {
       "id": "nn-primitives",
       "title": "Neural Network Primitives",
-      "icon": "\ud83e\udde0",
+      "icon": "brain",
       "chapters": [
         "005-linear-layer"
       ]
@@ -60,7 +60,7 @@
     {
       "id": "nn-beginner",
       "title": "Neural Networks: Beginner",
-      "icon": "\ud83c\udf31",
+      "icon": "sprout",
       "chapters": [
         "028-activation-functions",
         "029-loss-functions",
@@ -75,7 +75,7 @@
     {
       "id": "nn-intermediate",
       "title": "Neural Networks: Intermediate",
-      "icon": "\ud83d\udd25",
+      "icon": "flame",
       "chapters": [
         "036-conv2d-from-scratch",
         "037-pooling-batchnorm",
@@ -92,7 +92,7 @@
     {
       "id": "nn-advanced",
       "title": "Neural Networks: Advanced",
-      "icon": "\ud83d\ude80",
+      "icon": "rocket",
       "chapters": [
         "046-attention-mechanism",
         "047-multihead-attention",
@@ -109,7 +109,7 @@
     {
       "id": "random",
       "title": "Random & Distributions",
-      "icon": "\ud83c\udfb2",
+      "icon": "dices",
       "chapters": [
         "056-random-sampling",
         "057-probability-distributions",
@@ -120,7 +120,7 @@
     {
       "id": "calculus-autodiff",
       "title": "Calculus & Autodiff",
-      "icon": "\u2202",
+      "icon": "sigma",
       "chapters": [
         "060-derivatives-and-gradients",
         "061-chain-rule",
@@ -130,7 +130,7 @@
     {
       "id": "training",
       "title": "Training & Optimization",
-      "icon": "\ud83c\udfcb\ufe0f",
+      "icon": "dumbbell",
       "chapters": [
         "063-mini-batch-training",
         "064-gradient-clipping",

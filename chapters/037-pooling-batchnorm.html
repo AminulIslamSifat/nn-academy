@@ -10,6 +10,7 @@
   <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -34,7 +35,7 @@
     <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
       <div class="flex items-center justify-between">
         <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
-          <span class="text-base">📖</span>
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
           <span>NN Academy</span>
         </a>
         <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
@@ -66,8 +67,8 @@
           </nav>
         </div>
         <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
-          <span class="flex items-center gap-1">🕐 25 min</span>
-          <span class="hidden sm:flex items-center gap-1">💻 20 min</span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 25 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 20 min</span>
         </div>
       </div>
     </header>
@@ -152,5 +153,6 @@
   </main>
 
   <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
 </body>
 </html>

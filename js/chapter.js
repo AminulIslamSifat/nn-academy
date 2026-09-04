@@ -31,7 +31,7 @@ function renderSidebar() {
     const btn = document.createElement('button')
     btn.className = 'sidebar-track-btn'
     btn.setAttribute('aria-expanded', 'true')
-    btn.innerHTML = `<span class="chevron" style="color: var(--text-muted); font-size: 0.7rem;">▾</span><span>${track.icon}</span><span class="flex-1 text-left">${track.title}</span><span style="font-size: 0.7rem; color: var(--text-muted);">${trackCompleted}/${track.chapters.length}</span>`
+    btn.innerHTML = `<span class="chevron" style="color: var(--text-muted); font-size: 0.7rem;">▾</span><i data-lucide="${track.icon}" style="width:14px;height:14px;color:var(--accent);"></i><span class="flex-1 text-left">${track.title}</span><span style="font-size: 0.7rem; color: var(--text-muted);">${trackCompleted}/${track.chapters.length}</span>`
 
     const chaptersDiv = document.createElement('div')
     chaptersDiv.className = 'ml-6 space-y-0.5 mt-1'
@@ -68,9 +68,10 @@ function renderSidebar() {
 }
 
 renderSidebar()
+lucide.createIcons()
 
 // Listen for progress updates and re-render sidebar
-window.addEventListener('nna-progress', () => renderSidebar())
+window.addEventListener('nna-progress', () => { renderSidebar(); lucide.createIcons() })
 
 // Sidebar toggle (desktop + mobile)
 const mobileBtn = document.getElementById('mobile-menu-btn')

@@ -13,7 +13,7 @@ for (const track of manifest.tracks) {
   card.style.textDecoration = 'none'
   card.innerHTML = `
     <div class="flex items-center justify-between">
-      <span class="text-xl">${track.icon}</span>
+      <i data-lucide="${track.icon}" style="width:18px;height:18px;color:var(--accent);"></i>
       <span class="text-[11px] font-medium px-2 py-0.5 rounded-full" style="color: var(--text-muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle);">
         ${count} ch
       </span>
@@ -29,3 +29,6 @@ for (const track of manifest.tracks) {
   `
   grid.appendChild(card)
 }
+
+// Render lucide icons after dynamic content is inserted
+lucide.createIcons()

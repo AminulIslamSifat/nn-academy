@@ -12,6 +12,7 @@
 
 # production
 /build
+_site/
 
 # python / scripts
 __pycache__/
