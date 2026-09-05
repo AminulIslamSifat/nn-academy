@@ -22,6 +22,8 @@ A small kernel slides across the image, computing dot products at every position
 
 The same kernel detects the same feature everywhere. A 3×3 edge detector finds edges whether they're in the top-left or bottom-right corner.
 
+<Visualizer mode="broadcasting" shapeA={[5, 5]} shapeB={[3, 3]} title="Conv2D: Kernel slides over image" />
+
 ```python
 import numpy as np
 

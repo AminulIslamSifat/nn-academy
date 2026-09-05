@@ -30,6 +30,8 @@ In words:
 - **Key**: what does each source position contain?
 - **Value**: what information should I retrieve?
 
+<Visualizer mode="matmul" shapeA={[8, 64]} shapeB={[64, 8]} title="Attention: Q(T×D) @ K(D×T) → scores(T×T)" />
+
 ```python
 import numpy as np
 
