@@ -54,7 +54,7 @@ class PyodideManager {
         this._clearWatchdog()
         const cb = msg.id ? this.pending.get(msg.id) : null
         if (cb && msg.id) {
-          const output = cb.stdout.join('')
+          const output = cb.stdout.join('\n')
           const result = msg.data ? `${output}${output ? '\n' : ''}${msg.data}` : output
           cb.resolve(result || '(no output)')
           this.pending.delete(msg.id)
