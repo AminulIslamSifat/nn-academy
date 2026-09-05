@@ -165,20 +165,240 @@ Attention gives direct paths between any two positions. Distance no longer matte
     {
       id: "q1",
       type: "multiple-choice",
-      prompt: "Why divide QKᵀ by sqrt(d_k) in scaled dot-product attention?",
-      options: ["To reduce parameter count", "Dot product variance grows with d_k; scaling keeps scores numerically stable and prevents softmax saturation", "To make attention symmetric", "Because values must be normalized"],
+      prompt: "Why divide QKᵀ by √d_k in scaled dot-product attention?",
+      options: [
+        "To reduce parameter count",
+        "Dot product variance grows linearly with d_k; scaling keeps scores in a range where softmax produces non-saturated distributions with healthy gradients",
+        "To make attention symmetric",
+        "Because values must be normalized first"
+      ],
       correctIndex: 1,
-      explanation: "A dot product sums d_k terms, so its variance grows with d_k. Large scores make softmax nearly one-hot, killing gradients. Dividing by sqrt(d_k) keeps the variance roughly constant.",
-      randomize: true,
+      explanation: "A dot product of two d_k-dim vectors has variance proportional to d_k. Without scaling, large d_k produces extreme scores → near-one-hot softmax → vanishing gradients. Dividing by √d_k normalizes variance to ~1.",
+      randomize: true
     },
     {
       id: "q2",
       type: "multiple-choice",
       prompt: "What does a causal mask prevent?",
-      options: ["Overfitting", "A token attending to future tokens during autoregressive generation", "Gradient explosion", "Repeated words"],
+      options: [
+        "Overfitting to training data",
+        "A token attending to future tokens during autoregressive generation — it enforces left-to-right information flow",
+        "Gradient explosion in deep networks",
+        "Repeated word generation"
+      ],
       correctIndex: 1,
-      explanation: "In language generation, token t must only depend on tokens < t. A causal mask sets future attention scores to -inf, making their softmax probability zero.",
-      randomize: false,
+      explanation: "In language generation, token t must only depend on tokens ≤ t. A causal mask sets future attention scores to -∞ before softmax, making their weights exactly zero.",
+      randomize: false
+    },
+    {
+      id: "q3",
+      type: "multiple-choice",
+      prompt: "In attention, what do Query, Key, and Value represent conceptually?",
+      options: [
+        "Input, hidden state, output",
+        "Query = what am I looking for, Key = what does each position contain (address), Value = what information to retrieve (content)",
+        "Encoder, decoder, context",
+        "Weights, biases, activations"
+      ],
+      correctIndex: 1,
+      explanation: "Analogy to database retrieval: query is the search term, keys are indexed addresses, values are stored content. Attention computes similarity between query and each key, then retrieves a weighted combination of values.",
+      randomize: true
+    },
+    {
+      id: "q4",
+      type: "shape-prediction",
+      prompt: "If Q has shape (T_q, D) and K has shape (T_k, D), what shape is the attention score matrix Q @ K.T?",
+      options: ["(T_q, T_k)", "(D, D)", "(T_q, D)", "(T_k, T_q)"],
+      correctIndex: 0,
+      explanation: "Q(T_q, D) @ K.T(D, T_k) = (T_q, T_k). Each entry [i,j] is the similarity between query i and key j. This matrix determines how much each query attends to each key.",
+      randomize: true
+    },
+    {
+      id: "q5",
+      type: "code-output",
+      prompt: "What does np.tril produce for T=4?",
+      code: "import numpy as np\nprint(np.tril(np.ones((4,4), dtype=int)))",
+      options: ["[[1 0 0 0]\n [1 1 0 0]\n [1 1 1 0]\n [1 1 1 1]]", "[[1 1 1 1]\n [0 1 1 1]\n [0 0 1 1]\n [0 0 0 1]]", "Identity matrix", "All ones"],
+      correctIndex: 0,
+      explanation: "np.tril creates a lower triangular matrix. Row t has 1s for columns ≤ t and 0s for columns > t. This is the causal mask: position t can attend to positions 0..t but not t+1..T.",
+      randomize: true
+    },
+    {
+      id: "q6",
+      type: "multiple-choice",
+      prompt: "How does attention solve the context vector bottleneck of basic seq2seq?",
+      options: [
+        "It uses a larger context vector",
+        "Instead of compressing everything into one fixed vector, attention computes a fresh context at each decoder step by directly accessing all encoder states. No information needs to be pre-compressed.",
+        "It removes the encoder entirely",
+        "It uses multiple context vectors in parallel"
+      ],
+      correctIndex: 1,
+      explanation: "The decoder queries relevant encoder states at each generation step. Long-range dependencies are handled in O(1) instead of O(T) recurrent steps. Information flows directly from any encoder position to any decoder position.",
+      randomize: true
+    },
+    {
+      id: "q7",
+      type: "fill-blank",
+      prompt: "Attention weights α_i are computed via ___ over the raw scores, ensuring they sum to ___ and are all non-negative.",
+      options: ["softmax, 1", "sigmoid, 0", "ReLU, 1", "normalization, 0"],
+      correctIndex: 0,
+      explanation: "Softmax converts arbitrary real-valued scores into a valid probability distribution: all positive, summing to 1. This makes attention weights interpretable as 'how much to focus on each position'.",
+      randomize: false
+    },
+    {
+      id: "q8",
+      type: "multiple-choice",
+      prompt: "What happens if you forget to apply the causal mask during autoregressive generation training?",
+      options: [
+        "Nothing — the model still works",
+        "The model cheats by attending to future tokens it shouldn't see. Training loss looks great but inference fails because future tokens aren't available at generation time.",
+        "Training becomes slower",
+        "Gradients explode"
+      ],
+      correctIndex: 1,
+      explanation: "Without masking, the model learns to copy future tokens directly rather than predicting from past context. This train/test mismatch causes catastrophic failure at inference when future tokens don't exist.",
+      randomize: true
+    },
+    {
+      id: "q9",
+      type: "code-output",
+      prompt: "What is the effect of setting masked positions to -1e9 before softmax?",
+      code: "import numpy as np\nscores = np.array([1.0, 2.0, -1e9, -1e9])\nshifted = scores - scores.max()\nprobs = np.exp(shifted) / np.exp(shifted).sum()\nprint(probs.round(4))",
+      options: ["[0.2689 0.7311 0.     0.    ]", "[0.25 0.25 0.25 0.25]", "[0. 0. 0.5 0.5]", "Error"],
+      correctIndex: 0,
+      explanation: "exp(-1e9) ≈ 0, so masked positions get zero probability. The remaining positions share the probability mass normally. This is how causal/padding masks work in practice.",
+      randomize: true
+    },
+    {
+      id: "q10",
+      type: "ordering",
+      prompt: "Order the scaled dot-product attention computation:",
+      items: ["Compute scores: Q @ K.T", "Scale by 1/√d_k", "Apply mask (if any)", "Softmax over scores", "Weighted sum: weights @ V"],
+      correctOrder: [0, 1, 2, 3, 4],
+      explanation: "Scores → scale → mask → softmax → aggregate. Scaling before softmax prevents saturation. Masking before softmax ensures blocked positions get zero weight. Final matmul retrieves content.",
+      randomize: true
+    },
+    {
+      id: "q11",
+      type: "multiple-choice",
+      prompt: "How does additive attention differ from dot-product attention?",
+      options: [
+        "Additive attention is faster",
+        "Additive uses a learned neural network (vᵀ·tanh(W_q·q + W_k·k)) to compute compatibility. Dot-product uses simple matrix multiplication. Dot-product is faster and became standard in Transformers.",
+        "They're mathematically identical",
+        "Additive attention doesn't use softmax"
+      ],
+      correctIndex: 1,
+      explanation: "Additive attention (Bahdanau) learns a compatibility function via a small MLP. Dot-product attention assumes similarity is captured by inner product. Dot-product is computationally cheaper and scales better, winning out in Transformer architectures.",
+      randomize: true
+    },
+    {
+      id: "q12",
+      type: "multiple-choice",
+      prompt: "Why is attention described as 'differentiable memory retrieval'?",
+      options: [
+        "It stores data in GPU memory",
+        "Keys act as addresses, values as stored content, and softmax-weighted retrieval is fully differentiable — gradients flow through the attention weights back to Q, K, and V",
+        "It replaces RAM with neural storage",
+        "It's an analogy with no mathematical basis"
+      ],
+      correctIndex: 1,
+      explanation: "Unlike hard memory lookup (non-differentiable), soft attention retrieves a weighted combination of all values. The weighting depends on learnable parameters, so the entire retrieval process can be trained end-to-end via backpropagation.",
+      randomize: true
+    },
+    {
+      id: "q13",
+      type: "shape-prediction",
+      prompt: "If attention weights have shape (T_q, T_k) and V has shape (T_k, D_v), what shape is the attention output (weights @ V)?",
+      options: ["(T_q, D_v)", "(T_k, D_v)", "(T_q, T_k)", "(D_v, T_q)"],
+      correctIndex: 0,
+      explanation: "(T_q, T_k) @ (T_k, D_v) = (T_q, D_v). Each query position gets its own D_v-dimensional context vector — a weighted combination of all value vectors.",
+      randomize: true
+    },
+    {
+      id: "q14",
+      type: "multiple-choice",
+      prompt: "In RNNs, information from token 1 to token 100 travels through 99 recurrent steps. How does attention change this?",
+      options: [
+        "It still requires 99 steps but processes them in parallel",
+        "Token 100 can directly attend to token 1 in a single operation — distance becomes irrelevant. This eliminates the long-range dependency problem entirely.",
+        "It reduces it to log(99) steps",
+        "Attention doesn't help with long-range dependencies"
+      ],
+      correctIndex: 1,
+      explanation: "Attention creates direct connections between any two positions regardless of distance. The path length from any token to any other is O(1), compared to O(T) for RNNs. This is why Transformers dominate sequence modeling.",
+      randomize: true
+    },
+    {
+      id: "q15",
+      type: "fill-blank",
+      prompt: "The context vector is computed as the ___ sum of value vectors, weighted by the attention ___.",
+      options: ["weighted, probabilities", "simple, scores", "unweighted, keys", "cumulative, queries"],
+      correctIndex: 0,
+      explanation: "context = Σ α_i · v_i where α_i are softmax-normalized attention weights. High-weight positions contribute more to the context; low-weight positions contribute less. This is a soft, differentiable selection mechanism.",
+      randomize: false
+    },
+    {
+      id: "q16",
+      type: "multiple-choice",
+      prompt: "Your attention weights are nearly uniform (all ≈ 1/T) even after training. What might be wrong?",
+      options: [
+        "This is expected behavior",
+        "The model isn't learning meaningful query-key relationships. Possible causes: poor initialization, learning rate too low, missing scaling factor causing gradient issues, or insufficient training data.",
+        "Uniform attention is optimal",
+        "The vocabulary is too small"
+      ],
+      correctIndex: 1,
+      explanation: "Uniform attention means the model treats all positions equally — equivalent to simple averaging. Attention should learn selective focus patterns. Check gradient flow through Q/K projections and verify the scaling factor is applied.",
+      randomize: true
+    },
+    {
+      id: "q17",
+      type: "multiple-choice",
+      prompt: "What is the computational complexity of self-attention for a sequence of length T with dimension D?",
+      options: ["O(T × D)", "O(T² × D) — quadratic in sequence length due to the T×T score matrix", "O(T × D²)", "O(D³)"],
+      correctIndex: 1,
+      explanation: "Computing Q@K.T produces a T×T matrix (O(T²D)), and weights@V also costs O(T²D). This quadratic scaling is why Transformers struggle with very long sequences and motivated efficient attention variants.",
+      randomize: true
+    },
+    {
+      id: "q18",
+      type: "code-output",
+      prompt: "For d_k=64, what is the scaling factor 1/√d_k?",
+      code: "import numpy as np\nd_k = 64\nprint(f'{1/np.sqrt(d_k):.4f}')",
+      options: ["0.1250", "0.0156", "1.0000", "0.2500"],
+      correctIndex: 0,
+      explanation: "1/√64 = 1/8 = 0.125. This scales down dot products by 8× for d_k=64, preventing the variance from growing too large and keeping softmax in a well-behaved regime.",
+      randomize: true
+    },
+    {
+      id: "q19",
+      type: "multiple-choice",
+      prompt: "Why is self-attention called 'self'?",
+      options: [
+        "It attends to itself recursively",
+        "Queries, keys, and values all come from the SAME sequence — each position attends to all other positions in its own input, unlike cross-attention where Q and K/V come from different sources",
+        "It's a self-supervised technique",
+        "It only works on single sentences"
+      ],
+      correctIndex: 1,
+      explanation: "In self-attention, Q=K=V=X (same source). Each token looks at every other token in the same sequence. Cross-attention uses Q from one sequence and K,V from another (e.g., decoder attending to encoder).",
+      randomize: true
+    },
+    {
+      id: "q20",
+      type: "multiple-choice",
+      prompt: "You're building a translation model. Where would you use causal masking vs no masking?",
+      options: [
+        "Causal mask everywhere",
+        "Encoder self-attention: NO mask (bidirectional context). Decoder self-attention: CAUSAL mask (no future peeking). Encoder-decoder cross-attention: NO mask (decoder can see all encoder states).",
+        "No mask anywhere",
+        "Causal mask only in the encoder"
+      ],
+      correctIndex: 1,
+      explanation: "Encoder reads the full input bidirectionally. Decoder generates left-to-right, needing causal masking. Cross-attention lets each decoder position access the complete encoded input. Different masking serves different information flow requirements.",
+      randomize: true
     }
   ]}
 />
