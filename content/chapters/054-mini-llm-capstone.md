@@ -171,20 +171,186 @@ A mini-LLM trained on a few KB of text for 20 epochs will:
     {
       id: "q1",
       type: "multiple-choice",
-      prompt: "Why does a mini-LLM generate grammatical but nonsensical text?",
-      options: ["The architecture is wrong", "It learned local patterns (grammar, common phrases) from limited data but lacks the scale for global coherence, facts, and reasoning", "Temperature is too high", "Need more layers"],
+      prompt: "What is the overall goal of the mini-LLM capstone project?",
+      options: ["Build a production chatbot", "Demonstrate every concept from chapters 046-053 by training a tiny language model from scratch in NumPy", "Beat GPT-4 on benchmarks", "Learn PyTorch"],
       correctIndex: 1,
-      explanation: "Grammar is a local pattern learnable from small data. Factual knowledge and long-range reasoning require seeing billions of tokens. Architecture is correct; scale is missing.",
-      randomize: true,
+      explanation: "The capstone integrates tokenization, transformer architecture, training, and generation into one complete pipeline to solidify understanding of how LLMs work end-to-end.",
+      randomize: true
     },
     {
       id: "q2",
       type: "multiple-choice",
-      prompt: "What's the most important lesson from building a mini-LLM?",
-      options: ["NumPy is fast enough for production", "The same architecture that generates nonsense at 100K params generates Shakespeare at 100B params — scale transforms capability", "Transformers are too complex", "Language models need PyTorch"],
+      prompt: "Why does a mini-LLM generate grammatically plausible but factually nonsensical text?",
+      options: ["The architecture is wrong", "It learned local patterns (grammar, common phrases) from limited data but lacks the scale for global coherence, facts, and reasoning", "Temperature is too high", "Needs more attention heads"],
       correctIndex: 1,
-      explanation: "Architecture alone doesn't create intelligence. The identical transformer block, scaled up with sufficient data and compute, produces qualitatively different behavior. Understanding both the architecture AND the scaling is essential.",
-      randomize: false,
+      explanation: "Grammar is a local statistical pattern learnable from small data. Factual knowledge and long-range reasoning require seeing billions of tokens across diverse domains.",
+      randomize: true
+    },
+    {
+      id: "q3",
+      type: "multiple-choice",
+      prompt: "In the training loop, why do we slice batch[:, :-1] for inputs and batch[:, 1:] for targets?",
+      options: ["To remove padding", "Next-token prediction: input is tokens 0..T-1, target is tokens 1..T. Each position predicts the next token.", "To reduce memory usage", "To separate prompt from response"],
+      correctIndex: 1,
+      explanation: "Causal LM training shifts the sequence by one position. Position t receives tokens 0..t-1 as input and must predict token t. This is the core pretraining objective.",
+      randomize: true
+    },
+    {
+      id: "q4",
+      type: "code-output",
+      prompt: "What shape are the logits after model.forward(batch[:, :-1]) if batch is (32, 128)?",
+      code: "import numpy as np\nbatch = np.random.randint(0, 100, (32, 128))\ninputs = batch[:, :-1]\nprint('Input shape:', inputs.shape)\n# Assuming vocab_size=2000\nlogits_shape = (inputs.shape[0], inputs.shape[1], 2000)\nprint('Logits shape:', logits_shape)",
+      options: ["(32, 127, 2000)", "(32, 128, 2000)", "(32, 127)", "(127, 2000)"],
+      correctIndex: 0,
+      explanation: "batch[:, :-1] removes the last token → shape (32, 127). The model outputs logits of shape (batch, seq_len, vocab_size) = (32, 127, 2000).",
+      randomize: true
+    },
+    {
+      id: "q5",
+      type: "multiple-choice",
+      prompt: "Why is d_model=64 recommended for the mini-LLM instead of 512 or 1024?",
+      options: ["Larger models can't learn language", "d_model=64 keeps the model trainable on CPU within reasonable time while still demonstrating all architectural concepts", "64 is the only valid dimension", "Attention doesn't work with larger dimensions"],
+      correctIndex: 1,
+      explanation: "The goal is educational, not competitive. d=64 allows full forward+backward passes on CPU in seconds. Larger dimensions would make iteration painfully slow without adding conceptual value.",
+      randomize: true
+    },
+    {
+      id: "q6",
+      type: "fill-blank",
+      prompt: "With d_model=64 and num_heads=4, each head operates on vectors of dimension d_k = ___.",
+      options: ["16", "64", "4", "256"],
+      correctIndex: 0,
+      explanation: "d_k = d_model / num_heads = 64 / 4 = 16. Multi-head attention splits the representation into smaller subspaces per head.",
+      randomize: true
+    },
+    {
+      id: "q7",
+      type: "multiple-choice",
+      prompt: "Why is ff_dim typically set to 4× d_model?",
+      options: ["It's a hardware requirement", "Empirical convention: provides enough capacity for non-linear transformations while keeping parameter count manageable", "Mathematical proof requires it", "Attention needs it"],
+      correctIndex: 1,
+      explanation: "The feed-forward network expands to 4× d_model then projects back. This bottleneck design gives the model room for non-linear feature processing. 4× is standard from the original Transformer paper.",
+      randomize: true
+    },
+    {
+      id: "q8",
+      type: "multiple-choice",
+      prompt: "During generation, why do we use ids[-128:] when max_len=128?",
+      options: ["To speed up computation", "The model was trained with max context length 128. Feeding more tokens would exceed positional encoding bounds.", "To save memory", "128 is always optimal"],
+      correctIndex: 1,
+      explanation: "Positional encodings are defined for positions 0..max_len-1. Feeding more tokens than max_len causes out-of-bounds errors or undefined behavior. We keep only the most recent 128 tokens.",
+      randomize: true
+    },
+    {
+      id: "q9",
+      type: "multiple-choice",
+      prompt: "What role does temperature play in the generate function?",
+      code: "logits = model.forward(x)[0, -1] / temperature",
+      options: ["It changes the model weights", "Dividing logits by temperature > 1 makes the distribution softer (more random); < 1 makes it sharper (more deterministic)", "It controls batch size", "It adjusts learning rate"],
+      correctIndex: 1,
+      explanation: "Temperature scales logits before softmax. T>1 flattens the distribution (more exploration), T<1 sharpens it (more greedy), T=1 leaves it unchanged.",
+      randomize: true
+    },
+    {
+      id: "q10",
+      type: "code-output",
+      prompt: "What happens to probabilities when temperature approaches 0?",
+      code: "import numpy as np\nlogits = np.array([1.0, 2.0, 3.0])\nfor temp in [1.0, 0.1, 0.01]:\n    scaled = logits / temp\n    probs = np.exp(scaled - np.max(scaled))\n    probs /= probs.sum()\n    print(f'T={temp:.2f}: {probs.round(3)}')",
+      options: ["Distribution becomes uniform", "Distribution concentrates on the highest-logit token (argmax-like)", "All probabilities become 0", "Error: division by zero"],
+      correctIndex: 1,
+      explanation: "As T→0, the largest logit dominates exponentially. T=0.01 gives ~[0, 0, 1]. This is equivalent to greedy decoding. Note: T=0 exactly would cause division by zero.",
+      randomize: true
+    },
+    {
+      id: "q11",
+      type: "ordering",
+      prompt: "Order the steps of autoregressive generation:",
+      items: ["Tokenize the prompt into IDs", "Take the last max_len tokens as input", "Run forward pass through the model", "Get logits for the last position", "Apply temperature scaling and softmax", "Sample next token from probability distribution", "Append sampled token to the sequence"],
+      correctOrder: [0, 1, 2, 3, 4, 5, 6],
+      explanation: "Generation is a loop: tokenize → truncate context → forward → extract last position logits → scale & normalize → sample → append → repeat from step 2.",
+      randomize: true
+    },
+    {
+      id: "q12",
+      type: "multiple-choice",
+      prompt: "Why use np.logaddexp.reduce instead of naive log(sum(exp(logits))) for computing log_probs?",
+      options: ["It's faster", "Numerical stability: exp of large logits overflows. logaddexp uses the log-sum-exp trick internally to prevent overflow/underflow", "It gives different results", "NumPy doesn't support sum(exp())"],
+      correctIndex: 1,
+      explanation: "log_probs = logits - log(sum(exp(logits))). If any logit is large (e.g., 1000), exp(1000) = inf. logaddexp.reduce subtracts the max first, keeping values in safe range.",
+      randomize: true
+    },
+    {
+      id: "q13",
+      type: "multiple-choice",
+      prompt: "How are training subsequences created from the corpus?",
+      code: "indices = np.random.randint(0, N - seq_len, batch_size)\nbatch = np.array([token_ids[i:i+seq_len] for i in indices])",
+      options: ["Sequential chunks from start to end", "Random starting positions are sampled, creating overlapping subsequences of length seq_len from anywhere in the corpus", "Only non-overlapping windows", "Every possible subsequence is used"],
+      correctIndex: 1,
+      explanation: "Random sampling creates stochastic batches. Overlapping subsequences provide more training signal than sequential chunking. This is standard practice for language model training.",
+      randomize: true
+    },
+    {
+      id: "q14",
+      type: "multiple-choice",
+      prompt: "What is the most important takeaway from building a mini-LLM from scratch?",
+      options: ["NumPy is production-ready for LLMs", "The same architecture that generates nonsense at small scale produces remarkable capabilities at large scale — architecture + scale together create emergent abilities", "Transformers are too complex to understand", "You need PyTorch to build LLMs"],
+      correctIndex: 1,
+      explanation: "Understanding the architecture demystifies LLMs. The mini-LLM proves you understand every component. Scale (data + parameters + compute) is what transforms this architecture into something powerful.",
+      randomize: true
+    },
+    {
+      id: "q15",
+      type: "multiple-choice",
+      prompt: "A mini-LLM trained on 10KB of text for 20 epochs will NOT be able to:",
+      options: ["Generate grammatically plausible text", "Repeat common phrases from training data", "Follow instructions or reason about novel problems", "Show basic word-level coherence"],
+      correctIndex: 2,
+      explanation: "Instruction following and reasoning are emergent properties requiring massive scale (billions of tokens, billions of parameters) plus fine-tuning. A tiny model on tiny data learns statistics, not reasoning.",
+      randomize: true
+    },
+    {
+      id: "q16",
+      type: "multiple-choice",
+      prompt: "Why is BPE preferred over character-level tokenization for the mini-LLM?",
+      options: ["BPE is simpler to implement", "BPE merges frequent character sequences into single tokens, reducing sequence length and allowing the model to capture word-level patterns more efficiently", "Character-level doesn't work with transformers", "BPE requires less memory"],
+      correctIndex: 1,
+      explanation: "Character-level means 'understanding' takes many more tokens. BPE compresses common words/patterns into single tokens, making the 128-token context window much more expressive.",
+      randomize: true
+    },
+    {
+      id: "q17",
+      type: "fill-blank",
+      prompt: "With d_model=64, num_layers=2, num_heads=4, ff_dim=256, the approximate parameter count per transformer layer is ___ × d_model² + d_model × ff_dim × 2 ≈ ___.",
+      options: ["roughly 100K-200K total for the whole model", "exactly 64", "over 1 billion", "zero"],
+      correctIndex: 0,
+      explanation: "Each layer has attention (~4×d²) + FFN (~2×d×ff_dim) + norms. With these hyperparameters, total model params are roughly 100K-200K including embeddings. Tiny compared to real LLMs.",
+      randomize: true
+    },
+    {
+      id: "q18",
+      type: "multiple-choice",
+      prompt: "In the loss computation, what does log_probs[:, np.arange(seq_len-1), targets] achieve?",
+      options: ["Selects random positions", "Advanced indexing: for each batch element and each position t, selects the log probability assigned to the actual target token at that position", "Computes the mean of all logits", "Filters out padding tokens"],
+      correctIndex: 1,
+      explanation: "targets has shape (N, seq_len-1). For each (batch_idx, position), we index into the vocab dimension to get the log prob of the correct next token. This is the cross-entropy numerator.",
+      randomize: true
+    },
+    {
+      id: "q19",
+      type: "multiple-choice",
+      prompt: "Which concept from earlier chapters is NOT directly used in the mini-LLM pipeline?",
+      options: ["Multi-head attention (ch 047)", "Batch normalization (ch 037)", "Positional encoding (ch 048)", "Autoregressive generation (ch 050)"],
+      correctIndex: 1,
+      explanation: "Transformers use Layer Normalization, not Batch Normalization. BN was covered in the CNN chapters (037) but isn't part of the standard transformer architecture used in the mini-LLM.",
+      randomize: true
+    },
+    {
+      id: "q20",
+      type: "multiple-choice",
+      prompt: "If your mini-LLM's loss plateaus at a high value and generated text is gibberish, what should you check FIRST?",
+      options: ["Add more layers immediately", "Verify the tokenizer maps tokens consistently between training and generation, check that targets are correctly shifted by 1, and ensure the loss computation indexes the right positions", "Increase temperature", "Switch to character-level tokenization"],
+      correctIndex: 1,
+      explanation: "Common bugs: off-by-one in target shifting, inconsistent tokenization between train/generate, wrong indexing in loss computation. Always verify correctness of the pipeline before scaling up.",
+      randomize: true
     }
   ]}
 />
