@@ -46,6 +46,8 @@ An interactive curriculum that teaches neural networks by building them with raw
 ### Install & Run
 
 ```bash
+git clone https://github.com/AminulIslamSifat/nn-academy
+cd nn-academy
 npm install
 npm run dev
 ```
