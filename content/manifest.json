@@ -1,140 +1,239 @@
 {
-  "version": 3,
-  "totalChapters": 65,
-  "tracks": [
+  "version": 4,
+  "totalChapters": 88,
+  "modules": [
     {
-      "id": "numpy-foundations",
-      "title": "NumPy Foundations",
-      "icon": "grid-3x3",
-      "chapters": [
-        "001-arrays-and-shapes",
-        "002-indexing-and-slicing",
-        "006-data-types",
-        "007-copy-vs-view",
-        "008-array-shape",
-        "009-array-reshape",
-        "010-array-iterating",
-        "011-array-join",
-        "012-array-split",
-        "013-array-search",
-        "014-array-sort",
-        "015-array-filter"
-      ]
-    },
-    {
-      "id": "vectorization",
-      "title": "Vectorization & Broadcasting",
-      "icon": "zap",
-      "chapters": [
-        "003-vectorization",
-        "004-broadcasting"
-      ]
-    },
-    {
-      "id": "ufuncs",
-      "title": "Universal Functions (ufunc)",
-      "icon": "wrench",
-      "chapters": [
-        "016-ufunc-intro",
-        "017-ufunc-create-function",
-        "018-ufunc-arithmetic",
-        "019-ufunc-rounding",
-        "020-ufunc-logs",
-        "021-ufunc-summations",
-        "022-ufunc-products",
-        "023-ufunc-differences",
-        "024-ufunc-lcm-gcd",
-        "025-ufunc-trigonometric",
-        "026-ufunc-hyperbolic",
-        "027-ufunc-set-operations"
-      ]
-    },
-    {
-      "id": "nn-primitives",
-      "title": "Neural Network Primitives",
+      "id": "neural-networks",
+      "title": "Neural Networks",
+      "tagline": "Pure NumPy · Zero Frameworks",
+      "description": "Master deep learning by building it from first principles with raw array math.",
       "icon": "brain",
-      "chapters": [
-        "005-linear-layer"
+      "accent": "#34d399",
+      "tracks": [
+        {
+          "id": "numpy-foundations",
+          "title": "NumPy Foundations",
+          "icon": "grid-3x3",
+          "chapters": [
+            "001-arrays-and-shapes",
+            "002-indexing-and-slicing",
+            "006-data-types",
+            "007-copy-vs-view",
+            "008-array-shape",
+            "009-array-reshape",
+            "010-array-iterating",
+            "011-array-join",
+            "012-array-split",
+            "013-array-search",
+            "014-array-sort",
+            "015-array-filter"
+          ]
+        },
+        {
+          "id": "vectorization",
+          "title": "Vectorization & Broadcasting",
+          "icon": "zap",
+          "chapters": [
+            "003-vectorization",
+            "004-broadcasting"
+          ]
+        },
+        {
+          "id": "ufuncs",
+          "title": "Universal Functions (ufunc)",
+          "icon": "wrench",
+          "chapters": [
+            "016-ufunc-intro-and-creation",
+            "017-ufunc-math-operations",
+            "018-ufunc-aggregation-and-calculus",
+            "019-ufunc-trigonometry-and-sets"
+          ]
+        },
+        {
+          "id": "nn-primitives",
+          "title": "Neural Network Primitives",
+          "icon": "brain",
+          "chapters": [
+            "005-linear-layer"
+          ]
+        },
+        {
+          "id": "nn-beginner",
+          "title": "Neural Networks: Beginner",
+          "icon": "sprout",
+          "chapters": [
+            "028-activation-functions",
+            "029-loss-functions",
+            "030-backpropagation",
+            "031-gradient-descent-optimizers",
+            "032-mnist-from-scratch",
+            "033-regularization",
+            "034-evaluation-metrics",
+            "035-learning-rate-schedules"
+          ]
+        },
+        {
+          "id": "nn-intermediate",
+          "title": "Neural Networks: Intermediate",
+          "icon": "flame",
+          "chapters": [
+            "036-conv2d-from-scratch",
+            "037-pooling-batchnorm",
+            "038-dropout-data-augmentation",
+            "039-cnn-mnist",
+            "040-ocr-text-recognition",
+            "041-rnn-from-scratch",
+            "042-lstm-gru",
+            "043-word-embeddings",
+            "044-seq2seq",
+            "045-crnn-ocr-capstone"
+          ]
+        },
+        {
+          "id": "nn-advanced",
+          "title": "Neural Networks: Advanced",
+          "icon": "rocket",
+          "chapters": [
+            "046-attention-mechanism",
+            "047-multihead-attention",
+            "048-transformer-architecture",
+            "049-tokenization",
+            "050-gpt-from-scratch",
+            "051-pretraining-finetuning",
+            "052-rlhf-alignment",
+            "053-scaling-laws",
+            "054-mini-llm-capstone",
+            "055-whats-next"
+          ]
+        },
+        {
+          "id": "random",
+          "title": "Random & Distributions",
+          "icon": "dices",
+          "chapters": [
+            "056-random-sampling",
+            "057-probability-distributions",
+            "058-monte-carlo-methods",
+            "059-noise-and-data-augmentation"
+          ]
+        },
+        {
+          "id": "calculus-autodiff",
+          "title": "Calculus & Autodiff",
+          "icon": "sigma",
+          "chapters": [
+            "060-derivatives-and-gradients",
+            "061-chain-rule",
+            "062-computational-graphs"
+          ]
+        },
+        {
+          "id": "training",
+          "title": "Training & Optimization",
+          "icon": "dumbbell",
+          "chapters": [
+            "063-mini-batch-training",
+            "064-gradient-clipping",
+            "065-initialization-strategies"
+          ]
+        }
       ]
     },
     {
-      "id": "nn-beginner",
-      "title": "Neural Networks: Beginner",
-      "icon": "sprout",
-      "chapters": [
-        "028-activation-functions",
-        "029-loss-functions",
-        "030-backpropagation",
-        "031-gradient-descent-optimizers",
-        "032-mnist-from-scratch",
-        "033-regularization",
-        "034-evaluation-metrics",
-        "035-learning-rate-schedules"
-      ]
-    },
-    {
-      "id": "nn-intermediate",
-      "title": "Neural Networks: Intermediate",
-      "icon": "flame",
-      "chapters": [
-        "036-conv2d-from-scratch",
-        "037-pooling-batchnorm",
-        "038-dropout-data-augmentation",
-        "039-cnn-mnist",
-        "040-ocr-text-recognition",
-        "041-rnn-from-scratch",
-        "042-lstm-gru",
-        "043-word-embeddings",
-        "044-seq2seq",
-        "045-crnn-ocr-capstone"
-      ]
-    },
-    {
-      "id": "nn-advanced",
-      "title": "Neural Networks: Advanced",
-      "icon": "rocket",
-      "chapters": [
-        "046-attention-mechanism",
-        "047-multihead-attention",
-        "048-transformer-architecture",
-        "049-tokenization",
-        "050-gpt-from-scratch",
-        "051-pretraining-finetuning",
-        "052-rlhf-alignment",
-        "053-scaling-laws",
-        "054-mini-llm-capstone",
-        "055-whats-next"
-      ]
-    },
-    {
-      "id": "random",
-      "title": "Random & Distributions",
-      "icon": "dices",
-      "chapters": [
-        "056-random-sampling",
-        "057-probability-distributions",
-        "058-monte-carlo-methods",
-        "059-noise-and-data-augmentation"
-      ]
-    },
-    {
-      "id": "calculus-autodiff",
-      "title": "Calculus & Autodiff",
-      "icon": "sigma",
-      "chapters": [
-        "060-derivatives-and-gradients",
-        "061-chain-rule",
-        "062-computational-graphs"
-      ]
-    },
-    {
-      "id": "training",
-      "title": "Training & Optimization",
-      "icon": "dumbbell",
-      "chapters": [
-        "063-mini-batch-training",
-        "064-gradient-clipping",
-        "065-initialization-strategies"
+      "id": "cybersecurity",
+      "title": "Cybersecurity",
+      "tagline": "Offense · Defense · First Principles",
+      "description": "Learn to think like an attacker and defend like a professional.",
+      "icon": "shield",
+      "accent": "#fb7185",
+      "tracks": [
+        {
+          "id": "sec-foundations",
+          "title": "Security Foundations",
+          "icon": "shield",
+          "chapters": [
+            "101-security-foundations",
+            "102-threat-landscape",
+            "103-cia-triad-principles",
+            "104-risk-management"
+          ]
+        },
+        {
+          "id": "net-crypto",
+          "title": "Network & Crypto Security",
+          "icon": "network",
+          "chapters": [
+            "105-network-fundamentals",
+            "106-firewalls-ids-ips",
+            "107-cryptography-basics",
+            "108-wireless-security"
+          ]
+        },
+        {
+          "id": "web-app-security",
+          "title": "Web & Application Security",
+          "icon": "globe",
+          "chapters": [
+            "109-owasp-top-ten",
+            "110-injection-attacks",
+            "111-authentication-sessions",
+            "112-secure-coding"
+          ]
+        },
+        {
+          "id": "off-def-security",
+          "title": "Offensive & Defensive Security",
+          "icon": "crosshair",
+          "chapters": [
+            "113-penetration-testing",
+            "114-malware-analysis",
+            "115-incident-response"
+          ]
+        },
+        {
+          "id": "cloud-devsecops",
+          "title": "Cloud & DevSecOps Security",
+          "icon": "cloud",
+          "chapters": [
+            "116-shared-responsibility-model",
+            "117-identity-and-access-management",
+            "118-container-and-k8s-security",
+            "119-devsecops-cicd-security"
+          ]
+        },
+        {
+          "id": "security-operations",
+          "title": "Security Operations",
+          "icon": "activity",
+          "chapters": [
+            "120-soc-and-siem-monitoring",
+            "121-threat-intelligence",
+            "122-digital-forensics",
+            "123-zero-trust-architecture"
+          ]
+        },
+        {
+          "id": "security-tooling",
+          "title": "Hands-On Security Tooling",
+          "icon": "terminal",
+          "chapters": [
+            "124-network-scanning-with-nmap",
+            "125-web-app-testing-with-proxies",
+            "126-password-attacks-lab",
+            "127-security-automation-python"
+          ]
+        },
+        {
+          "id": "governance-human",
+          "title": "Governance & The Human Factor",
+          "icon": "scale",
+          "chapters": [
+            "128-compliance-frameworks",
+            "129-security-architecture-design",
+            "130-social-engineering-defense",
+            "131-careers-and-next-steps"
+          ]
+        }
       ]
     }
   ]

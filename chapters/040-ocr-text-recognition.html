@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCR: From Digit Recognition to Text Recognition — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="040-ocr-text-recognition" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">OCR: From Digit Recognition to Text Recognition</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 28 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 20 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">OCR: From Digit Recognition to Text Recognition</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Scale from single-digit MNIST to recognizing full words and lines. Learn CTC loss, sliding windows, and CRNN architecture concepts in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>OCR: From Digit Recognition to Text Recognition</h1>
+
+<p>MNIST classifies one digit. ==Real OCR reads entire words and sentences== of variable length. This requires three new ideas: handling variable-length sequences, predicting without knowing character boundaries, and training with misaligned labels.</p>
+
+<h2>The OCR Problem</h2>
+
+<table><tr><td>Aspect</td><td>MNIST</td><td>Real OCR</td></tr>
+</table>
+<table><tr><td>Input</td><td>Fixed 28×28</td><td>Variable width images</td></tr>
+<tr><td>Output</td><td>Single digit (0-9)</td><td>Variable-length string</td></tr>
+<tr><td>Alignment</td><td>Known</td><td>Unknown (where does each char start?)</td></tr>
+<tr><td>Classes</td><td>10</td><td>26+ letters + digits + symbols</td></tr>
+</table>
+<h2>Approach 1: Sliding Window (Simple)</h2>
+
+<p>Slide a fixed-size window across the image, classify each patch independently:</p>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def sliding_window_ocr(image, window_width=28, stride=7):&#10;    &quot;&quot;&quot;Classify overlapping patches across a text line image.&#10;    image: (H, W) grayscale&#10;    Returns: list of (position, predicted_char, confidence)&#10;    &quot;&quot;&quot;&#10;    H, W = image.shape&#10;    results = []&#10;    for x in range(0, W - window_width + 1, stride):&#10;        patch = image[:, x:x+window_width]&#10;        # Resize to 28×28 if needed, then classify&#10;        # prob = classifier.predict(patch)&#10;        # results.append((x, argmax(prob), max(prob)))&#10;        pass&#10;    return results</code></pre>
+
+<p>Problems: doesn't handle variable-width characters, no context between predictions, needs post-processing to merge overlapping detections.</p>
+
+<h2>Approach 2: CRNN Architecture (Modern)</h2>
+
+<p>==Convolutional Recurrent Neural Network== — the standard OCR architecture:</p>
+
+<pre><code class="language-text">Image (H, W)&#10;  → CNN feature extractor → (T, F) feature sequence&#10;  → Bidirectional RNN → (T, num_classes) per-timestep predictions&#10;  → CTC decoding → final text string</code></pre>
+
+<p>The CNN extracts visual features column-by-column. The RNN models sequential dependencies. CTC handles the alignment problem.</p>
+
+<h3>Feature Extraction</h3>
+
+<pre><code class="language-python">def cnn_feature_extractor(X):&#10;    &quot;&quot;&quot;X: (N, 1, H, W) → (N, T, F) where T = W//4 after pooling.&quot;&quot;&quot;&#10;    # Conv blocks reduce height to 1, width by factor of 4&#10;    # Result: each column of features represents a horizontal slice&#10;    # of the input image&#10;    pass  # Uses conv layers from chapters 036-037</code></pre>
+
+<h2>CTC Loss: Training Without Alignment</h2>
+
+<p>The key innovation. ==CTC sums over ALL possible alignments== between predictions and labels:</p>
+
+<p>Given predictions <span data-widget="katex" data-latex="y_t^c" data-display="false"></span> at each timestep and target string <span data-widget="katex" data-latex="l" data-display="false"></span>:</p>
+
+<div data-widget="katex" data-latex="P(l|X) = \sum_{\pi: B(\pi)=l} P(\pi|X) = \sum_{\pi: B(\pi)=l} \prod_{t=1}^{T} y_t^{\pi_t}" data-display="true"></div>
+
+<p>where <span data-widget="katex" data-latex="B" data-display="false"></span> collapses repeated characters and removes blanks.</p>
+
+<p>The trick: dynamic programming computes this sum efficiently in <span data-widget="katex" data-latex="O(T \cdot |l|)" data-display="false"></span> instead of enumerating exponentially many paths.</p>
+
+<div data-widget="pyrunner" data-cellid="040-cell-1" data-defaultcode="import numpy as np&#10;&#10;# Demonstrate CTC concept with a simple example&#10;# Predictions over 5 timesteps for chars {a, b, -}&#10;# Target: &quot;ab&quot;&#10;&#10;np.random.seed(42)&#10;T = 5&#10;chars = [&#39;-&#39;, &#39;a&#39;, &#39;b&#39;]  # - is blank&#10;logits = np.array([&#10;    [2.0, 0.5, 0.1],  # t=0: mostly blank&#10;    [0.1, 2.5, 0.2],  # t=1: mostly &#39;a&#39;&#10;    [1.5, 0.3, 0.3],  # t=2: blank-ish&#10;    [0.2, 0.3, 2.0],  # t=3: mostly &#39;b&#39;&#10;    [1.0, 0.5, 0.8],  # t=4: mixed&#10;])&#10;&#10;# Softmax&#10;shifted = logits - logits.max(axis=1, keepdims=True)&#10;probs = np.exp(shifted) / np.exp(shifted).sum(axis=1, keepdims=True)&#10;&#10;print(&quot;Per-timestep probabilities:&quot;)&#10;print(f&quot;{&#39;t&#39;:&gt;3} | {&#39;blank&#39;:&gt;6} | {&#39;a&#39;:&gt;6} | {&#39;b&#39;:&gt;6} | Best&quot;)&#10;print(&quot;─&quot; * 38)&#10;for t in range(T):&#10;    best = chars[np.argmax(probs[t])]&#10;    print(f&quot;{t:3d} | {probs[t,0]:6.3f} | {probs[t,1]:6.3f} | {probs[t,2]:6.3f} | {best}&quot;)&#10;&#10;print(f&quot;\nValid alignments for target &#39;ab&#39;:&quot;)&#10;alignments = [&#10;    &quot;-ab--&quot;, &quot;-a-b-&quot;, &quot;-a--b&quot;, &quot;aab--&quot;, &quot;a-ab-&quot;,&#10;    &quot;aa-b-&quot;, &quot;-abb-&quot;, &quot;-ab-b&quot;, &quot;aabb-&quot;, &quot;aab-b&quot;&#10;]&#10;for a in alignments[:5]:&#10;    prob = np.prod([probs[t, chars.index(c)] for t, c in enumerate(a)])&#10;    print(f&quot;  {a}: P={prob:.6f}&quot;)&#10;&#10;print(f&quot;\n💡 CTC sums ALL valid alignments automatically&quot;)&#10;print(f&quot;   No need to know where each character starts!&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h3>Simplified CTC Forward Algorithm</h3>
+
+<pre><code class="language-python">def ctc_loss(log_probs, targets, input_lengths, target_lengths):&#10;    &quot;&quot;&quot;Simplified CTC loss using forward algorithm.&#10;    log_probs: (T, N, C) log-softmax outputs&#10;    targets: (N, S) target sequences (padded)&#10;    Returns: scalar loss&#10;    &quot;&quot;&quot;&#10;    T, N, C = log_probs.shape&#10;    total_loss = 0.0&#10;    &#10;    for n in range(N):&#10;        S = target_lengths[n]&#10;        label = targets[n, :S]&#10;        &#10;        # Create extended label with blanks: [-, l1, -, l2, -, ...]&#10;        ext_label = np.zeros(2 * S + 1, dtype=int)  # 0 = blank&#10;        ext_label[1::2] = label&#10;        &#10;        L = len(ext_label)&#10;        alpha = np.full((T, L), -np.inf)&#10;        &#10;        # Initialize&#10;        alpha[0, 0] = log_probs[0, n, 0]  # blank&#10;        if L &gt; 1:&#10;            alpha[0, 1] = log_probs[0, n, ext_label[1]]&#10;        &#10;        # Forward pass&#10;        for t in range(1, T):&#10;            for s in range(L):&#10;                a = alpha[t-1, s]&#10;                if s &gt; 0:&#10;                    a = np.logaddexp(a, alpha[t-1, s-1])&#10;                if s &gt; 1 and ext_label[s] != ext_label[s-2]:&#10;                    a = np.logaddexp(a, alpha[t-1, s-2])&#10;                alpha[t, s] = a + log_probs[t, n, ext_label[s]]&#10;        &#10;        # Total probability&#10;        log_prob = np.logaddexp(alpha[T-1, L-1], alpha[T-1, L-2])&#10;        total_loss -= log_prob&#10;    &#10;    return total_loss / N</code></pre>
+
+<blockquote>[!IMPORTANT] Why CTC Matters for OCR</blockquote>
+<blockquote>Without CTC, you'd need pixel-level character segmentation labels — extremely expensive to annotate. CTC trains on just the text string, learning alignment implicitly. This made modern OCR practical.</blockquote>
+
+<h2>Greedy CTC Decoding</h2>
+
+<p>At inference, collapse predictions:</p>
+
+<pre><code class="language-python">def ctc_greedy_decode(probs):&#10;    &quot;&quot;&quot;probs: (T, C). Returns decoded string.&quot;&quot;&quot;&#10;    preds = np.argmax(probs, axis=1)&#10;    # Remove consecutive duplicates and blanks&#10;    decoded = []&#10;    prev = -1  # -1 = blank&#10;    for p in preds:&#10;        if p != prev and p != 0:  # not blank, not duplicate&#10;            decoded.append(p)&#10;        prev = p&#10;    return decoded</code></pre>
+
+<div data-widget="pyrunner" data-cellid="040-cell-2" data-defaultcode="import numpy as np&#10;&#10;# Simulate CTC greedy decoding&#10;np.random.seed(42)&#10;chars = [&#39;_&#39;, &#39;h&#39;, &#39;e&#39;, &#39;l&#39;, &#39;o&#39;]  # _ = blank&#10;&#10;# Simulated predictions for &quot;hello&quot;&#10;T = 12&#10;preds = [0, 1, 1, 0, 2, 2, 3, 3, 3, 0, 4, 4]  # raw argmax&#10;&#10;# Decode&#10;decoded = []&#10;prev = -1&#10;for p in preds:&#10;    if p != prev and p != 0:&#10;        decoded.append(chars[p])&#10;    prev = p&#10;&#10;result = &quot;&quot;.join(decoded)&#10;print(f&quot;Raw predictions: {[chars[p] for p in preds]}&quot;)&#10;print(f&quot;After CTC decode: &#39;{result}&#39;&quot;)&#10;print(f&quot;\n✅ Repeated chars collapsed, blanks removed&quot;)&#10;print(f&quot;   &#39;_hh_eelll_o_&#39; → &#39;hello&#39;&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>OCR Pipeline Summary</h2>
+
+<pre><code class="language-text">Input Image → Preprocessing (binarize, deskew, resize)&#10;           → CNN Feature Extractor (visual features per column)&#10;           → Bidirectional RNN (sequential context)&#10;           → CTC Loss (training) / Greedy Decode (inference)&#10;           → Post-processing (language model, dictionary lookup)</code></pre>
+
+<div data-widget="quiz" data-chapterslug="040-ocr-text-recognition" data-quizid="quiz-040-ocr-text-recognition"></div>
+
+<script type="application/json" id="quiz-040-ocr-text-recognition">[{"id":"q1","type":"multiple-choice","prompt":"What fundamental problem does CTC loss solve that standard cross-entropy cannot?","options":["CTC is faster to compute than cross-entropy","Standard CE requires aligned labels (knowing which timestep maps to which character). CTC handles unaligned input-output pairs by summing over all valid alignments.","CTC supports larger vocabularies","CTC automatically prevents overfitting"],"correctIndex":1,"explanation":"In OCR, you know the output text but not where each character appears in the image. CTC marginalizes over all possible alignments via dynamic programming, enabling training with only transcript-level labels.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why does CTC introduce a blank token?","options":["To pad short sequences to fixed length","To represent whitespace between words","To let the model output nothing at certain timesteps, enabling variable-length outputs and proper handling of repeated characters","It's optional and can be safely removed"],"correctIndex":2,"explanation":"Without blank, every timestep must emit a character. Blank lets the model 'wait' during transitions and handles cases where the same character spans multiple timesteps — consecutive duplicates are collapsed during decoding.","randomize":false},{"id":"q3","type":"multiple-choice","prompt":"In CTC greedy decoding, what happens to the raw prediction sequence [_, h, h, _, e, e, l, l, l, _, o, o]?","options":["All tokens kept as-is","Consecutive duplicates collapsed then blanks removed → 'hello'","Only blanks removed → 'hhell oo'","Randomly sampled to produce output"],"correctIndex":1,"explanation":"Greedy CTC decode: first collapse consecutive duplicates (_, h, _, e, l, _, o), then remove blanks (h, e, l, o) → 'hello'. The order matters — collapse first, then strip blanks.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"What is the main limitation of the sliding window approach to OCR?","options":["It's too slow for real-time applications","It classifies each patch independently with no context between predictions, can't handle variable-width characters, and needs post-processing to merge overlapping detections","It only works with digits","It requires GPU acceleration"],"correctIndex":1,"explanation":"Sliding window treats each patch as an isolated classification problem. No sequential modeling means no context, no natural handling of variable character widths, and ambiguous overlapping predictions that need heuristic merging.","randomize":true},{"id":"q5","type":"fill-blank","prompt":"The CRNN architecture consists of three stages: CNN feature extractor → ___ → CTC decoding.","options":["Fully-connected classifier","Bidirectional RNN","Attention mechanism","Max pooling"],"correctIndex":1,"explanation":"CNN extracts visual features per column, BiRNN models left-right sequential context across columns, and CTC handles alignment-free training/decoding. Each stage addresses a different aspect of the OCR problem.","randomize":false},{"id":"q6","type":"multiple-choice","prompt":"In the CTC forward algorithm, why is the label extended with blanks between every character (e.g., 'ab' → '-a-b-')?","options":["To make all labels the same length","To explicitly represent all valid alignment paths — the extended label encodes which transitions are allowed (blank→char, char→blank, char→different-char, but NOT char→same-char without intervening blank)","To improve numerical stability","It's a convention with no mathematical purpose"],"correctIndex":1,"explanation":"The extended label creates a state machine where valid CTC paths correspond to traversals through these states. Blanks between characters allow repetition of the same character (via blank intermediary) while preventing invalid direct repeats.","randomize":true},{"id":"q7","type":"code-output","prompt":"What does this CTC greedy decode produce?","code":"preds = [0, 1, 1, 2, 0, 2, 3, 3, 0]  # 0=blank\ndecoded = []\nprev = -1\nfor p in preds:\n    if p != prev and p != 0:\n        decoded.append(p)\n    prev = p\nprint(decoded)","options":["[1, 2, 2, 3]","[1, 2, 3]","[1, 1, 2, 2, 3, 3]","[0, 1, 2, 0, 2, 3, 0]"],"correctIndex":0,"explanation":"Walk through: 0(skip blank), 1(add, prev=1), 1(same as prev, skip), 2(different, add, prev=2), 0(blank, prev=0), 2(different from 0, add, prev=2), 3(different, add, prev=3), 3(same, skip), 0(blank). Result: [1,2,2,3]. Note: two 2s because they're separated by a blank.","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"Why does the CNN feature extractor reduce height to 1 but keep width proportional to input?","options":["Height contains no useful information","Each resulting column of features represents a horizontal slice of the image, creating a left-to-right sequence that the RNN can process temporally","It's required by the CTC loss function","To reduce computation"],"correctIndex":1,"explanation":"Text reads left-to-right. Collapsing height creates a 1D sequence where position t corresponds to horizontal location t in the image. This converts a 2D spatial problem into a 1D temporal one suitable for RNN processing.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"What is the time complexity of the CTC forward algorithm?","options":["O(T × |l|) where T = timesteps, |l| = label length","O(T²)","O(2^T)","O(T × C) where C = number of classes"],"correctIndex":0,"explanation":"The forward algorithm uses dynamic programming over the extended label (length 2|l|+1) across T timesteps. Naive enumeration of all alignments would be exponential; DP makes it tractable at O(T × |l|).","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"In the CTC forward pass, when can alpha[t,s] receive contributions from alpha[t-1, s-2] (skip transition)?","options":["Always","Only when ext_label[s] ≠ ext_label[s-2] — i.e., the current and two-back labels are different characters (not the same character separated by blank)","Only at even timesteps","Never — only adjacent transitions are allowed"],"correctIndex":1,"explanation":"The skip transition (s-2 → s) jumps over a blank. It's only valid when the characters on either side differ. If ext_label[s] == ext_label[s-2], skipping would incorrectly merge two instances of the same character without an explicit blank emission between them.","randomize":true},{"id":"q11","type":"ordering","prompt":"Order the complete OCR pipeline stages:","items":["Image preprocessing (binarize, deskew, resize)","CNN feature extraction (visual features per column)","Bidirectional RNN (sequential context)","CTC decoding (collapse + remove blanks)","Post-processing (language model, dictionary)"],"correctOrder":[0,1,2,3,4],"explanation":"Preprocessing cleans the image → CNN extracts spatial features → BiRNN adds sequential context → CTC decodes raw predictions to text → Post-processing corrects errors using language knowledge.","randomize":true},{"id":"q12","type":"multiple-choice","prompt":"Why is log-space used in the CTC forward algorithm (log_probs, logaddexp)?","options":["Log-space makes the math simpler to understand","Multiplying many small probabilities causes underflow. Log-space converts products to sums, maintaining numerical precision across hundreds of timesteps","GPUs compute logs faster than multiplication","It's optional — regular probability space works fine"],"correctIndex":1,"explanation":"CTC multiplies probabilities across T timesteps. With T=100 and average prob=0.5, the product is ~10^-30 — below float32 range. Log-space keeps values in a manageable range (-70 to 0) and uses logaddexp for stable summation.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"How does a bidirectional RNN improve OCR compared to a unidirectional RNN?","options":["It's twice as fast","Each timestep has access to both past AND future context. When recognizing a character, seeing what comes after helps disambiguate visually similar characters.","It doubles the number of output classes","It eliminates the need for CTC"],"correctIndex":1,"explanation":"In OCR, future context is as valuable as past context. A partially visible 'm' followed by 'ing' is more confidently 'm' than 'rn'. BiRNN concatenates forward and backward hidden states, giving full contextual awareness.","randomize":true},{"id":"q14","type":"fill-blank","prompt":"In CTC greedy decoding, the rule is: collapse consecutive ___ first, then remove all ___ tokens.","options":["duplicates, blank","blanks, duplicate","predictions, zero","characters, space"],"correctIndex":0,"explanation":"First pass: merge consecutive identical predictions (aaa → a). Second pass: strip blank tokens. Order matters — if you remove blanks first, previously separated same-characters become adjacent and get incorrectly merged.","randomize":false},{"id":"q15","type":"multiple-choice","prompt":"What advantage does CTC provide for annotation cost in OCR datasets?","options":["CTC generates synthetic labels automatically","CTC only needs transcript-level labels (the text string), not pixel-level character bounding boxes or segmentation masks. This makes dataset creation dramatically cheaper.","CTC reduces the number of training samples needed","CTC works without any labels"],"correctIndex":1,"explanation":"Traditional OCR required precise character-level segmentation — expensive and error-prone. CTC's alignment-free training means annotators just type the text they see, reducing annotation cost by orders of magnitude.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"If your CTC model outputs [b, b, _, b, b] for target 'bb', what does greedy decoding produce?","options":["'b'","'bb'","'bbb'","'b_b'"],"correctIndex":1,"explanation":"Collapse consecutive duplicates: [b, _, b]. Remove blanks: [b, b] → 'bb'. The blank between the two b-groups preserves them as separate characters. Without the blank, [b,b,b,b,b] would collapse to just 'b'.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"Why can't standard softmax + cross-entropy train an OCR model directly?","options":["Softmax doesn't work with variable-length outputs","CE requires a fixed mapping between input timesteps and target characters. In OCR, we don't know which image column corresponds to which character — the alignment is unknown.","CE only works with binary classification","Softmax can't handle more than 10 classes"],"correctIndex":1,"explanation":"Cross-entropy computes loss per-position: loss_t = -log(y_t^{target_t}). But in OCR, there's no target_t for each timestep — we only know the full string, not the alignment. CTC solves this by marginalizing over all possible alignments.","randomize":true},{"id":"q18","type":"code-output","prompt":"For target 'ab' with extended label [-, a, -, b, -], how many states does the CTC forward algorithm track per timestep?","code":"target_len = 2  # 'ab'\nextended_len = 2 * target_len + 1\nprint(extended_len)","options":["5","4","3","2"],"correctIndex":0,"explanation":"Extended label inserts blanks between and around every character: [-, a, -, b, -]. Length = 2S + 1 where S = original label length. For 'ab' (S=2): 2×2+1 = 5 states tracked at each timestep.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"What role does post-processing (language model, dictionary lookup) play in the OCR pipeline?","options":["It replaces CTC decoding entirely","It corrects CTC errors using linguistic knowledge — 'rnake' → 'snake', 'thc' → 'the'. CTC produces character-level predictions; post-processing adds word-level intelligence.","It speeds up inference","It's only needed during training"],"correctIndex":1,"explanation":"CTC operates at the character level with no language understanding. Post-processing leverages dictionaries and language models to fix plausible errors, resolve ambiguities, and produce coherent text. It's the bridge from characters to meaning.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"A CTC-trained OCR model consistently merges repeated characters ('ee' → 'e'). What is the most likely cause?","options":["The learning rate is too high","The model isn't learning to emit blank tokens between repeated characters. Without blanks, consecutive same-character predictions collapse to a single character during decoding.","The vocabulary is too small","Greedy decoding is fundamentally broken"],"correctIndex":1,"explanation":"CTC requires blank emissions between repeated characters to preserve them after decoding. If the model never predicts blank between two 'e' regions, greedy decode collapses them. Fix: ensure sufficient training data with repeated characters and verify blank predictions exist.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/039-cnn-mnist.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/041-rnn-from-scratch.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

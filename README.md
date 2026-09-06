@@ -1,18 +1,22 @@
-# NumPy Neural Network Academy
+# Academia
 
-> Pure NumPy. Zero frameworks. Learn deep learning from the ground up.
+> Learn by building. Two rigorous tracks taught from first principles — no hand-waving.
 
-An interactive curriculum that teaches neural networks by building them with raw array math. 65 chapters across 10 tracks, in-browser Python execution via WebAssembly, and rigorous assessments — no PyTorch, no TensorFlow, just you and `numpy`.
+An interactive curriculum with in-browser execution, live visualizers, and rigorous assessments. 88 chapters across 2 modules and 18 tracks. No server, no setup — everything runs in the browser.
 
 ***
 
-## Curriculum
+## Modules
+
+### 🧠 Neural Networks — *Pure NumPy · Zero Frameworks*
+
+Build deep learning from the ground up with raw array math. 57 chapters across 10 tracks.
 
 | Track | Chapters | Description |
 |---|---|---|
 | 📐 NumPy Foundations | 12 | Arrays, shapes, indexing, slicing, dtypes, copy vs view |
 | ⚡ Vectorization & Broadcasting | 2 | Eliminating loops, broadcasting rules |
-| 🔧 Universal Functions (ufunc) | 12 | Arithmetic, trig, logs, set ops, custom ufuncs |
+| 🔧 Universal Functions (ufunc) | 4 | Creation, math ops, aggregation/calculus, trig & sets |
 | 🧠 Neural Network Primitives | 1 | Linear layer from scratch |
 | 🌱 NN: Beginner | 8 | Activations, loss, backprop, optimizers, MNIST, regularization |
 | 🔥 NN: Intermediate | 10 | Conv2D, pooling, batchnorm, RNN, LSTM, seq2seq, OCR capstone |
@@ -21,18 +25,31 @@ An interactive curriculum that teaches neural networks by building them with raw
 | ∂ Calculus & Autodiff | 3 | Derivatives, chain rule, computational graphs |
 | 🏋️ Training & Optimization | 3 | Mini-batch, gradient clipping, initialization strategies |
 
+### 🛡️ Cybersecurity — *Offense · Defense · First Principles*
+
+Learn to think like an attacker and defend like a professional. 31 chapters across 8 tracks.
+
+| Track | Chapters | Description |
+|---|---|---|
+| 🛡️ Security Foundations | 4 | Vocabulary, threat landscape, CIA triad, risk management |
+| 🌐 Network & Crypto Security | 4 | Network attacks, firewalls/IDS/IPS, applied cryptography, wireless |
+| 🧩 Web & Application Security | 4 | OWASP Top 10, injection, authentication, secure coding |
+| 🎯 Offensive & Defensive | 3 | Penetration testing, malware analysis, incident response |
+| ☁️ Cloud & DevSecOps Security | 4 | Shared responsibility, IAM, containers/K8s, CI/CD security |
+| 📊 Security Operations | 4 | SOC/SIEM, threat intelligence, forensics, zero trust |
+| 💻 Hands-On Security Tooling | 4 | Nmap, proxy testing, password attacks, Python automation |
+| ⚖️ Governance & Human Factor | 4 | Compliance, architecture, social engineering, careers |
+
 ***
 
 ## Tech Stack
 
-- **Next.js 14** — App Router, static export
-- **MDX** — Chapter content with embedded interactive components
-- **CodeMirror 6 / Monaco** — In-browser Python editor
-- **Pyodide (WASM)** — Client-side NumPy execution, no server
-- **KaTeX** — Math rendering
-- **Zustand + Dexie** — Progress tracking (localStorage + IndexedDB)
-- **Framer Motion** — Animations
-- **Tailwind CSS + Typography** — Styling
+- **Static site** — plain HTML/CSS/JS, no framework
+- **Custom MDX → HTML build** — `build.mjs` converts chapter Markdown into static pages
+- **Pyodide (WASM)** — client-side Python/NumPy execution, no server
+- **KaTeX** — math rendering
+- **Lucide** — icons
+- **Tailwind CSS + Typography** — styling
 
 ***
 
@@ -41,81 +58,55 @@ An interactive curriculum that teaches neural networks by building them with raw
 ### Prerequisites
 
 - Node.js ≥ 18
-- npm or pnpm
 
-### Install & Run
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-### Build for Production
+### Build the chapters
 
 ```bash
-npm run build    # validates content first, then builds
-npm start        # preview production build
+node build.mjs
 ```
 
-### Validate Content
+This reads `content/manifest.json`, converts every `content/chapters/*.md` file via `chapter-template.html`, and writes the results into `chapters/`.
+
+### Serve locally
+
+Any static server works, for example:
 
 ```bash
-npm run validate   # runs scripts/validate-content.mjs
+python -m http.server 8000
+# or
+npx serve .
 ```
 
-This checks all 65 chapter MDX files for structural correctness before build.
+Then open [http://localhost:8000](http://localhost:8000).
 
 ***
 
 ## Project Structure
 
 ```
-src/
-├── app/              # Next.js App Router pages
-│   ├── chapters/     # Dynamic chapter routes
-│   ├── layout.tsx
-│   └── page.tsx      # Landing page
-├── components/       # Interactive UI (editors, visualizers, quizzes)
-├── content/
-│   ├── chapters/     # 65 MDX chapter files
-│   └── manifest.json # Track/chapter registry
-├── lib/              # MDX loader, utils, helpers
-├── styles/           # Global CSS, Tailwind overrides
-└── workers/          # Web Workers for Pyodide
-scripts/
-├── validate-content.mjs   # CI/content validation
-├── generate_chapters_batch1.py
-├── gen_ufuncs.py
-├── expand_quizzes.py
-└── fix_quiz_code.py
+content/
+├── chapters/     # Markdown chapter sources (NN + Cybersecurity)
+└── manifest.json # Module → track → chapter registry
+css/
+└── styles.css    # Global theme
+js/
+├── home.js       # Home-page module/track rendering
+├── chapter.js    # Sidebar + widget mounting
+├── widgets.js    # PyRunner, quiz, visualizer, KaTeX, callout
+├── store.js      # Progress persistence
+└── pyodide*.js   # In-browser Python runtime
+build.mjs         # MDX → static HTML build script
+chapter-template.html
+index.html        # Landing page
 ```
 
 ***
 
-## Scripts
+## Adding Content
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start dev server |
-| `npm run build` | Validate + production build |
-| `npm run validate` | Check chapter MDX integrity |
-| `python scripts/generate_chapters_batch1.py` | Batch-generate chapter drafts |
-| `python scripts/gen_ufuncs.py` | Generate ufunc chapter content |
-| `python scripts/expand_quizzes.py` | Expand quiz questions |
-| `python scripts/fix_quiz_code.py` | Fix code blocks in quizzes |
-
-***
-
-## Contributing
-
-1. Edit or add chapters in `src/content/chapters/`
-2. Register new chapters in `src/content/manifest.json`
-3. Run `npm run validate` to verify structure
-4. Test locally with `npm run dev`
-
-Chapter MDX files support frontmatter, KaTeX math, and embedded React components for interactive exercises.
+1. Add or edit a chapter in `content/chapters/`.
+2. Register its slug under the right module/track in `content/manifest.json`.
+3. Run `node build.mjs` to regenerate the static pages.
 
 ***
 

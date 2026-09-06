@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero Trust Architecture — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="123-zero-trust-architecture" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Zero Trust Architecture</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 11 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 6 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Zero Trust Architecture</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Never trust, always verify — replacing the perimeter model with identity-centric, continuous access control.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The Perimeter Problem</h2>
+
+<p>Traditional security assumed a hard outer shell (firewall) and a soft interior. Once inside, you were trusted. This fails when:</p>
+
+<ul><li>Employees work remotely.</li>
+<li>Applications live in the cloud.</li>
+<li>An attacker phishes a valid credential.</li>
+<li>A compromised laptop is already "inside."</li>
+</ul>
+<p>The perimeter is gone. <strong>Zero Trust</strong> starts from the assumption that no network location, device, or user is trusted by default.</p>
+
+<h2>The Core Principle</h2>
+
+<blockquote>Never trust, always verify.</blockquote>
+
+<p>Every access request is evaluated <strong>per-request</strong>, based on:</p>
+
+<li><strong>Who</strong> is requesting (identity, authentication strength).</li>
+<li><strong>What</strong> they want (the specific resource).</li>
+<li><strong>Where</strong> they are (device health, network context, geolocation).</li>
+<li><strong>When</strong> they are requesting (time of day, anomaly score).</li>
+
+<h2>The Zero Trust Pillars</h2>
+
+<table><tr><td>Pillar</td><td>Question It Answers</td></tr>
+</table>
+<table><tr><td><strong>Identity</strong></td><td>Is this really who they claim to be?</td></tr>
+<tr><td><strong>Device</strong></td><td>Is this device managed, patched, and healthy?</td></tr>
+<tr><td><strong>Network</strong></td><td>Is the connection encrypted and from an expected location?</td></tr>
+<tr><td><strong>Application</strong></td><td>Is the user authorized for this specific app and action?</td></tr>
+<tr><td><strong>Data</strong></td><td>Is the data classified and access policy enforced?</td></tr>
+<tr><td><strong>Visibility</strong></td><td>Are we logging and monitoring every decision?</td></tr>
+</table>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Zero Trust is not a product" data-content="It is an architectural philosophy. You implement it with a combination of IAM, MDM, microsegmentation, encryption, and continuous monitoring. No single vendor delivers &#39;zero trust in a box.&#39;"></div>
+
+<h2>Identity as the New Perimeter</h2>
+
+<p>In a zero trust model, <strong>identity replaces the network boundary</strong>. The key components:</p>
+
+<ul><li><strong>Strong authentication</strong> — MFA required, preferably phishing-resistant (FIDO2/WebAuthn).</li>
+<li><strong>Conditional access policies</strong> — access decisions based on real-time signals.</li>
+<li><strong>Session-bound tokens</strong> — short-lived, revocable, scoped to specific resources.</li>
+<li><strong>Continuous verification</strong> — re-evaluate trust during the session, not just at login.</li>
+</ul>
+<h2>Microsegmentation</h2>
+
+<p>Instead of a flat internal network, divide it into small zones with strict access controls between them.</p>
+
+<pre><code class="language-text">[Web Tier] --HTTPS--&gt; [App Tier] --mTLS--&gt; [DB Tier]&#10;     |                    |                    |&#10;   WAF              Service Mesh         Encrypted at rest</code></pre>
+
+<p>If an attacker compromises the web tier, microsegmentation prevents lateral movement to the database tier.</p>
+
+<h2>The BeyondCorp Model</h2>
+
+<p>Google's <strong>BeyondCorp</strong> was one of the first large-scale zero trust deployments. Key ideas:</p>
+
+<ul><li>No internal network privilege. Every request goes through the same access control, whether from the office or a coffee shop.</li>
+<li>Access decisions are based on device state, user identity, and context — not IP address.</li>
+<li>Every access is logged and auditable.</li>
+</ul>
+<h2>Interactive: Simulate a Zero Trust Access Decision</h2>
+
+<div data-widget="pyrunner" data-cellid="123-zero-trust-architecture-cell-1" data-defaultcode="# Simulate a zero trust policy engine&#10;def evaluate_access(request):&#10;    signals = []&#10;    score = 0&#10;&#10;    # Identity check&#10;    if request.get(&quot;mfa_verified&quot;):&#10;        signals.append(&quot;MFA verified (+30)&quot;)&#10;        score += 30&#10;    else:&#10;        signals.append(&quot;MFA missing (-20)&quot;)&#10;        score -= 20&#10;&#10;    # Device check&#10;    if request.get(&quot;device_managed&quot;) and request.get(&quot;device_patched&quot;):&#10;        signals.append(&quot;Device managed and patched (+25)&quot;)&#10;        score += 25&#10;    elif request.get(&quot;device_managed&quot;):&#10;        signals.append(&quot;Device managed but unpatched (+10)&quot;)&#10;        score += 10&#10;    else:&#10;        signals.append(&quot;Unmanaged device (-15)&quot;)&#10;        score -= 15&#10;&#10;    # Network check&#10;    if request.get(&quot;encrypted&quot;):&#10;        signals.append(&quot;Encrypted connection (+15)&quot;)&#10;        score += 15&#10;    else:&#10;        signals.append(&quot;Unencrypted connection (-10)&quot;)&#10;        score -= 10&#10;&#10;    # Context check&#10;    if request.get(&quot;anomaly_score&quot;, 0) &lt; 0.3:&#10;        signals.append(&quot;Low anomaly score (+20)&quot;)&#10;        score += 20&#10;    else:&#10;        signals.append(&quot;High anomaly score (-25)&quot;)&#10;        score -= 25&#10;&#10;    # Resource sensitivity&#10;    if request.get(&quot;resource_sensitivity&quot;) == &quot;high&quot; and score &lt; 60:&#10;        signals.append(&quot;High-sensitivity resource requires score &gt;= 60&quot;)&#10;        return &quot;DENY&quot;, score, signals&#10;&#10;    decision = &quot;ALLOW&quot; if score &gt;= 40 else &quot;DENY&quot;&#10;    return decision, score, signals&#10;&#10;# Test scenarios&#10;scenarios = [&#10;  {&quot;name&quot;: &quot;Corporate laptop, MFA, encrypted&quot;, &quot;mfa_verified&quot;: True, &quot;device_managed&quot;: True,&#10;   &quot;device_patched&quot;: True, &quot;encrypted&quot;: True, &quot;anomaly_score&quot;: 0.1, &quot;resource_sensitivity&quot;: &quot;medium&quot;},&#10;  {&quot;name&quot;: &quot;Personal phone, no MFA&quot;, &quot;mfa_verified&quot;: False, &quot;device_managed&quot;: False,&#10;   &quot;device_patched&quot;: False, &quot;encrypted&quot;: True, &quot;anomaly_score&quot;: 0.6, &quot;resource_sensitivity&quot;: &quot;high&quot;},&#10;  {&quot;name&quot;: &quot;Managed device, MFA, but high anomaly&quot;, &quot;mfa_verified&quot;: True, &quot;device_managed&quot;: True,&#10;   &quot;device_patched&quot;: True, &quot;encrypted&quot;: True, &quot;anomaly_score&quot;: 0.8, &quot;resource_sensitivity&quot;: &quot;medium&quot;},&#10;]&#10;&#10;print(&quot;Zero Trust Policy Engine Simulation&quot;)&#10;print(&quot;=&quot; * 55)&#10;for s in scenarios:&#10;    name = s.pop(&quot;name&quot;)&#10;    decision, score, signals = evaluate_access(s)&#10;    print(f&quot;\nScenario: {name}&quot;)&#10;    print(f&quot;  Decision: {decision} (score: {score})&quot;)&#10;    for sig in signals:&#10;        print(f&quot;    {sig}&quot;)" data-timeout="8" data-title="Zero Trust Policy Engine"></div>
+
+<h2>Migration Reality</h2>
+
+<p>Zero trust is a journey, not a switch. A practical migration path:</p>
+
+<li><strong>Inventory</strong> — know all users, devices, and applications.</li>
+<li><strong>MFA everywhere</strong> — the single highest-impact first step.</li>
+<li><strong>Device management</strong> — MDM/EDR on all endpoints.</li>
+<li><strong>Microsegment critical assets</strong> — start with the crown jewels.</li>
+<li><strong>Continuous monitoring</strong> — feed every access decision into the SIEM.</li>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Start with MFA" data-content="If you do nothing else, enforce phishing-resistant MFA. It eliminates the majority of credential-based attacks and is the foundation of zero trust identity."></div>
+
+<h2>Summary</h2>
+
+<p>Zero trust replaces the outdated perimeter model with continuous, context-aware verification. Identity is the new boundary, microsegmentation limits blast radius, and every decision is logged. It is not a product you buy but an architecture you build incrementally.</p>
+
+<div data-widget="quiz" data-chapterslug="123-zero-trust-architecture" data-quizid="quiz-123-zero-trust-architecture"></div>
+
+<script type="application/json" id="quiz-123-zero-trust-architecture">[{"id":"q1","type":"multiple-choice","prompt":"What is the foundational assumption of zero trust?","options":["Internal users are trusted by default","No user, device, or network location is trusted by default","Only external users need verification","Firewalls are sufficient for internal security"],"correctIndex":1,"explanation":"Zero trust assumes that threats exist both outside and inside the network. Every access request must be verified regardless of origin.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"In zero trust, what replaces the network perimeter as the security boundary?","options":["A stronger firewall","Identity and device context","VLAN tagging","IP whitelisting"],"correctIndex":1,"explanation":"Zero trust shifts the boundary from network location to identity. Access decisions are based on who you are, your device state, and context — not which subnet you are on.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What does microsegmentation primarily prevent?","options":["DDoS attacks","Lateral movement after initial compromise","Phishing emails","SQL injection"],"correctIndex":1,"explanation":"Microsegmentation divides the network into isolated zones with strict access controls. If an attacker compromises one zone, they cannot freely move to others.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"What is the recommended first step in a zero trust migration?","options":["Replace all firewalls","Enforce multi-factor authentication everywhere","Migrate everything to the cloud","Deploy a SIEM"],"correctIndex":1,"explanation":"MFA is the highest-impact, lowest-friction starting point. It eliminates most credential-based attacks and establishes the identity foundation that zero trust depends on.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/122-digital-forensics.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/124-network-scanning-with-nmap.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

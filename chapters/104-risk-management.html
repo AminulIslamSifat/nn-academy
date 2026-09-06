@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Risk Management — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="104-risk-management" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Risk Management</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 14 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 10 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Risk Management</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">How to quantify risk, prioritize what to fix, and choose between mitigating, transferring, or accepting it.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>From Fear to Numbers</h2>
+
+<p>You cannot fix everything. Limited budgets, staff, and time force prioritization. Risk management turns vague worry into ranked, defensible decisions that align security spending with business impact.</p>
+
+<p>Without formal risk management, organizations either overspend on low-impact threats or ignore catastrophic vulnerabilities. A structured approach ensures effort goes where it reduces the most harm.</p>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Risk is not a vulnerability" data-content="A vulnerability is a weakness. Risk is the combination of that weakness, the likelihood it will be exploited, and the business impact if it is. You manage risk, not just vulnerabilities."></div>
+
+<h2>The Risk Formula</h2>
+
+<p>The foundational equation for quantitative and qualitative risk assessment:</p>
+
+<div data-widget="katex" data-latex="Risk = Likelihood \times Impact" data-display="true"></div>
+
+<p>Both factors are typically scored on a scale (e.g., 1–5) and multiplied to produce a risk score you can rank. Some frameworks add asset value:</p>
+
+<div data-widget="katex" data-latex="Annualized\ Loss\ Expectancy = SLE \times ARO" data-display="true"></div>
+
+<p>Where SLE (Single Loss Expectancy) is the cost per incident and ARO (Annualized Rate of Occurrence) is expected incidents per year.</p>
+
+<h2>Worked Example: Building a Risk Matrix</h2>
+
+<p>Risk matrices convert subjective assessments into comparable scores. The interactive tool below demonstrates how to score and rank multiple risks systematically.</p>
+
+<div data-widget="pyrunner" data-cellid="risk-management-cell-1" data-defaultcode="risks = [&#10;    {&#39;name&#39;: &#39;Unpatched public web server&#39;, &#39;likelihood&#39;: 4, &#39;impact&#39;: 5},&#10;    {&#39;name&#39;: &#39;Employee phishing click&#39;, &#39;likelihood&#39;: 5, &#39;impact&#39;: 3},&#10;    {&#39;name&#39;: &#39;USB drive malware&#39;, &#39;likelihood&#39;: 2, &#39;impact&#39;: 3},&#10;    {&#39;name&#39;: &#39;Database backup failure&#39;, &#39;likelihood&#39;: 2, &#39;impact&#39;: 5},&#10;    {&#39;name&#39;: &#39;Insider data theft&#39;, &#39;likelihood&#39;: 2, &#39;impact&#39;: 5},&#10;    {&#39;name&#39;: &#39;DDoS on marketing site&#39;, &#39;likelihood&#39;: 3, &#39;impact&#39;: 2},&#10;]&#10;&#10;def classify(score):&#10;    if score &gt;= 16: return &#39;CRITICAL&#39;&#10;    if score &gt;= 10: return &#39;HIGH&#39;&#10;    if score &gt;= 5: return &#39;MEDIUM&#39;&#10;    return &#39;LOW&#39;&#10;&#10;print(&#39;=== Risk Matrix Scoring ===&#39;)&#10;print(f&#39;{&quot;Risk&quot;:&lt;30s} {&quot;L&quot;:&gt;3s} {&quot;I&quot;:&gt;3s} {&quot;Score&quot;:&gt;5s} {&quot;Level&quot;:&lt;10s}&#39;)&#10;print(&#39;-&#39; * 58)&#10;&#10;scored = []&#10;for r in risks:&#10;    score = r[&#39;likelihood&#39;] * r[&#39;impact&#39;]&#10;    level = classify(score)&#10;    scored.append((score, r[&#39;name&#39;], r[&#39;likelihood&#39;], r[&#39;impact&#39;], level))&#10;&#10;for score, name, l, i, level in sorted(scored, reverse=True):&#10;    print(f&#39;{name:&lt;30s} {l:&gt;3d} {i:&gt;3d} {score:&gt;5d} {level:&lt;10s}&#39;)&#10;&#10;print()&#10;critical = sum(1 for s, _, _, _, lv in scored if lv == &#39;CRITICAL&#39;)&#10;high = sum(1 for s, _, _, _, lv in scored if lv == &#39;HIGH&#39;)&#10;print(f&#39;Prioritize first: {critical} CRITICAL, {high} HIGH risks&#39;)" data-timeout="8" data-title="Risk Matrix Calculator"></div>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Calibrate your scales" data-content="Define what each likelihood and impact score means concretely before scoring. &#39;Impact 5 = regulatory fine exceeding $1M&#39; is more useful than &#39;Impact 5 = very bad.&#39; Consistency matters more than precision."></div>
+
+<h2>Risk Response Strategies</h2>
+
+<p>Once risks are scored and ranked, choose a response for each:</p>
+
+<li><strong>Mitigate</strong> — apply controls to reduce likelihood or impact. This is the most common response.</li>
+<li><strong>Transfer</strong> — shift financial consequence via insurance, outsourcing, or contracts.</li>
+<li><strong>Accept</strong> — knowingly live with the risk because mitigation costs exceed expected loss. Document acceptance formally.</li>
+<li><strong>Avoid</strong> — stop the activity that creates the risk entirely. Most effective but often impractical.</li>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Acceptance requires sign-off" data-content="Never accept risk silently. Formal acceptance with executive sign-off creates accountability and prevents future blame-shifting when the risk materializes."></div>
+
+<h2>Threat Modeling with STRIDE</h2>
+
+<p>Threat modeling finds risks before attackers do. STRIDE is a lightweight, widely-used method. For each system component, ask six questions:</p>
+
+<table><tr><td>Letter</td><td>Threat</td><td>Question</td></tr>
+</table>
+<table><tr><td>S</td><td>Spoofing</td><td>Can an attacker impersonate a user or system?</td></tr>
+<tr><td>T</td><td>Tampering</td><td>Can data be modified without authorization?</td></tr>
+<tr><td>R</td><td>Repudiation</td><td>Can actions be denied due to lack of logging?</td></tr>
+<tr><td>I</td><td>Information Disclosure</td><td>Can sensitive data leak?</td></tr>
+<tr><td>D</td><td>Denial of Service</td><td>Can availability be disrupted?</td></tr>
+<tr><td>E</td><td>Elevation of Privilege</td><td>Can a user gain unauthorized permissions?</td></tr>
+</table>
+<p>STRIDE maps directly to security properties: authentication, integrity, non-repudiation, confidentiality, availability, and authorization.</p>
+
+<h2>Asset Inventory and Valuation</h2>
+
+<p>You cannot protect what you do not know you have. Maintain a current asset inventory including:</p>
+
+<ul><li>Hardware and software assets</li>
+<li>Data stores and classifications</li>
+<li>Third-party dependencies and vendors</li>
+<li>People and their access levels</li>
+</ul>
+<p>Assign value to each asset based on replacement cost, revenue impact, regulatory exposure, and reputational damage. Spend proportional to value.</p>
+
+<h2>Continuous Risk Assessment</h2>
+
+<p>Risk is not a one-time exercise. New vulnerabilities emerge daily. Business changes alter impact. Adversary capabilities evolve. Schedule regular reassessment:</p>
+
+<ul><li>Quarterly risk register reviews</li>
+<li>Trigger-based reassessment after incidents or major changes</li>
+<li>Annual comprehensive threat modeling refresh</li>
+<li>Continuous vulnerability scanning integrated into CI/CD</li>
+</ul>
+<h2>Summary</h2>
+
+<p>Risk management is the discipline of spending limited security effort where it reduces the most harm. Score risks consistently, choose appropriate responses, model threats systematically, and reassess continuously. Decisions backed by structured analysis are defensible; decisions based on fear are not.</p>
+
+<div data-widget="quiz" data-chapterslug="104-risk-management" data-quizid="quiz-104-risk-management"></div>
+
+<script type="application/json" id="quiz-104-risk-management">[{"id":"q1","type":"multiple-choice","prompt":"What is the correct formula for basic risk calculation?","options":["Risk = Assets + Vulnerabilities","Risk = Likelihood x Impact","Risk = Threats - Controls","Risk = Cost x Time"],"correctIndex":1,"explanation":"Risk equals likelihood multiplied by impact. This fundamental formula drives all risk prioritization.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Which risk response involves purchasing cyber insurance?","options":["Mitigate","Avoid","Transfer","Accept"],"correctIndex":2,"explanation":"Transferring risk shifts the financial consequence to another party, typically through insurance or outsourcing contracts.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"In STRIDE, what does the 'T' stand for?","options":["Theft","Tampering","Tracking","Trust"],"correctIndex":1,"explanation":"Tampering refers to unauthorized modification of data or systems, threatening integrity.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why must risk acceptance be formally documented?","options":["To increase paperwork","To create accountability and prevent future blame-shifting","To satisfy auditors only","To reduce insurance premiums"],"correctIndex":1,"explanation":"Formal acceptance with executive sign-off ensures someone owns the decision and prevents denial when the risk materializes.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/103-cia-triad-principles.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/105-network-fundamentals.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

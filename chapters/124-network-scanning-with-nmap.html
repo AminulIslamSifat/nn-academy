@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Scanning with Nmap — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="124-network-scanning-with-nmap" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Network Scanning with Nmap</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 13 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Network Scanning with Nmap</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Discover hosts, enumerate services, and map attack surfaces using the industry-standard network scanner.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>What Nmap Does</h2>
+
+<strong>Nmap</strong> (Network Mapper) sends crafted packets to targets and interprets the responses to answer: What hosts are up? What ports are open? What services and versions are running? What OS is likely?
+
+<p>In a pentest, nmap is usually the first active step after passive reconnaissance.</p>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Scanning without authorization is illegal" data-content="Port scanning a network you do not own or have written permission to test violates computer fraud laws in most jurisdictions. Always have a signed scope before scanning."></div>
+
+<h2>Scan Types</h2>
+
+<table><tr><td>Scan</td><td>Flag</td><td>What It Does</td><td>Stealth</td></tr>
+</table>
+<table><tr><td>TCP SYN</td><td><code>-sS</code></td><td>Half-open; sends SYN, reads SYN/ACK or RST</td><td>Moderate</td></tr>
+<tr><td>TCP Connect</td><td><code>-sT</code></td><td>Full 3-way handshake</td><td>Low</td></tr>
+<tr><td>UDP</td><td><code>-sU</code></td><td>Sends UDP probes</td><td>Very slow</td></tr>
+<tr><td>ACK</td><td><code>-sA</code></td><td>Maps firewall rules (stateful vs stateless)</td><td>Moderate</td></tr>
+<tr><td>Ping sweep</td><td><code>-sn</code></td><td>Host discovery only, no port scan</td><td>High</td></tr>
+<tr><td>Version detect</td><td><code>-sV</code></td><td>Probes open ports for service/version</td><td>Low</td></tr>
+<tr><td>OS detect</td><td><code>-O</code></td><td>TCP/IP fingerprinting</td><td>Low</td></tr>
+</table>
+<pre><code class="language-bash"># Typical pentest scan: SYN scan + version detection + top 1000 ports&#10;nmap -sS -sV --top-ports 1000 -oN scan_results.txt 192.168.1.0/24</code></pre>
+
+<h2>Reading Nmap Output</h2>
+
+<pre><code class="language-text">PORT     STATE  SERVICE  VERSION&#10;22/tcp   open   ssh      OpenSSH 8.9p1&#10;80/tcp   open   http     Apache 2.4.54&#10;443/tcp  open   https    nginx 1.24.0&#10;3306/tcp closed mysql&#10;8080/tcp open   http     Apache Tomcat 9.0.73</code></pre>
+
+<p>Key columns: <strong>STATE</strong> (open/closed/filtered), <strong>SERVICE</strong> (protocol guess), <strong>VERSION</strong> (fingerprinted version). A <code>filtered</code> state usually means a firewall dropped the packet.</p>
+
+<h2>The Nmap Scripting Engine (NSE)</h2>
+
+<p>Nmap includes hundreds of Lua scripts for deeper enumeration:</p>
+
+<pre><code class="language-bash"># Run default scripts on open ports&#10;nmap -sC -sV target.com&#10;&#10;# Run specific vulnerability scripts&#10;nmap --script vuln target.com&#10;&#10;# Enumerate DNS&#10;nmap --script dns-brute target.com</code></pre>
+
+<div data-widget="callout" data-type="info" data-callouttitle="NSE categories" data-content="Scripts are grouped: `safe`, `intrusive`, `vuln`, `discovery`, `auth`, `exploit`. In a scoped pentest, start with `safe` and `default` categories before anything intrusive."></div>
+
+<h2>Scan Strategies</h2>
+
+<li><strong>Host discovery first</strong> — <code>-sn</code> to find live hosts before port scanning.</li>
+<li><strong>Top ports</strong> — <code>--top-ports 1000</code> covers 90%+ of real services without scanning all 65535.</li>
+<li><strong>Timing templates</strong> — <code>-T3</code> is default; <code>-T4</code> is faster but noisier; <code>-T2</code> is stealthier.</li>
+<li><strong>Output formats</strong> — <code>-oN</code> (normal text), <code>-oX</code> (XML for tools), <code>-oA</code> (all formats).</li>
+
+<h2>Interactive: Parse Nmap Output</h2>
+
+<div data-widget="pyrunner" data-cellid="124-network-scanning-with-nmap-cell-1" data-defaultcode="import re&#10;&#10;# Simulated nmap -sV output&#10;nmap_output = &quot;&quot;&quot;&#10;Nmap scan report for 192.168.1.10&#10;PORT     STATE  SERVICE      VERSION&#10;22/tcp   open   ssh          OpenSSH 8.9p1 Ubuntu&#10;80/tcp   open   http         Apache httpd 2.4.54&#10;443/tcp  open   https        nginx 1.24.0&#10;3306/tcp closed mysql&#10;5432/tcp open   postgresql   PostgreSQL 15.3&#10;8080/tcp open   http         Apache Tomcat 9.0.73&#10;8443/tcp open   https-alt    Apache Tomcat 9.0.73&#10;&#10;Nmap scan report for 192.168.1.20&#10;PORT     STATE  SERVICE      VERSION&#10;22/tcp   open   ssh          OpenSSH 9.0p1&#10;53/tcp   open   domain       ISC BIND 9.18.12&#10;80/tcp   open   http         Microsoft IIS 10.0&#10;445/tcp  open   microsoft-ds Windows Server 2022&#10;3389/tcp open   ms-wbt-server Microsoft Terminal Services&#10;&quot;&quot;&quot;&#10;&#10;# Parse into structured data&#10;hosts = {}&#10;current_host = None&#10;for line in nmap_output.strip().split(&quot;\n&quot;):&#10;    host_match = re.match(r&#39;Nmap scan report for (\S+)&#39;, line)&#10;    if host_match:&#10;        current_host = host_match.group(1)&#10;        hosts[current_host] = []&#10;        continue&#10;    port_match = re.match(r&#39;(\d+/\w+)\s+(\w+)\s+(\S+)\s*(.*)&#39;, line)&#10;    if port_match and current_host:&#10;        hosts[current_host].append({&#10;            &quot;port&quot;: port_match.group(1),&#10;            &quot;state&quot;: port_match.group(2),&#10;            &quot;service&quot;: port_match.group(3),&#10;            &quot;version&quot;: port_match.group(4).strip(),&#10;        })&#10;&#10;print(&quot;Nmap Output Parser&quot;)&#10;print(&quot;=&quot; * 60)&#10;for host, ports in hosts.items():&#10;    open_ports = [p for p in ports if p[&quot;state&quot;] == &quot;open&quot;]&#10;    print(f&quot;\nHost: {host} ({len(open_ports)} open ports)&quot;)&#10;    print(f&quot;  {&#39;PORT&#39;:12s} {&#39;SERVICE&#39;:16s} {&#39;VERSION&#39;}&quot;)&#10;    print(f&quot;  {&#39;-&#39;*12} {&#39;-&#39;*16} {&#39;-&#39;*25}&quot;)&#10;    for p in open_ports:&#10;        print(f&quot;  {p[&#39;port&#39;]:12s} {p[&#39;service&#39;]:16s} {p[&#39;version&#39;]}&quot;)&#10;&#10;# Risk assessment&#10;print(&quot;\n--- Quick Risk Assessment ---&quot;)&#10;risky = {&quot;mysql&quot;: &quot;Database exposed&quot;, &quot;postgresql&quot;: &quot;Database exposed&quot;,&#10;         &quot;microsoft-ds&quot;: &quot;SMB - potential lateral movement&quot;,&#10;         &quot;ms-wbt-server&quot;: &quot;RDP - brute force target&quot;}&#10;for host, ports in hosts.items():&#10;    for p in ports:&#10;        if p[&quot;service&quot;] in risky and p[&quot;state&quot;] == &quot;open&quot;:&#10;            print(f&quot;  [!] {host}:{p[&#39;port&#39;]} -&gt; {risky[p[&#39;service&#39;]]}&quot;)" data-timeout="8" data-title="Nmap Output Analyzer"></div>
+
+<h2>Defense: What Scanning Looks Like From the Other Side</h2>
+
+<p>Defenders see nmap as:</p>
+
+<ul><li>A burst of SYN packets to many ports from one IP.</li>
+<li>Unusual TCP flag combinations (NULL, FIN, Xmas scans).</li>
+<li>Rapid connection attempts that do not complete the handshake.</li>
+</ul>
+<p>Detection: alert on <code>>50 SYN packets to distinct ports from one IP within 60 seconds</code>.</p>
+
+<h2>Summary</h2>
+
+<p>Nmap is the reconnaissance workhorse. Master the scan types, read the output critically, use NSE for depth, and always operate within a signed scope. From the defender's side, understanding nmap helps you write better detection rules.</p>
+
+<div data-widget="quiz" data-chapterslug="124-network-scanning-with-nmap" data-quizid="quiz-124-network-scanning-with-nmap"></div>
+
+<script type="application/json" id="quiz-124-network-scanning-with-nmap">[{"id":"q1","type":"multiple-choice","prompt":"What does a SYN scan (-sS) do differently from a connect scan (-sT)?","options":["It scans UDP ports instead of TCP","It sends a SYN and reads the response without completing the full handshake","It only scans port 80","It requires root privileges on Windows"],"correctIndex":1,"explanation":"A SYN scan is a half-open scan. It sends a SYN packet and interprets the SYN/ACK (open) or RST (closed) without completing the TCP handshake, making it slightly stealthier.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What does a 'filtered' port state in nmap output typically indicate?","options":["The service is running but encrypted","A firewall or IDS is dropping the probe packets","The port is open but the service crashed","Nmap has a bug"],"correctIndex":1,"explanation":"Filtered means nmap sent a probe but got no response (or an ICMP unreachable). This typically indicates a firewall is silently dropping the packets.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the Nmap Scripting Engine (NSE)?","options":["A GUI for nmap","A collection of Lua scripts that extend nmap with vulnerability checks and enumeration","A replacement for nmap","A Python API for nmap"],"correctIndex":1,"explanation":"NSE allows running Lua scripts against scan targets for deeper enumeration, vulnerability detection, and even exploitation. Scripts are categorized by safety and purpose.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why should you use --top-ports 1000 instead of scanning all 65535 ports?","options":["All ports cannot be scanned","The top 1000 ports cover the vast majority of real services, saving time","Scanning all ports is illegal","Nmap cannot scan more than 1000 ports"],"correctIndex":1,"explanation":"The top 1000 most commonly used ports cover over 90% of real-world services. Scanning all 65535 ports takes significantly longer with diminishing returns.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/123-zero-trust-architecture.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/125-web-app-testing-with-proxies.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

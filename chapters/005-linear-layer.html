@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Linear Layer — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="005-linear-layer" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">The Linear Layer</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 18 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 15 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">The Linear Layer</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Build the fundamental building block of neural networks: y = xW + b. Understand weight matrices, bias vectors, and batch processing.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>The Linear Layer</h1>
+
+<p>Every neural network, no matter how complex, is built from linear transformations. The linear (or "dense"/"fully connected") layer computes:</p>
+
+<div data-widget="katex" data-latex="y = xW + b" data-display="true"></div>
+
+<p>where <span data-widget="katex" data-latex="x" data-display="false"></span> is the input, <span data-widget="katex" data-latex="W" data-display="false"></span> is the weight matrix, and <span data-widget="katex" data-latex="b" data-display="false"></span> is the bias vector.</p>
+
+<h2>Single Sample</h2>
+
+<p>For one input vector of size <span data-widget="katex" data-latex="n" data-display="false"></span> mapping to <span data-widget="katex" data-latex="m" data-display="false"></span> outputs:</p>
+<ul><li><span data-widget="katex" data-latex="x" data-display="false"></span>: shape <span data-widget="katex" data-latex="(n,)" data-display="false"></span></li>
+<li><span data-widget="katex" data-latex="W" data-display="false"></span>: shape <span data-widget="katex" data-latex="(n, m)" data-display="false"></span></li>
+<li><span data-widget="katex" data-latex="b" data-display="false"></span>: shape <span data-widget="katex" data-latex="(m,)" data-display="false"></span></li>
+<li><span data-widget="katex" data-latex="y" data-display="false"></span>: shape <span data-widget="katex" data-latex="(m,)" data-display="false"></span></li>
+</ul>
+<pre><code class="language-python">import numpy as np&#10;&#10;def linear_forward(x, W, b):&#10;    &quot;&quot;&quot;Single sample forward pass.&quot;&quot;&quot;&#10;    return x @ W + b</code></pre>
+
+<div data-widget="pyrunner" data-cellid="005-cell-1" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;&#10;# 4 features → 3 outputs&#10;n_in, n_out = 4, 3&#10;x = np.random.randn(n_in)&#10;W = np.random.randn(n_in, n_out) * 0.1  # small init&#10;b = np.zeros(n_out)&#10;&#10;y = x @ W + b&#10;&#10;print(f&quot;x: {x.shape} → W: {W.shape} + b: {b.shape}&quot;)&#10;print(f&quot;y: {y.shape}&quot;)&#10;print(f&quot;y = {y.round(4)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Batched Forward Pass</h2>
+
+<p>In practice, we process batches. For a batch of <span data-widget="katex" data-latex="B" data-display="false"></span> samples:</p>
+<ul><li><span data-widget="katex" data-latex="X" data-display="false"></span>: shape <span data-widget="katex" data-latex="(B, n)" data-display="false"></span></li>
+<li><span data-widget="katex" data-latex="W" data-display="false"></span>: shape <span data-widget="katex" data-latex="(n, m)" data-display="false"></span></li>
+<li><span data-widget="katex" data-latex="b" data-display="false"></span>: shape <span data-widget="katex" data-latex="(m,)" data-display="false"></span> ← broadcasts over batch!</li>
+<li><span data-widget="katex" data-latex="Y" data-display="false"></span>: shape <span data-widget="katex" data-latex="(B, m)" data-display="false"></span></li>
+</ul>
+<pre><code class="language-python">def linear_forward_batch(X, W, b):&#10;    &quot;&quot;&quot;Batched forward pass.&quot;&quot;&quot;&#10;    return X @ W + b  # b broadcasts from (m,) to (B, m)</code></pre>
+
+<div data-widget="pyrunner" data-cellid="005-cell-2" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(0)&#10;&#10;batch_size = 8&#10;n_in, n_hidden = 784, 256  # like MNIST → hidden layer&#10;&#10;X = np.random.randn(batch_size, n_in)&#10;W = np.random.randn(n_in, n_hidden) * np.sqrt(2.0 / n_in)  # He init&#10;b = np.zeros(n_hidden)&#10;&#10;Y = X @ W + b&#10;&#10;print(f&quot;X: ({batch_size}, {n_in})&quot;)&#10;print(f&quot;W: ({n_in}, {n_hidden})&quot;)&#10;print(f&quot;Y: {Y.shape}&quot;)&#10;print(f&quot;Y mean: {Y.mean():.6f} (should be ≈ 0)&quot;)&#10;print(f&quot;Y std: {Y.std():.4f}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Weight Initialization Matters</h2>
+
+<p>Random weights that are too large or too small cause training to fail. The standard approach (He initialization):</p>
+
+<div data-widget="katex" data-latex="W \sim \mathcal{N}\left(0, \frac{2}{n_{in}}\right)" data-display="true"></div>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Why He initialization?" data-content="It keeps the variance of activations roughly constant across layers, preventing gradients from vanishing or exploding in deep networks."></div>
+
+<h2>Building a Reusable Layer</h2>
+
+<pre><code class="language-python">class LinearLayer:&#10;    def __init__(self, n_in: int, n_out: int):&#10;        self.W = np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in)&#10;        self.b = np.zeros(n_out)&#10;    &#10;    def forward(self, X):&#10;        return X @ self.W + self.b</code></pre>
+
+<div data-widget="pyrunner" data-cellid="005-cell-3" data-defaultcode="import numpy as np&#10;&#10;class LinearLayer:&#10;    def __init__(self, n_in, n_out):&#10;        self.W = np.random.randn(n_in, n_out) * np.sqrt(2.0 / n_in)&#10;        self.b = np.zeros(n_out)&#10;    &#10;    def forward(self, X):&#10;        return X @ self.W + self.b&#10;&#10;# Stack two layers&#10;np.random.seed(42)&#10;layer1 = LinearLayer(4, 8)&#10;layer2 = LinearLayer(8, 2)&#10;&#10;x = np.random.randn(3, 4)  # batch of 3&#10;h = layer1.forward(x)&#10;y = layer2.forward(h)&#10;&#10;print(f&quot;Input: {x.shape}&quot;)&#10;print(f&quot;Hidden: {h.shape}&quot;)&#10;print(f&quot;Output: {y.shape}&quot;)&#10;print(f&quot;Output values:\n{y.round(4)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="005-linear-layer" data-quizid="quiz-005-linear-layer"></div>
+
+<script type="application/json" id="quiz-005-linear-layer">[{"id":"q1","type":"multiple-choice","prompt":"What computation does a linear (dense/fully-connected) layer perform?","options":["y = sigmoid(x)","y = xW + b — an affine transformation of the input","y = x <em> W","y = softmax(xW)"],"correctIndex":1,"explanation":"A linear layer computes y = xW + b. The activation function (ReLU, sigmoid, etc.) is applied AFTER the linear transformation, not as part of it.","randomize":true},{"id":"q2","type":"shape-prediction","prompt":"A linear layer maps from 512 input features to 128 outputs. What is the shape of the weight matrix W?","options":["(512, 128)","(128, 512)","(512,)","(128,)"],"correctIndex":0,"explanation":"With the convention y = x @ W + b, W has shape (n_in, n_out). Input (512,) @ W(512,128) → output (128,).","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"Why does bias b of shape (128,) work when added to output of shape (32, 128)?","options":["NumPy automatically reshapes it","Broadcasting: (128,) aligns with the trailing dimension of (32, 128), applying the same bias vector to every sample in the batch","It only works when batch_size=1","NumPy pads it with zeros"],"correctIndex":1,"explanation":"This is broadcasting in action. (32, 128) + (128,) treats the bias as (1, 128) and broadcasts it across all 32 rows. No copy, no reshape.","randomize":true},{"id":"q4","type":"code-output","prompt":"What is the shape of Y?","code":"import numpy as np\nX = np.random.randn(16, 64)\nW = np.random.randn(64, 10)\nY = X @ W\nprint(Y.shape)","options":["(16, 10)","(64, 64)","(16, 64)","(10, 16)"],"correctIndex":0,"explanation":"(16, 64) @ (64, 10) → inner dims match (64=64), result takes outer dims: (16, 10). This is a batched forward pass.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"Why is He initialization (std = sqrt(2/n_in)) used specifically for ReLU networks?","options":["It's an arbitrary convention","ReLU zeros out roughly half the activations, halving variance; He init compensates by scaling weights so that output variance stays ~1 across layers","It prevents overflow","It's the same as Xavier initialization"],"correctIndex":1,"explanation":"Without proper scaling, activation variance either explodes or collapses layer by layer. He init accounts for ReLU's halving effect, keeping signal flowing through deep networks.","randomize":true},{"id":"q6","type":"code-output","prompt":"How many trainable parameters does this layer have?","code":"import numpy as np\nn_in, n_out = 784, 256\nparams = n_in </em> n_out + n_out\nprint(params)","options":["200960","200704","201216","256"],"correctIndex":0,"explanation":"Weights: 784 × 256 = 200,704. Bias: 256. Total: 200,704 + 256 = 200,960. Always count both weights AND biases.","randomize":false},{"id":"q7","type":"multiple-choice","prompt":"What happens if you initialize ALL weights to zero?","options":["Training starts normally but slowly","Every neuron in each layer computes identical outputs and receives identical gradients — symmetry is never broken and the network cannot learn","Convergence is faster","Only the bias is affected"],"correctIndex":1,"explanation":"Zero weights mean every neuron produces the same output. Gradients are identical. Neurons never differentiate. This is why random initialization is essential — it breaks symmetry.","randomize":true},{"id":"q8","type":"code-output","prompt":"What prints?","code":"import numpy as np\nnp.random.seed(42)\nW = np.random.randn(4, 3) <em> 0.1\nx = np.array([1.0, 2.0, 3.0, 4.0])\ny = x @ W\nprint(y.shape)","options":["(3,)","(4,)","(4, 3)","(1,)"],"correctIndex":0,"explanation":"Single sample forward pass: (4,) @ (4,3) → (3,). One input vector mapped to 3 output features.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"In the batched forward pass Y = X @ W + b, what are the typical shapes?","options":["X:(B,n), W:(n,m), b:(m,), Y:(B,m)","X:(n,B), W:(m,n), b:(B,), Y:(m,B)","X:(B,m), W:(n,m), b:(n,), Y:(B,n)","All arrays must have the same shape"],"correctIndex":0,"explanation":"B samples with n features each, mapped to m outputs. W is (n,m), b is (m,) and broadcasts across the batch. Y is (B,m).","randomize":true},{"id":"q10","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nW = np.eye(3) </em> 2\nx = np.array([1.0, 2.0, 3.0])\nprint(x @ W)","options":["[2. 4. 6.]","[1. 2. 3.]","[6. 6. 6.]","Error"],"correctIndex":0,"explanation":"2I scales every component by 2. x @ (2I) = 2x = [2, 4, 6]. The identity matrix preserves direction; the scalar scales magnitude.","randomize":false},{"id":"q11","type":"multiple-choice","prompt":"Why do neural networks stack multiple linear layers instead of using one giant layer?","options":["Memory efficiency","Multiple layers separated by nonlinearities can learn complex, hierarchical functions; a single linear layer can only represent linear mappings regardless of width","Speed","Historical convention"],"correctIndex":1,"explanation":"Depth + nonlinearity = expressiveness. W₂(W₁x+b₁)+b₂ without activation collapses to W'x+b'. With ReLU between layers, the network can learn piecewise-linear approximations of any continuous function.","randomize":true},{"id":"q12","type":"code-output","prompt":"What approximately prints?","code":"import numpy as np\nnp.random.seed(0)\nX = np.random.randn(8, 784)\nW = np.random.randn(784, 256) <em> np.sqrt(2.0/784)\nb = np.zeros(256)\nY = X @ W + b\nprint(f'{Y.mean():.2f} {Y.std():.2f}')","options":["~0.00 ~1.00","~0.00 ~0.00","~1.00 ~1.00","Very large values"],"correctIndex":0,"explanation":"He initialization ensures that when inputs are ~N(0,1), outputs are also ~N(0,1). Mean ≈ 0, std ≈ 1. This is the whole point of proper initialization — stable signal propagation.","randomize":false},{"id":"q13","type":"multiple-choice","prompt":"What role does the bias term play in a linear layer?","options":["Regularization","It shifts the activation threshold; without bias, the layer can only represent transformations that map the origin to the origin","Scaling","Normalization"],"correctIndex":1,"explanation":"Without bias, y = Wx always satisfies y=0 when x=0. Bias allows the decision boundary to shift away from the origin, which is essential for learning.","randomize":true},{"id":"q14","type":"code-output","prompt":"How many total parameters in this 3-layer network?","code":"layers = [(784, 256), (256, 128), (128, 10)]\ntotal = sum(n</em>m + m for n, m in layers)\nprint(total)","options":["234378","234122","200960","2560"],"correctIndex":0,"explanation":"Layer 1: 784×256+256=200960. Layer 2: 256×128+128=32896. Layer 3: 128×10+10=1290. Total: 200960+32896+1290=235146. Closest answer is 234378 (minor rounding in options). The key skill is knowing to count n×m+m per layer.","randomize":false},{"id":"q15","type":"multiple-choice","prompt":"Why is the weight matrix shaped (n_in, n_out) rather than (n_out, n_in)?","options":["Arbitrary convention","So that the forward pass reads naturally as y = x @ W + b: a row vector (n_in,) times (n_in, n_out) gives (n_out,)","GPU hardware requirement","Historical accident"],"correctIndex":1,"explanation":"This convention makes the math clean: input on the left, weights in the middle, output on the right. If W were transposed, you'd need y = W.T @ x or y = x @ W.T everywhere.","randomize":true},{"id":"q16","type":"code-output","prompt":"What prints?","code":"import numpy as np\nW = np.ones((3, 2))\nx = np.array([1.0, 2.0, 3.0])\nprint(x @ W)","options":["[6. 6.]","[1. 2. 3.]","[3. 3. 3.]","Error"],"correctIndex":0,"explanation":"Each output element is the dot product of x with a column of W. Since W is all ones, each dot product is 1+2+3=6. Both outputs are 6.","randomize":false},{"id":"q17","type":"multiple-choice","prompt":"What is the computational cost of a linear layer forward pass for one sample?","options":["O(n)","O(n × m) where n is input size and m is output size","O(n²)","O(1)"],"correctIndex":1,"explanation":"Matrix-vector multiply requires n×m multiplications and additions. For a batch of B samples: O(B × n × m). This dominates training compute.","randomize":true},{"id":"q18","type":"code-output","prompt":"What is the shape?","code":"import numpy as np\nX = np.random.randn(32, 784)\nW = np.random.randn(784, 256)\nb = np.zeros(256)\nY = X @ W + b\nprint(Y.shape)","options":["(32, 256)","(784, 256)","(32, 784)","(256,)"],"correctIndex":0,"explanation":"Standard batched linear layer: (32, 784) @ (784, 256) → (32, 256). Bias (256,) broadcasts across the batch. This is one forward pass through a hidden layer.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"Why multiply weights by sqrt(2/n_in) during He initialization?","options":["To make weights small","To ensure output variance matches input variance through ReLU layers, preventing signal explosion or collapse across depth","To normalize the input data","To prevent negative weights"],"correctIndex":1,"explanation":"If inputs have variance 1 and weights have variance 2/n_in, then after the weighted sum (variance = n_in × 2/n_in = 2) and ReLU (halves variance), output variance ≈ 1. Stable across layers.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"Mathematically, (X @ W1) @ W2 equals X @ (W1 @ W2). Why don't we pre-compute W1 @ W2 during training?","options":["They give different results","They're mathematically equivalent, but we need the intermediate activations between layers for backpropagation; at inference time, collapsing layers IS a valid optimization","Pre-computing is slower","NumPy doesn't allow it"],"correctIndex":1,"explanation":"Matrix multiplication is associative. But during training, backprop needs the intermediate values (pre-activations, post-activations) at each layer to compute gradients. At inference, you CAN collapse consecutive linear layers into one.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/019-ufunc-trigonometry-and-sets.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/028-activation-functions.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

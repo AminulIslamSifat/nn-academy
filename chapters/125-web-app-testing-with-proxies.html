@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Application Testing with Proxies — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="125-web-app-testing-with-proxies" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Web Application Testing with Proxies</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 7 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Web Application Testing with Proxies</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Intercept, inspect, and modify HTTP traffic to find vulnerabilities in web applications.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Why Intercept Traffic?</h2>
+
+<p>Browsers hide the raw HTTP conversation. A proxy sits between your browser and the server, letting you <strong>see, pause, modify, and replay</strong> every request and response. This is the core tool for manual web security testing.</p>
+
+<p>The two dominant tools are <strong>Burp Suite</strong> (commercial + free Community edition) and <strong>OWASP ZAP</strong> (fully open source).</p>
+
+<h2>How an Intercepting Proxy Works</h2>
+
+<pre><code class="language-text">Browser -&gt; Proxy (localhost:8080) -&gt; Target Server&#10;Browser &lt;- Proxy (inspect/modify) &lt;- Target Server</code></pre>
+
+<p>You configure your browser to route traffic through the proxy. The proxy decrypts HTTPS using its own CA certificate (which you install in the browser).</p>
+
+<div data-widget="callout" data-type="info" data-callouttitle="The CA certificate is key" data-content="The proxy generates a unique certificate for each site, signed by its own CA. Without installing the proxy CA in your browser, HTTPS interception will show certificate warnings."></div>
+
+<h2>The Manual Testing Workflow</h2>
+
+<h3>1. Spider / Crawl</h3>
+
+<p>Let the proxy map the application: discover pages, forms, API endpoints, and parameters. Burp's Spider and ZAP's Spider do this automatically.</p>
+
+<h3>2. Inspect Requests</h3>
+
+<p>Look for interesting patterns:</p>
+
+<ul><li>Hidden form fields (<code><input type="hidden" name="role" value="user"></code>)</li>
+<li>API endpoints not linked in the UI</li>
+<li>Cookies with sensitive data (base64-encoded JSON, JWTs)</li>
+<li>Verbose error messages</li>
+<li>Unusual headers (<code>X-Debug: true</code>)</li>
+</ul>
+<h3>3. Modify and Replay</h3>
+
+<p>This is where testing happens:</p>
+
+<ul><li><strong>Change parameter values</strong> — <code>role=user</code> to <code>role=admin</code></li>
+<li><strong>Swap HTTP methods</strong> — GET to POST, or add PUT/DELETE</li>
+<li><strong>Remove or duplicate parameters</strong> — test server-side validation</li>
+<li><strong>Modify cookies and headers</strong> — test session handling</li>
+<li><strong>Inject payloads</strong> — XSS, SQLi, SSTI strings into parameters</li>
+</ul>
+<h3>4. Fuzzing</h3>
+
+<p>Send many variations of a request to find edge cases:</p>
+
+<ul><li>Parameter values: numbers, strings, special characters</li>
+<li>HTTP headers: unusual values, missing headers</li>
+<li>Paths: directory traversal, hidden endpoints</li>
+</ul>
+<h2>Common Findings</h2>
+
+<table><tr><td>Vulnerability</td><td>What to Look For</td></tr>
+</table>
+<table><tr><td>Broken access control</td><td>Accessing /admin as a regular user, IDOR via changing IDs</td></tr>
+<tr><td>Injection</td><td>Error messages that change with special characters</td></tr>
+<tr><td>XSS</td><td>Reflected input without encoding</td></tr>
+<tr><td>CSRF</td><td>State-changing requests without anti-CSRF tokens</td></tr>
+<tr><td>Information disclosure</td><td>Stack traces, debug endpoints, verbose errors</td></tr>
+<tr><td>Session issues</td><td>Predictable tokens, missing Secure/HttpOnly flags</td></tr>
+</table>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Test in a safe environment" data-content="Never test against production without explicit authorization. Use a staging environment that mirrors production. Unauthorized testing is illegal and can cause real damage."></div>
+
+<h2>Interactive: Simulate Request Tampering</h2>
+
+<div data-widget="pyrunner" data-cellid="125-web-app-testing-with-proxies-cell-1" data-defaultcode="import base64&#10;import json&#10;&#10;# Simulated intercepted HTTP request&#10;request = {&#10;    &quot;method&quot;: &quot;GET&quot;,&#10;    &quot;path&quot;: &quot;/api/user/profile&quot;,&#10;    &quot;headers&quot;: {&#10;        &quot;Cookie&quot;: &quot;session=eyJ1c2VyIjogImpkb2UiLCAicm9sZSI6ICJ1c2VyIn0=&quot;,&#10;        &quot;User-Agent&quot;: &quot;Mozilla/5.0&quot;,&#10;    },&#10;    &quot;params&quot;: {&quot;user_id&quot;: &quot;1042&quot;},&#10;}&#10;&#10;print(&quot;Intercepted Request:&quot;)&#10;print(f&quot;  {request[&#39;method&#39;]} {request[&#39;path&#39;]}?user_id={request[&#39;params&#39;][&#39;user_id&#39;]}&quot;)&#10;print(f&quot;  Cookie: {request[&#39;headers&#39;][&#39;Cookie&#39;]}&quot;)&#10;&#10;# Decode the session cookie&#10;cookie_value = request[&quot;headers&quot;][&quot;Cookie&quot;].split(&quot;=&quot;)[1]&#10;decoded = base64.b64decode(cookie_value).decode()&#10;session_data = json.loads(decoded)&#10;print(f&quot;\nDecoded session: {session_data}&quot;)&#10;&#10;# Tamper: escalate role&#10;session_data[&quot;role&quot;] = &quot;admin&quot;&#10;tampered = base64.b64encode(json.dumps(session_data).encode()).decode()&#10;print(f&quot;\nTampered cookie: session={tampered}&quot;)&#10;print(f&quot;Tampered session: {session_data}&quot;)&#10;&#10;# Tamper: IDOR - access another user&#10;tampered_params = dict(request[&quot;params&quot;])&#10;tampered_params[&quot;user_id&quot;] = &quot;1001&quot;&#10;print(f&quot;\nIDOR test: changing user_id from {request[&#39;params&#39;][&#39;user_id&#39;]} to {tampered_params[&#39;user_id&#39;]}&quot;)&#10;&#10;# Check responses&#10;print(&quot;\n--- Simulated Server Responses ---&quot;)&#10;tests = [&#10;    (&quot;Original request&quot;, 200, &quot;Access granted for user jdoe (role: user)&quot;),&#10;    (&quot;Tampered role=admin&quot;, 403, &quot;Forbidden: role change detected in session token&quot;),&#10;    (&quot;IDOR user_id=1001&quot;, 200, &quot;Access granted - profile for user admin_user&quot;),&#10;]&#10;for name, status, body in tests:&#10;    flag = &quot;VULN&quot; if status == 200 and &quot;admin&quot; in name.lower() or &quot;IDOR&quot; in name else &quot;OK&quot;&#10;    print(f&quot;  [{flag:4s}] {status} - {name}: {body}&quot;)" data-timeout="8" data-title="Request Tampering Simulator"></div>
+
+<h2>Burp vs ZAP</h2>
+
+<table><tr><td>Feature</td><td>Burp Suite</td><td>OWASP ZAP</td></tr>
+</table>
+<table><tr><td>Cost</td><td>Community free, Pro paid</td><td>Fully free</td></tr>
+<tr><td>Intercept</td><td>Excellent manual workflow</td><td>Good</td></tr>
+<tr><td>Scanner</td><td>Industry-leading (Pro)</td><td>Good active/passive</td></tr>
+<tr><td>Extensibility</td><td>BApp Store (Java/Python)</td><td>Add-ons (Python)</td></tr>
+<tr><td>Learning curve</td><td>Moderate</td><td>Moderate</td></tr>
+</table>
+<p>For learning, ZAP is a great starting point. For professional work, Burp Suite Pro is the industry standard.</p>
+
+<h2>Summary</h2>
+
+<p>An intercepting proxy is the web tester's microscope. Crawl the app, inspect every request, tamper with parameters and headers, and observe how the server responds. The vulnerabilities you find this way — broken access control, injection, IDOR — are the ones automated scanners miss.</p>
+
+<div data-widget="quiz" data-chapterslug="125-web-app-testing-with-proxies" data-quizid="quiz-125-web-app-testing-with-proxies"></div>
+
+<script type="application/json" id="quiz-125-web-app-testing-with-proxies">[{"id":"q1","type":"multiple-choice","prompt":"Why must you install the proxy CA certificate in your browser?","options":["To speed up HTTPS connections","To allow the proxy to decrypt and re-encrypt HTTPS traffic without certificate warnings","To enable the proxy to block ads","To compress responses"],"correctIndex":1,"explanation":"The proxy generates its own certificates for each site. Without trusting the proxy CA, the browser would show certificate errors for every HTTPS site.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is an IDOR vulnerability?","options":["A type of SQL injection","Accessing another user data by changing an identifier in the request","A cross-site scripting attack","A denial of service technique"],"correctIndex":1,"explanation":"Insecure Direct Object Reference (IDOR) occurs when changing an ID parameter (like user_id) lets you access another user's data without proper authorization checks.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the purpose of fuzzing in web testing?","options":["To crash the server","To send many request variations and find edge cases or unexpected behavior","To encrypt test data","To bypass the proxy"],"correctIndex":1,"explanation":"Fuzzing sends many variations of inputs (parameters, headers, paths) to discover edge cases, validation gaps, and unexpected error handling that could indicate vulnerabilities.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Which finding is most likely to be caught by manual proxy testing but missed by automated scanners?","options":["Missing Content-Security-Policy header","Broken access control via role tampering","Outdated server software version","Missing X-Frame-Options header"],"correctIndex":1,"explanation":"Broken access control requires understanding the application logic and testing specific role/permission changes. Automated scanners can detect missing headers and outdated versions, but logic flaws need human judgment.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/124-network-scanning-with-nmap.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/126-password-attacks-lab.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

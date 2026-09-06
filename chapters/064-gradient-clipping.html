@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gradient Clipping — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="064-gradient-clipping" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Gradient Clipping</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 15 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 10 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Gradient Clipping</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Prevent exploding gradients by capping gradient magnitudes. Implement norm-based and value-based clipping in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Gradient Clipping</h1>
+
+<p>Sometimes gradients explode — especially in RNNs or with high learning rates. ==Gradient clipping caps the gradient magnitude== without changing its direction, preventing catastrophic parameter updates.</p>
+
+<h2>Norm-Based Clipping</h2>
+
+<p>Scale all gradients down if their total norm exceeds a threshold:</p>
+
+<pre><code class="language-python">def clip_grad_norm(grads, max_norm=1.0):&#10;    total_norm = np.sqrt(sum(np.sum(g<em>*2) for g in grads.values()))&#10;    if total_norm &gt; max_norm:&#10;        scale = max_norm / total_norm&#10;        grads = {k: v </em> scale for k, v in grads.items()}&#10;    return grads, total_norm</code></pre>
+
+<div data-widget="pyrunner" data-cellid="064-cell-1" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;&#10;# Simulate exploding gradients&#10;grads = {&#10;    &quot;W1&quot;: np.random.randn(100, 50) * 10,  # large!&#10;    &quot;b1&quot;: np.random.randn(50) * 10,&#10;    &quot;W2&quot;: np.random.randn(50, 10) * 10,&#10;}&#10;&#10;total_norm = np.sqrt(sum(np.sum(g**2) for g in grads.values()))&#10;print(f&quot;Before clipping: total gradient norm = {total_norm:.2f}&quot;)&#10;&#10;# Clip to max_norm=1.0&#10;max_norm = 1.0&#10;if total_norm &gt; max_norm:&#10;    scale = max_norm / total_norm&#10;    grads = {k: v * scale for k, v in grads.items()}&#10;&#10;clipped_norm = np.sqrt(sum(np.sum(g**2) for g in grads.values()))&#10;print(f&quot;After clipping:  total gradient norm = {clipped_norm:.2f}&quot;)&#10;print(f&quot;Scale factor: {scale:.4f}&quot;)&#10;print(f&quot;\n✅ Direction preserved, magnitude capped&quot;)&#10;print(f&quot;   This prevents a single bad batch from destroying trained weights&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Value-Based Clipping</h2>
+
+<p>Simpler: clamp each gradient element to [-threshold, threshold]:</p>
+
+<pre><code class="language-python">def clip_grad_value(grads, threshold=1.0):&#10;    return {k: np.clip(v, -threshold, threshold) for k, v in grads.items()}</code></pre>
+
+<blockquote>[!IMPORTANT] When to Use Which</blockquote>
+<blockquote>- <strong>Norm clipping</strong>: Preferred for most cases. Preserves gradient direction.</blockquote>
+<blockquote>- <strong>Value clipping</strong>: Simpler, used in original RNN papers. Can distort direction.</blockquote>
+<blockquote>- <strong>Typical threshold</strong>: 1.0 for norm, 5.0 for value. Start here and adjust.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="064-gradient-clipping" data-quizid="quiz-064-gradient-clipping"></div>
+
+<script type="application/json" id="quiz-064-gradient-clipping">[{"id":"q1","type":"multiple-choice","prompt":"Why does norm-based clipping preserve gradient direction?","options":["It doesn't","It multiplies ALL gradients by the same scalar (max_norm/total_norm), which scales magnitude uniformly without changing the relative proportions between parameters","It only clips the largest gradient","Direction doesn't matter"],"correctIndex":1,"explanation":"Multiplying a vector by a positive scalar changes its length but not its direction. Since all gradients are scaled by the same factor, the update direction is preserved.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/063-mini-batch-training.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/065-initialization-strategies.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

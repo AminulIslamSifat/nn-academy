@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Shared Responsibility Model — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="116-shared-responsibility-model" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">The Shared Responsibility Model</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 5 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">The Shared Responsibility Model</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Understanding security boundaries between cloud providers and customers across IaaS, PaaS, and SaaS.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Security Is a Partnership</h2>
+
+<p>Cloud security is never solely the provider's job. The Shared Responsibility Model defines exactly which security tasks belong to the cloud provider and which belong to you. Misunderstanding this boundary is the leading cause of cloud breaches. You cannot secure what you do not own, but you also cannot assume protection for assets that remain under your control.</p>
+
+<h2>The Core Division</h2>
+
+<p>Responsibility splits into two distinct categories regardless of service model:</p>
+
+<ul><li>  <strong>Security OF the Cloud:</strong> The provider protects the infrastructure running the services. This includes hardware, global infrastructure, hypervisors, and physical data centers.</li>
+<li>  <strong>Security IN the Cloud:</strong> The customer secures their specific usage. This includes guest operating systems, application code, identity management, firewall configurations, and data encryption.</li>
+</ul>
+<p>The line between these two shifts depending on whether you use IaaS, PaaS, or SaaS.</p>
+
+<h2>Service Model Breakdown</h2>
+
+<h3>Infrastructure as a Service (IaaS)</h3>
+
+<p>You retain the most responsibility in IaaS environments like Amazon EC2 or Azure Virtual Machines. The provider manages the physical host and network fabric. You manage everything above the hypervisor.</p>
+
+<ul><li>  <strong>Customer:</strong> OS patching, application security, network traffic filtering, IAM policies, data-at-rest encryption.</li>
+<li>  <strong>Provider:</strong> Physical security, compute hardware, storage hardware, virtualization layer.</li>
+</ul>
+<h3>Platform as a Service (PaaS)</h3>
+
+<p>In PaaS offerings like AWS RDS or Azure App Service, the provider absorbs operating system and runtime maintenance. Your focus narrows to application logic and data.</p>
+
+<ul><li>  <strong>Customer:</strong> Application code, database configuration, identity integration, client-side encryption.</li>
+<li>  <strong>Provider:</strong> OS patching, middleware updates, runtime environment, database engine maintenance.</li>
+</ul>
+<h3>Software as a Service (SaaS)</h3>
+
+<p>SaaS solutions like Salesforce or Microsoft 365 shift nearly all infrastructure responsibility to the provider. Your primary duty becomes access governance and data classification.</p>
+
+<ul><li>  <strong>Customer:</strong> User accounts, MFA enforcement, data sharing policies, compliance monitoring.</li>
+<li>  <strong>Provider:</strong> Application security, infrastructure, OS, middleware, physical assets.</li>
+</ul>
+<h2>Comparison Table</h2>
+
+<table><tr><td>Responsibility Area</td><td>IaaS (e.g., EC2)</td><td>PaaS (e.g., RDS)</td><td>SaaS (e.g., Office 365)</td></tr>
+</table>
+<table><tr><td>Physical Infrastructure</td><td>Provider</td><td>Provider</td><td>Provider</td></tr>
+<tr><td>Network Controls</td><td>Shared</td><td>Provider</td><td>Provider</td></tr>
+<tr><td>Operating System</td><td><strong>Customer</strong></td><td>Provider</td><td>Provider</td></tr>
+<tr><td>Middleware/Runtime</td><td><strong>Customer</strong></td><td>Provider</td><td>Provider</td></tr>
+<tr><td>Application Code</td><td><strong>Customer</strong></td><td><strong>Customer</strong></td><td>Provider</td></tr>
+<tr><td>Data Encryption</td><td><strong>Customer</strong></td><td>Shared</td><td>Shared</td></tr>
+<tr><td>Identity & Access</td><td><strong>Customer</strong></td><td><strong>Customer</strong></td><td><strong>Customer</strong></td></tr>
+<tr><td>Configuration Mgmt</td><td><strong>Customer</strong></td><td><strong>Customer</strong></td><td>Limited</td></tr>
+</table>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="The Configuration Trap" data-content="Most cloud breaches result from customer misconfiguration, not provider failure. Leaving an S3 bucket public or disabling MFA on administrative accounts falls entirely on the customer, even in managed services."></div>
+
+<h2>Practical Examples: Patching and Encryption</h2>
+
+<p>Understanding abstract models requires concrete mapping. Consider how patching differs across AWS services:</p>
+
+<ul><li>  <strong>EC2 (IaaS):</strong> You must schedule, test, and apply all OS and application patches. The provider only patches the underlying host during scheduled maintenance windows.</li>
+<li>  <strong>RDS (PaaS):</strong> AWS applies database engine patches automatically during your maintenance window. You still patch any custom stored procedures or connected applications.</li>
+<li>  <strong>S3 (Managed Storage):</strong> There is no OS to patch. AWS handles all backend maintenance. You configure bucket policies and lifecycle rules.</li>
+</ul>
+<p>Encryption follows a similar pattern. In IaaS, you manage keys and implement volume encryption. In PaaS, the provider often encrypts data at rest by default, but you may need to enable customer-managed keys (CMK) for regulatory compliance. In SaaS, encryption is typically transparent, though you control who accesses the decrypted content.</p>
+
+<h2>Interactive: Check Patch Responsibility</h2>
+
+<p>Use the simulator below to determine who handles patching for different service types. The script parses a dictionary of common cloud services and outputs the responsible party.</p>
+
+<div data-widget="pyrunner" data-cellid="116-shared-responsibility-model-cell-1" data-defaultcode="services = {&#10;    &quot;EC2&quot;: &quot;IaaS&quot;,&#10;    &quot;RDS&quot;: &quot;PaaS&quot;,&#10;    &quot;Lambda&quot;: &quot;Serverless&quot;,&#10;    &quot;Office365&quot;: &quot;SaaS&quot;,&#10;    &quot;AppService&quot;: &quot;PaaS&quot;&#10;}&#10;&#10;responsibilities = {&#10;    &quot;IaaS&quot;: &quot;Customer patches OS and Apps&quot;,&#10;    &quot;PaaS&quot;: &quot;Provider patches OS/Runtime; Customer patches App&quot;,&#10;    &quot;Serverless&quot;: &quot;Provider patches everything except Code&quot;,&#10;    &quot;SaaS&quot;: &quot;Provider patches all software layers&quot;&#10;}&#10;&#10;print(&quot;=== Patch Responsibility Report ===&quot;)&#10;for service, model in services.items():&#10;    owner = responsibilities.get(model, &quot;Unknown Model&quot;)&#10;    print(f&quot;{service} ({model}): {owner}&quot;)" data-timeout="8" data-title="Check Patch Responsibility"></div>
+
+<h2>Key Takeaways</h2>
+
+<li> <strong>Identify your service model first.</strong> Never assume security controls transfer automatically between IaaS, PaaS, and SaaS.</li>
+<li> <strong>Automate configuration checks.</strong> Use tools like AWS Config or Azure Policy to detect drift from secure baselines.</li>
+<li> <strong>Review provider documentation.</strong> Responsibility matrices change frequently as new managed features launch.</li>
+<li> <strong>Assume breach.</strong> Design architectures where customer-side failures do not cascade into total compromise.</li>
+<li> <strong>Audit shared controls.</strong> Network segmentation and IAM require coordination between provider capabilities and customer implementation.</li>
+
+<h2>Knowledge Check</h2>
+
+<div data-widget="quiz" data-chapterslug="" data-quizid="quiz-dac10sljkwj"></div>
+
+<script type="application/json" id="quiz-dac10sljkwj">[{"text":"In an IaaS environment like EC2, who is responsible for patching the guest operating system?","options":["The customer","The cloud provider","Shared equally","The hypervisor vendor"],"correctIndex":0,"explanation":"In IaaS, the customer manages everything above the hypervisor, including the guest OS, applications, and data."},{"text":"Which security task remains the customer's responsibility across ALL cloud service models?","options":["Identity and Access Management","Physical data center security","Hypervisor patching","Hardware replacement"],"correctIndex":0,"explanation":"Customers always control who accesses their resources, regardless of whether they use IaaS, PaaS, or SaaS."},{"text":"What is the most common cause of cloud security incidents according to industry reports?","options":["Customer misconfiguration","Provider infrastructure failure","Zero-day hypervisor exploits","Physical data center breaches"],"correctIndex":0,"explanation":"Misconfigurations such as open storage buckets, excessive permissions, and disabled logging account for the vast majority of cloud breaches."},{"text":"In a PaaS offering like AWS RDS, who applies database engine patches?","options":["The cloud provider","The customer DBA","Third-party vendor","No patching required"],"correctIndex":0,"explanation":"PaaS providers handle runtime and engine maintenance. Customers focus on schema design, queries, and application integration."}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/115-incident-response.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/117-identity-and-access-management.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vectorization: Kill Your Loops — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="003-vectorization" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Vectorization: Kill Your Loops</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 15 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 12 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Vectorization: Kill Your Loops</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Replace Python loops with array operations. Understand why vectorized code is 100x faster and how to think in batches.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Vectorization: Kill Your Loops</h1>
+
+<p>The single most important mindset shift in NumPy: <strong>never loop over elements when an array operation can do it for you.</strong></p>
+
+<h2>The Problem with Loops</h2>
+
+<p>Python loops are slow because each iteration involves type checking, object allocation, and interpreter overhead. NumPy pushes the loop down to optimized C/Fortran.</p>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;# ❌ Slow: Python loop&#10;result = np.zeros(1000000)&#10;for i in range(1000000):&#10;    result[i] = np.sin(i) <em> np.cos(i)&#10;&#10;# ✅ Fast: Vectorized&#10;result = np.sin(np.arange(1000000)) </em> np.cos(np.arange(1000000))</code></pre>
+
+<div data-widget="pyrunner" data-cellid="003-cell-1" data-defaultcode="import numpy as np&#10;import time&#10;&#10;n = 1_000_000&#10;x = np.arange(n, dtype=np.float64)&#10;&#10;# Vectorized&#10;start = time.perf_counter()&#10;result = np.sin(x) * np.cos(x)&#10;vec_time = time.perf_counter() - start&#10;&#10;print(f&quot;Vectorized: {vec_time*1000:.2f}ms&quot;)&#10;print(f&quot;Result shape: {result.shape}&quot;)&#10;print(f&quot;First 5: {result[:5]}&quot;)&#10;" data-timeout="10000" data-title=""></div>
+
+<h2>Element-wise Operations</h2>
+
+<p>All arithmetic operators work element-wise on arrays:</p>
+
+<pre><code class="language-python">a = np.array([1, 2, 3])&#10;b = np.array([4, 5, 6])&#10;&#10;a + b    # [5, 7, 9]&#10;a <em> b    # [4, 10, 18]  (element-wise, NOT dot product!)&#10;a </em>* 2   # [1, 4, 9]&#10;np.exp(a)  # [e, e², e³]</code></pre>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="* is NOT matrix multiplication" data-content="`a * b` multiplies element-by-element. For dot products, use `a @ b` or `np.dot(a, b)`. This trips up everyone at first."></div>
+
+<h2>The Dot Product</h2>
+
+<p>The fundamental operation in neural networks:</p>
+
+<pre><code class="language-python">weights = np.random.randn(784, 128)  # layer weights&#10;x = np.random.randn(784)             # single input&#10;&#10;output = x @ weights  # shape (128,) — one forward pass</code></pre>
+
+<div data-widget="pyrunner" data-cellid="003-cell-2" data-defaultcode="import numpy as np&#10;&#10;# Simulate a single linear layer&#10;np.random.seed(42)&#10;weights = np.random.randn(4, 3)  # 4 inputs → 3 outputs&#10;bias = np.zeros(3)&#10;x = np.array([1.0, 2.0, 3.0, 4.0])&#10;&#10;output = x @ weights + bias&#10;print(&quot;Input shape:&quot;, x.shape)&#10;print(&quot;Weights shape:&quot;, weights.shape)&#10;print(&quot;Output shape:&quot;, output.shape)&#10;print(&quot;Output:&quot;, output.round(4))&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Batched Operations</h2>
+
+<p>Instead of looping over samples, stack them into a matrix:</p>
+
+<pre><code class="language-python"># ❌ Loop over batch&#10;for i in range(batch_size):&#10;    outputs[i] = X[i] @ W + b&#10;&#10;# ✅ Single matrix multiply&#10;outputs = X @ W + b  # X: (batch, features), W: (features, out)</code></pre>
+
+<div data-widget="pyrunner" data-cellid="003-cell-3" data-defaultcode="import numpy as np&#10;import time&#10;&#10;np.random.seed(0)&#10;batch_size = 256&#10;features = 512&#10;out_features = 128&#10;&#10;X = np.random.randn(batch_size, features)&#10;W = np.random.randn(features, out_features)&#10;b = np.random.randn(out_features)&#10;&#10;# Vectorized forward pass&#10;start = time.perf_counter()&#10;Y = X @ W + b&#10;elapsed = time.perf_counter() - start&#10;&#10;print(f&quot;Batch forward pass: {elapsed*1000:.3f}ms&quot;)&#10;print(f&quot;X: {X.shape} @ W: {W.shape} → Y: {Y.shape}&quot;)&#10;" data-timeout="10000" data-title=""></div>
+
+<div data-widget="visualizer" data-mode="matmul" data-shapea="3,1" data-shapeb="1,4" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="003-vectorization" data-quizid="quiz-003-vectorization"></div>
+
+<script type="application/json" id="quiz-003-vectorization">[{"id":"q1","type":"multiple-choice","prompt":"Why is vectorized NumPy code faster than an equivalent Python for-loop?","options":["Python is inherently slow at everything","NumPy pushes the loop into optimized compiled C/Fortran code, eliminating per-element interpreter overhead like type checking and object allocation","NumPy automatically uses the GPU","Vectorized code uses less RAM"],"correctIndex":1,"explanation":"Every iteration of a Python loop goes through the interpreter: type dispatch, reference counting, memory allocation. NumPy's inner loops run in compiled C with SIMD instructions on contiguous memory — no interpreter involved.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What does the <em> operator do when applied to two NumPy arrays?","options":["Matrix multiplication","Element-wise multiplication","Dot product","Outer product"],"correctIndex":1,"explanation":"In NumPy, </em> is ALWAYS element-wise. This is different from math notation where <em> often means matrix multiply. Use @ or np.dot() for matrix multiplication.","randomize":true},{"id":"q3","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([2, 3, 4])\nprint(a <strong> 2)","options":["[4 9 16]","[2 3 4 2 3 4]","8","Error"],"correctIndex":0,"explanation":"</strong> is element-wise exponentiation. Each element is squared independently: 2²=4, 3²=9, 4²=16.","randomize":true},{"id":"q4","type":"shape-prediction","prompt":"If X has shape (32, 784) and W has shape (784, 256), what is the shape of X @ W?","options":["(32, 256)","(784, 784)","(32, 784)","(256, 32)"],"correctIndex":0,"explanation":"Matrix multiply rule: (m, k) @ (k, n) → (m, n). Inner dimensions must match (784=784). Result takes outer dimensions: (32, 256).","randomize":true},{"id":"q5","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nprint(a </em> b)","options":["[4 10 18]","32","[5 7 9]","Error"],"correctIndex":0,"explanation":"Element-wise multiplication: 1×4=4, 2×5=10, 3×6=18. NOT a dot product.","randomize":false},{"id":"q6","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nprint(np.dot(a, b))","options":["32","[4 10 18]","21","Error"],"correctIndex":0,"explanation":"np.dot on 1D arrays computes the dot product (sum of element-wise products): 1×4 + 2×5 + 3×6 = 4+10+18 = 32.","randomize":false},{"id":"q7","type":"multiple-choice","prompt":"Which expression correctly computes a batched forward pass for a linear layer?","options":["for i in range(N): Y[i] = X[i] @ W + b","Y = X @ W + b where X is (batch, features)","Y = X <em> W + b","Y = np.dot(X, W) </em> b"],"correctIndex":1,"explanation":"X @ W + b processes the entire batch in one matrix multiply. The bias broadcasts across all samples. No loop needed.","randomize":true},{"id":"q8","type":"code-output","prompt":"What is the shape of the result?","code":"import numpy as np\nX = np.ones((3, 4))\nw = np.ones(4)\nprint((X @ w).shape)","options":["(3,)","(4,)","(3, 4)","()"],"correctIndex":0,"explanation":"(3,4) @ (4,) → (3,). Matrix times vector produces a vector with one entry per row of the matrix.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"Why should you never write <code>for i in range(len(a)): result[i] = np.sin(a[i])</code>?","options":["It's ugly","Each iteration calls the Python interpreter and invokes np.sin on a scalar; np.sin(a) processes the entire array in one optimized C call","Loops don't work with NumPy arrays","It produces wrong results"],"correctIndex":1,"explanation":"Calling np.sin on individual scalars N times has N× interpreter overhead. Calling it once on the whole array runs a single optimized loop in C. Typical speedup: 50-100×.","randomize":true},{"id":"q10","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(6).reshape(2, 3)\nb = np.arange(6).reshape(3, 2)\nprint((a @ b).shape)","options":["(2, 2)","(3, 3)","(2, 3)","(6,)"],"correctIndex":0,"explanation":"(2,3) @ (3,2) → (2,2). Inner dimensions match (3=3), outer dimensions form the result shape.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"What happens if you try (3, 4) @ (3, 2)?","options":["Returns (3, 2)","ValueError: inner dimensions don't match (4 ≠ 3)","Returns (4, 2)","Broadcasts automatically"],"correctIndex":1,"explanation":"Matrix multiply requires the last dimension of the left operand to equal the first dimension of the right. 4 ≠ 3, so it fails. No broadcasting in matmul.","randomize":true},{"id":"q12","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([[1, 2], [3, 4]])\nprint(a.sum())","options":["10","[4 6]","[3 7]","[[1 2]\n [3 4]]"],"correctIndex":0,"explanation":"sum() with no axis argument sums ALL elements into a scalar: 1+2+3+4 = 10.","randomize":false},{"id":"q13","type":"multiple-choice","prompt":"In neural networks, why is the forward pass written as Y = X @ W + b instead of looping over samples?","options":["It's shorter to write","A single matrix multiply maps directly to highly optimized BLAS routines (cuBLAS on GPU); a Python loop would be 100-1000× slower","Loops can't compute dot products","NumPy doesn't support loops"],"correctIndex":1,"explanation":"BLAS libraries are hand-tuned for specific hardware with cache-aware blocking, SIMD, and GPU kernels. No Python loop can approach this performance.","randomize":true},{"id":"q14","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.eye(3)\nb = np.array([1.0, 2.0, 3.0])\nprint(a @ b)","options":["[1. 2. 3.]","[6.]","[[1 0 0]\n [0 2 0]\n [0 0 3]]","Error"],"correctIndex":0,"explanation":"Identity matrix times any vector returns the same vector unchanged. I @ x = x. This is the defining property of the identity matrix.","randomize":false},{"id":"q15","type":"multiple-choice","prompt":"What typical speedup do you get by replacing a Python loop with a vectorized NumPy operation?","options":["2-3×","10-100× for numerical operations on large arrays","No measurable difference","1000× always"],"correctIndex":1,"explanation":"Speedup depends on array size and operation complexity. Small arrays: 10×. Large arrays with complex math: 100× or more. The gap widens because vectorized code also benefits from better cache utilization.","randomize":true},{"id":"q16","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.array([1, 2, 3])\nprint(a + 10)","options":["[11 12 13]","[1 2 3 10]","Error","10"],"correctIndex":0,"explanation":"Scalar-to-array operations broadcast automatically. 10 is added to every element: [1+10, 2+10, 3+10] = [11, 12, 13].","randomize":false},{"id":"q17","type":"multiple-choice","prompt":"What does 'thinking in batches' mean for deep learning code?","options":["Process data in fixed-size chunks","Stack multiple samples into matrices and compute all outputs simultaneously with one matrix multiply, instead of processing samples one at a time","Use batch normalization","Store data in batches on disk"],"correctIndex":1,"explanation":"Batching turns N separate forward passes into ONE matrix multiply. This maximizes GPU utilization and amortizes kernel launch overhead. It's why we use mini-batches instead of single samples.","randomize":true},{"id":"q18","type":"code-output","prompt":"What is the shape of the result?","code":"import numpy as np\nX = np.random.randn(64, 128)\nW = np.random.randn(128, 10)\nb = np.random.randn(10)\nY = X @ W + b\nprint(Y.shape)","options":["(64, 10)","(128, 10)","(64, 128)","(10,)"],"correctIndex":0,"explanation":"This is a complete batched linear layer. (64,128) @ (128,10) → (64,10). Bias (10,) broadcasts across the batch dimension via broadcasting rules.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"Why does np.exp(a) vastly outperform [math.exp(x) for x in a]?","options":["Shorter syntax only","np.exp processes the entire array in a single compiled C call with SIMD; the list comprehension invokes Python's interpreter and math.exp separately for each element","math.exp doesn't accept floats","They perform identically"],"correctIndex":1,"explanation":"Vectorized ufuncs like np.exp execute a tight C loop over contiguous memory. List comprehensions pay interpreter overhead per element. For 1M elements, this is ~100× slower.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"You have X with shape (batch, features) and want to normalize each sample independently. Which approach is correct and vectorized?","options":["for i in range(batch): X[i] = X[i] / X[i].max()","X / X.max(axis=1, keepdims=True)","X / X.max()","X / np.linalg.norm(X)"],"correctIndex":1,"explanation":"max(axis=1, keepdims=True) computes per-sample max with shape (batch, 1), which broadcasts correctly against (batch, features). No loop needed. Without keepdims, shape (batch,) won't broadcast properly against (batch, features).","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/015-array-filter.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/004-broadcasting.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

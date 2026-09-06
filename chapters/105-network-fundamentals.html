@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TITLE}} — Academia</title>
+  <title>Network Security Fundamentals — Academia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
     }
   </script>
 </head>
-<body class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+<body data-slug="105-network-fundamentals" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
 
   <!-- Mobile overlay -->
   <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
@@ -63,29 +63,57 @@
           <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
             <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
             <span style="color: var(--text-muted);">/</span>
-            <span style="color: var(--text-secondary);">{{TITLE}}</span>
+            <span style="color: var(--text-secondary);">Network Security Fundamentals</span>
           </nav>
         </div>
         <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
-          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> {{READ_TIME}} min</span>
-          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> {{CODE_TIME}} min</span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 5 min</span>
         </div>
       </div>
     </header>
 
     <!-- Chapter content -->
     <article class="mx-auto max-w-3xl px-6 py-12">
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">{{TITLE}}</h1>
-      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">{{DESCRIPTION}}</p>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Network Security Fundamentals</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">How networks actually move packets, and where attackers intercept them.</p>
 
       <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
-        {{CONTENT}}
+        
+<h2>The Layers That Matter</h2>
+
+<ul><li><strong>IP</strong> — addressing and routing; the source address can be forged.</li>
+<li><strong>TCP/UDP</strong> — transport; TCP handshakes can be hijacked.</li>
+<li><strong>DNS</strong> — name resolution; a prime target for redirection attacks.</li>
+<li><strong>HTTP/HTTPS</strong> — application layer; where most web attacks land.</li>
+</ul>
+<h2>Packet Anatomy</h2>
+
+<p>Each packet carries headers (who it is from, who it is to) and a payload. Attackers read or rewrite headers to impersonate, redirect, or drop traffic.</p>
+
+<h2>Common Network Attacks</h2>
+
+<li><strong>IP spoofing</strong> — forge the source address.</li>
+<li><strong>ARP poisoning</strong> — lie about MAC-to-IP mapping on a LAN.</li>
+<li><strong>DNS hijacking</strong> — return false IP addresses for a domain.</li>
+<li><strong>Sniffing</strong> — passively read unencrypted traffic.</li>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Trust nothing on the wire" data-content="Anything that travels unencrypted can be read, and anything that is not authenticated can be forged. This is why encryption and authentication are inseparable."></div>
+
+<h2>Ports & Services</h2>
+
+<p>Every open port is a door. Reducing the attack surface means closing ports you do not need and hardening the ones you keep.</p>
+
+<h2>Summary</h2>
+
+<p>You now know the layers, the headers, and the classic interception techniques that later chapters defend against.</p>
+
       </div>
 
       <!-- Prev / Next -->
       <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
-        {{PREV_LINK}}
-        {{NEXT_LINK}}
+        <a href="/chapters/104-risk-management.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/106-firewalls-ids-ips.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
       </nav>
     </article>
   </main>

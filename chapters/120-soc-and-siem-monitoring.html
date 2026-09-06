@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOC &amp; SIEM Monitoring — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="120-soc-and-siem-monitoring" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">SOC &amp; SIEM Monitoring</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 6 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">SOC &amp; SIEM Monitoring</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">How a Security Operations Center detects, triages, and escalates threats using log aggregation.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>What a SOC Does</h2>
+
+<p>A <strong>Security Operations Center</strong> is the team (and tooling) that watches for threats 24/7. Its core loop is: <strong>collect</strong> logs, <strong>detect</strong> anomalies, <strong>triage</strong> alerts, <strong>investigate</strong> incidents, and <strong>respond</strong>.</p>
+
+<p>The SOC does not prevent attacks — it <strong>detects and limits</strong> them. Prevention is the job of firewalls, endpoint protection, and secure code. The SOC catches what prevention misses.</p>
+
+<h2>Log Sources</h2>
+
+<p>A SOC ingests logs from every layer:</p>
+
+<table><tr><td>Source</td><td>What It Tells You</td></tr>
+</table>
+<table><tr><td>Firewall / IDS</td><td>Blocked connections, intrusion attempts</td></tr>
+<tr><td>Endpoint (EDR)</td><td>Process creation, file writes, registry changes</td></tr>
+<tr><td>Authentication (AD / IdP)</td><td>Logins, failures, privilege escalation</td></tr>
+<tr><td>Web server / WAF</td><td>HTTP requests, blocked payloads</td></tr>
+<tr><td>DNS resolver</td><td>Lookups for known-bad domains</td></tr>
+<tr><td>Cloud audit trail</td><td>API calls, config changes</td></tr>
+</table>
+
+<div data-widget="callout" data-type="info" data-callouttitle="You cannot detect what you do not log" data-content="The first SOC maturity question is not &#39;do we have alerts?&#39; but &#39;do we have logs?&#39; If a server is not sending logs, an attacker can operate there invisibly."></div>
+
+<h2>The SIEM</h2>
+
+<p>A <strong>Security Information and Event Management</strong> system aggregates, normalizes, and correlates logs from all sources. Popular SIEMs include Splunk, Microsoft Sentinel, Elastic Security, and the open-source Wazuh.</p>
+
+<h3>What a SIEM Actually Does</h3>
+
+<li><strong>Ingest</strong> — receive logs via agents, syslog, or API.</li>
+<li><strong>Normalize</strong> — parse different formats into a common schema (IP, user, action, timestamp).</li>
+<li><strong>Correlate</strong> — combine events across sources. A failed SSH login from the same IP that later triggers a WAF alert is more interesting than either alone.</li>
+<li><strong>Alert</strong> — fire a notification when a rule or anomaly threshold is crossed.</li>
+<li><strong>Retain</strong> — keep logs for forensic and compliance purposes.</li>
+
+<h3>Detection Rules</h3>
+
+<p>A detection rule is a query over the log stream:</p>
+
+<pre><code class="language-text"># Pseudo-SIEM rule&#10;ALERT WHEN count(failed_login) BY source_ip &gt; 10 WITHIN 5m&#10;  AND source_ip NOT IN whitelist</code></pre>
+
+<h3>Anomaly Detection</h3>
+
+<p>Rules catch known patterns. <strong>Anomaly detection</strong> builds a baseline of normal behavior and flags deviations. This is where the neural-network skills from Module 1 connect directly: an autoencoder or isolation forest can model normal log patterns and flag outliers.</p>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Start with high-fidelity rules" data-content="A SOC drowning in false positives is worse than no SOC. Start with a small set of high-confidence rules (brute force, impossible travel, known-bad IOCs) and expand from there."></div>
+
+<h2>Alert Triage</h2>
+
+<p>When an alert fires, the analyst asks:</p>
+
+<li><strong>Is it a true positive?</strong> Check context — is the user on vacation? Is the IP in a known-bad range?</li>
+<li><strong>What is the scope?</strong> One host or the whole fleet?</li>
+<li><strong>What is the urgency?</strong> A ransomware beacon is critical; a port scan from a scanner is low.</li>
+<li><strong>What is the next step?</strong> Contain, escalate, or close as false positive.</li>
+
+<h3>The Triage Funnel</h3>
+
+<pre><code class="language-text">Raw events (millions/day)&#10;  -&gt; Correlated alerts (hundreds/day)&#10;    -&gt; Triage queue (dozens/day)&#10;      -&gt; Confirmed incidents (single digits/day)</code></pre>
+
+<p>Most alerts are noise. The SOC's job is to reduce the funnel efficiently without missing real threats.</p>
+
+<h2>Interactive: Parse and Correlate Log Events</h2>
+
+<div data-widget="pyrunner" data-cellid="120-soc-siem-monitoring-cell-1" data-defaultcode="import re&#10;from collections import defaultdict&#10;&#10;# Simulated raw security logs&#10;raw_logs = [&#10;  &quot;2024-03-15 08:12:01 AUTH FAILED user=admin src=10.0.0.55&quot;,&#10;  &quot;2024-03-15 08:12:03 AUTH FAILED user=admin src=10.0.0.55&quot;,&#10;  &quot;2024-03-15 08:12:05 AUTH FAILED user=admin src=10.0.0.55&quot;,&#10;  &quot;2024-03-15 08:12:07 AUTH FAILED user=admin src=10.0.0.55&quot;,&#10;  &quot;2024-03-15 08:12:09 AUTH FAILED user=admin src=10.0.0.55&quot;,&#10;  &quot;2024-03-15 08:12:11 AUTH SUCCESS user=admin src=10.0.0.55&quot;,&#10;  &quot;2024-03-15 08:15:00 FIREWALL BLOCK src=10.0.0.55 dst=192.168.1.10 port=445&quot;,&#10;  &quot;2024-03-15 09:00:00 AUTH SUCCESS user=jdoe src=172.16.0.20&quot;,&#10;  &quot;2024-03-15 09:01:00 DNS QUERY domain=evil-c2.example.com src=10.0.0.55&quot;,&#10;]&#10;&#10;# Parse into structured events&#10;events = []&#10;for log in raw_logs:&#10;    m = re.match(r&#39;(\S+ \S+) (\w+) (\w+) (?:user=(\S+) )?(?:src=(\S+))?&#39;, log)&#10;    if m:&#10;        events.append({&#10;            &quot;time&quot;: m.group(1),&#10;            &quot;source&quot;: m.group(2),&#10;            &quot;action&quot;: m.group(3),&#10;            &quot;user&quot;: m.group(4) or &quot;-&quot;,&#10;            &quot;ip&quot;: m.group(5) or &quot;-&quot;,&#10;            &quot;raw&quot;: log,&#10;        })&#10;&#10;# Correlation: count failed logins per IP&#10;failed_by_ip = defaultdict(int)&#10;for e in events:&#10;    if e[&quot;action&quot;] == &quot;FAILED&quot;:&#10;        failed_by_ip[e[&quot;ip&quot;]] += 1&#10;&#10;print(&quot;SIEM Log Correlation Demo&quot;)&#10;print(&quot;=&quot; * 55)&#10;print(f&quot;Parsed {len(events)} events\n&quot;)&#10;&#10;print(&quot;Failed login counts by IP:&quot;)&#10;for ip, count in sorted(failed_by_ip.items(), key=lambda x: -x[1]):&#10;    status = &quot;ALERT: possible brute force&quot; if count &gt;= 5 else &quot;normal&quot;&#10;    print(f&quot;  {ip:15s} -&gt; {count} failures [{status}]&quot;)&#10;&#10;# Cross-reference: does the brute-force IP appear elsewhere?&#10;suspect_ip = max(failed_by_ip, key=failed_by_ip.get)&#10;print(f&quot;\nCross-referencing {suspect_ip}:&quot;)&#10;for e in events:&#10;    if e[&quot;ip&quot;] == suspect_ip and e[&quot;action&quot;] != &quot;FAILED&quot;:&#10;        print(f&quot;  [{e[&#39;source&#39;]}] {e[&#39;raw&#39;]}&quot;)" data-timeout="8" data-title="Log Correlation Engine"></div>
+
+<h2>Key Metrics</h2>
+
+<ul><li><strong>MTTD</strong> (Mean Time to Detect) — how long from compromise to alert.</li>
+<li><strong>MTTR</strong> (Mean Time to Respond) — how long from alert to containment.</li>
+<li><strong>False positive rate</strong> — percentage of alerts that are noise.</li>
+</ul>
+<p>Industry median MTTD is still around <strong>200 days</strong> for breaches discovered by the victim. A mature SOC with good log coverage and tuned detections can bring that down to hours.</p>
+
+<h2>Summary</h2>
+
+<p>The SOC is the detection and response layer. It depends on comprehensive logging, a SIEM for correlation, well-tuned detection rules, and a disciplined triage process. The goal is not to catch everything — it is to catch the important things fast.</p>
+
+<div data-widget="quiz" data-chapterslug="120-soc-and-siem-monitoring" data-quizid="quiz-120-soc-and-siem-monitoring"></div>
+
+<script type="application/json" id="quiz-120-soc-and-siem-monitoring">[{"id":"q1","type":"multiple-choice","prompt":"What is the primary role of a SIEM?","options":["Prevent all network intrusions","Aggregate, correlate, and alert on security logs","Replace the need for firewalls","Encrypt log data at rest"],"correctIndex":1,"explanation":"A SIEM collects logs from many sources, normalizes and correlates them, and generates alerts. It is a detection tool, not a prevention tool.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What does a high false positive rate indicate?","options":["The SOC is overstaffed","Detection rules need tuning to reduce noise","The network has no threats","Log retention is too short"],"correctIndex":1,"explanation":"Too many false positives mean analysts waste time on noise and may miss real incidents. Rules need tuning to improve signal-to-noise ratio.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"In the triage funnel, what happens between raw events and confirmed incidents?","options":["Events are encrypted and archived","Events are correlated into alerts, then triaged by analysts","Events are sent directly to the CISO","Events are deleted after 24 hours"],"correctIndex":1,"explanation":"Raw events (millions) are correlated into alerts (hundreds), which analysts triage down to confirmed incidents (single digits). This funnel is the core SOC workflow.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"How does anomaly detection connect to neural networks?","options":["Neural networks replace SIEMs entirely","Anomaly detection models normal behavior and flags deviations, which is a classification task","Neural networks are used to encrypt logs","There is no connection"],"correctIndex":1,"explanation":"Anomaly detection learns a baseline of normal behavior and flags outliers. This is fundamentally a classification or density-estimation problem where neural networks (autoencoders, isolation forests) apply directly.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/119-devsecops-cicd-security.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/121-threat-intelligence.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

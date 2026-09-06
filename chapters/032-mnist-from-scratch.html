@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your First Neural Network: MNIST from Scratch — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="032-mnist-from-scratch" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Your First Neural Network: MNIST from Scratch</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 35 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 30 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Your First Neural Network: MNIST from Scratch</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Load real MNIST data, build a complete 2-layer MLP with backprop and Adam, train it to 97%+ accuracy. Everything in pure NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Your First Neural Network: MNIST from Scratch</h1>
+
+<p>Time to stop playing with synthetic data. ==You're going to load real MNIST, build a neural network from zero, and train it to recognize handwritten digits.== No PyTorch. No TensorFlow. Just you, NumPy, and the math.</p>
+
+<h2>Loading MNIST</h2>
+
+<p>MNIST is 60,000 training + 10,000 test grayscale images of handwritten digits (0–9), each 28×28 pixels.</p>
+
+<pre><code class="language-python">import numpy as np&#10;import gzip&#10;import os&#10;import urllib.request&#10;&#10;def load_mnist(data_dir=&quot;../_data&quot;):&#10;    &quot;&quot;&quot;Download and load MNIST dataset.&quot;&quot;&quot;&#10;    base_url = &quot;https://ossci-datasets.s3.amazonaws.com/mnist/&quot;&#10;    files = {&#10;        &quot;train_images&quot;: &quot;train-images-idx3-ubyte.gz&quot;,&#10;        &quot;train_labels&quot;: &quot;train-labels-idx1-ubyte.gz&quot;,&#10;        &quot;test_images&quot;: &quot;t10k-images-idx3-ubyte.gz&quot;,&#10;        &quot;test_labels&quot;: &quot;t10k-labels-idx1-ubyte.gz&quot;,&#10;    }&#10;    &#10;    os.makedirs(data_dir, exist_ok=True)&#10;    &#10;    for name, fname in files.items():&#10;        fpath = os.path.join(data_dir, fname)&#10;        if not os.path.exists(fpath):&#10;            print(f&quot;Downloading {fname}...&quot;)&#10;            urllib.request.urlretrieve(base_url + fname, fpath)&#10;    &#10;    # Parse images&#10;    def parse_images(fname):&#10;        with gzip.open(os.path.join(data_dir, fname), &quot;rb&quot;) as f:&#10;            return np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784)&#10;    &#10;    # Parse labels&#10;    def parse_labels(fname):&#10;        with gzip.open(os.path.join(data_dir, fname), &quot;rb&quot;) as f:&#10;            return np.frombuffer(f.read(), np.uint8, offset=8)&#10;    &#10;    X_train = parse_images(files[&quot;train_images&quot;]).astype(np.float64) / 255.0&#10;    y_train = parse_labels(files[&quot;train_labels&quot;])&#10;    X_test = parse_images(files[&quot;test_images&quot;]).astype(np.float64) / 255.0&#10;    y_test = parse_labels(files[&quot;test_labels&quot;])&#10;    &#10;    return (X_train, y_train), (X_test, y_test)</code></pre>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Why Normalize to [0, 1]?" data-content="Raw pixel values are 0–255 (uint8). Dividing by 255 gives floats in [0, 1]. This keeps activations and gradients in a reasonable range. Without normalization, large inputs cause large activations, which cause exploding gradients."></div>
+
+<h2>The Complete Network</h2>
+
+<p>Here's everything in one clean class. Study this — it combines chapters 028–031 into a working system:</p>
+
+<pre><code class="language-python">class MNISTNet:&#10;    def __init__(self, input_dim=784, hidden_dim=256, num_classes=10):&#10;        # He initialization&#10;        self.W1 = np.random.randn(input_dim, hidden_dim) <em> np.sqrt(2.0 / input_dim)&#10;        self.b1 = np.zeros(hidden_dim)&#10;        self.W2 = np.random.randn(hidden_dim, num_classes) </em> np.sqrt(2.0 / hidden_dim)&#10;        self.b2 = np.zeros(num_classes)&#10;        &#10;        # Adam state&#10;        self.t = 0&#10;        self.param_names = [&quot;W1&quot;, &quot;b1&quot;, &quot;W2&quot;, &quot;b2&quot;]&#10;        self.m = {name: np.zeros_like(getattr(self, name)) for name in self.param_names}&#10;        self.v = {name: np.zeros_like(getattr(self, name)) for name in self.param_names}&#10;    &#10;    def forward(self, X):&#10;        self.Z1 = X @ self.W1 + self.b1&#10;        self.H = np.maximum(0, self.Z1)  # ReLU&#10;        self.Z2 = self.H @ self.W2 + self.b2&#10;        &#10;        # Stable softmax&#10;        shifted = self.Z2 - np.max(self.Z2, axis=1, keepdims=True)&#10;        exp_z = np.exp(shifted)&#10;        self.probs = exp_z / np.sum(exp_z, axis=1, keepdims=True)&#10;        return self.probs&#10;    &#10;    def backward(self, X, y_onehot):&#10;        N = X.shape[0]&#10;        &#10;        # Output gradient (softmax + CCE shortcut)&#10;        dZ2 = (self.probs - y_onehot) / N&#10;        dW2 = self.H.T @ dZ2&#10;        db2 = np.sum(dZ2, axis=0)&#10;        &#10;        # Hidden gradient&#10;        dH = dZ2 @ self.W2.T&#10;        dZ1 = dH <em> (self.Z1 &gt; 0).astype(float)  # ReLU derivative&#10;        dW1 = X.T @ dZ1&#10;        db1 = np.sum(dZ1, axis=0)&#10;        &#10;        return {&quot;W1&quot;: dW1, &quot;b1&quot;: db1, &quot;W2&quot;: dW2, &quot;b2&quot;: db2}&#10;    &#10;    def adam_step(self, grads, lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8):&#10;        self.t += 1&#10;        for name in self.param_names:&#10;            g = grads[name]&#10;            self.m[name] = beta1 </em> self.m[name] + (1 - beta1) <em> g&#10;            self.v[name] = beta2 </em> self.v[name] + (1 - beta2) <em> g<strong>2&#10;            m_hat = self.m[name] / (1 - beta1</strong>self.t)&#10;            v_hat = self.v[name] / (1 - beta2</em><em>self.t)&#10;            update = lr </em> m_hat / (np.sqrt(v_hat) + eps)&#10;            setattr(self, name, getattr(self, name) - update)&#10;    &#10;    def predict(self, X):&#10;        probs = self.forward(X)&#10;        return np.argmax(probs, axis=1)</code></pre>
+
+<h2>Training</h2>
+
+<div data-widget="pyrunner" data-cellid="032-cell-1" data-defaultcode="import numpy as np&#10;&#10;# --- Inline MNIST loader (uses cached data or generates synthetic fallback) ---&#10;import os, gzip&#10;&#10;def try_load_mnist():&#10;    data_dir = &quot;../_data&quot;&#10;    try:&#10;        if os.path.exists(os.path.join(data_dir, &quot;train-images-idx3-ubyte.gz&quot;)):&#10;            with gzip.open(os.path.join(data_dir, &quot;train-images-idx3-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                X_train = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784).astype(np.float64) / 255.0&#10;            with gzip.open(os.path.join(data_dir, &quot;train-labels-idx1-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                y_train = np.frombuffer(f.read(), np.uint8, offset=8)&#10;            with gzip.open(os.path.join(data_dir, &quot;t10k-images-idx3-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                X_test = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784).astype(np.float64) / 255.0&#10;            with gzip.open(os.path.join(data_dir, &quot;t10k-labels-idx1-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                y_test = np.frombuffer(f.read(), np.uint8, offset=8)&#10;            return (X_train, y_train), (X_test, y_test), True&#10;    except Exception as e:&#10;        pass&#10;    &#10;    # Synthetic fallback for demo&#10;    np.random.seed(42)&#10;    N_tr, N_te = 5000, 1000&#10;    X_tr = np.random.randn(N_tr, 784) * 0.3&#10;    y_tr = np.random.randint(0, 10, N_tr)&#10;    for i in range(N_tr): X_tr[i, y_tr[i]*78:(y_tr[i]+1)*78] += 1.0&#10;    X_te = np.random.randn(N_te, 784) * 0.3&#10;    y_te = np.random.randint(0, 10, N_te)&#10;    for i in range(N_te): X_te[i, y_te[i]*78:(y_te[i]+1)*78] += 1.0&#10;    return (X_tr, y_tr), (X_te, y_te), False&#10;&#10;(train_data, test_data), loaded = try_load_mnist()[0], try_load_mnist()[2]&#10;(X_train, y_train), (X_test, y_test) = train_data, test_data&#10;print(f&quot;Data source: {&#39;Real MNIST&#39; if loaded else &#39;Synthetic (demo mode)&#39;}&quot;)&#10;print(f&quot;Train: {X_train.shape}, Test: {X_test.shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="pyrunner" data-cellid="032-cell-2" data-defaultcode="import numpy as np&#10;import os, gzip&#10;&#10;# Load data&#10;def try_load_mnist():&#10;    data_dir = &quot;../_data&quot;&#10;    try:&#10;        if os.path.exists(os.path.join(data_dir, &quot;train-images-idx3-ubyte.gz&quot;)):&#10;            with gzip.open(os.path.join(data_dir, &quot;train-images-idx3-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                X_tr = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784).astype(np.float64) / 255.0&#10;            with gzip.open(os.path.join(data_dir, &quot;train-labels-idx1-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                y_tr = np.frombuffer(f.read(), np.uint8, offset=8)&#10;            with gzip.open(os.path.join(data_dir, &quot;t10k-images-idx3-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                X_te = np.frombuffer(f.read(), np.uint8, offset=16).reshape(-1, 784).astype(np.float64) / 255.0&#10;            with gzip.open(os.path.join(data_dir, &quot;t10k-labels-idx1-ubyte.gz&quot;), &quot;rb&quot;) as f:&#10;                y_te = np.frombuffer(f.read(), np.uint8, offset=8)&#10;            return (X_tr, y_tr), (X_te, y_te)&#10;    except: pass&#10;    np.random.seed(42)&#10;    N_tr, N_te = 5000, 1000&#10;    X_tr = np.random.randn(N_tr, 784)*0.3; y_tr = np.random.randint(0,10,N_tr)&#10;    for i in range(N_tr): X_tr[i, y_tr[i]*78:(y_tr[i]+1)*78] += 1.0&#10;    X_te = np.random.randn(N_te, 784)*0.3; y_te = np.random.randint(0,10,N_te)&#10;    for i in range(N_te): X_te[i, y_te[i]*78:(y_te[i]+1)*78] += 1.0&#10;    return (X_tr, y_tr), (X_te, y_te)&#10;&#10;(X_train, y_train), (X_test, y_test) = try_load_mnist()&#10;&#10;# Network&#10;class MNISTNet:&#10;    def __init__(self, D=784, H=256, C=10):&#10;        self.W1 = np.random.randn(D,H)*np.sqrt(2.0/D)&#10;        self.b1 = np.zeros(H)&#10;        self.W2 = np.random.randn(H,C)*np.sqrt(2.0/H)&#10;        self.b2 = np.zeros(C)&#10;        self.t = 0&#10;        self.pnames = [&quot;W1&quot;,&quot;b1&quot;,&quot;W2&quot;,&quot;b2&quot;]&#10;        self.m = {n: np.zeros_like(getattr(self,n)) for n in self.pnames}&#10;        self.v = {n: np.zeros_like(getattr(self,n)) for n in self.pnames}&#10;    &#10;    def forward(self, X):&#10;        self.X = X&#10;        self.Z1 = X @ self.W1 + self.b1&#10;        self.H = np.maximum(0, self.Z1)&#10;        self.Z2 = self.H @ self.W2 + self.b2&#10;        s = self.Z2 - np.max(self.Z2, axis=1, keepdims=True)&#10;        e = np.exp(s)&#10;        self.probs = e / np.sum(e, axis=1, keepdims=True)&#10;        return self.probs&#10;    &#10;    def backward(self, y_oh):&#10;        N = self.X.shape[0]&#10;        dZ2 = (self.probs - y_oh)/N&#10;        dW2 = self.H.T @ dZ2; db2 = np.sum(dZ2, axis=0)&#10;        dH = dZ2 @ self.W2.T&#10;        dZ1 = dH * (self.Z1 &gt; 0).astype(float)&#10;        dW1 = self.X.T @ dZ1; db1 = np.sum(dZ1, axis=0)&#10;        return {&quot;W1&quot;:dW1,&quot;b1&quot;:db1,&quot;W2&quot;:dW2,&quot;b2&quot;:db2}&#10;    &#10;    def adam(self, grads, lr=0.001, b1=0.9, b2=0.999, eps=1e-8):&#10;        self.t += 1&#10;        for n in self.pnames:&#10;            g = grads[n]&#10;            self.m[n] = b1*self.m[n] + (1-b1)*g&#10;            self.v[n] = b2*self.v[n] + (1-b2)*g**2&#10;            mh = self.m[n]/(1-b1**self.t)&#10;            vh = self.v[n]/(1-b2**self.t)&#10;            setattr(self, n, getattr(self,n) - lr*mh/(np.sqrt(vh)+eps))&#10;&#10;net = MNISTNet()&#10;epochs, batch_size = 10, 128&#10;N = X_train.shape[0]&#10;&#10;print(&quot;Training MNIST MLP (784→256→10) with Adam&quot;)&#10;print(&quot;═&quot; * 50)&#10;&#10;for epoch in range(epochs):&#10;    idx = np.random.permutation(N)&#10;    total_loss, correct = 0, 0&#10;    &#10;    for start in range(0, N, batch_size):&#10;        end = min(start + batch_size, N)&#10;        bi = idx[start:end]&#10;        X_b, y_b = X_train[bi], y_train[bi]&#10;        y_oh = np.zeros((len(y_b), 10)); y_oh[np.arange(len(y_b)), y_b] = 1&#10;        &#10;        probs = net.forward(X_b)&#10;        loss = -np.mean(np.sum(y_oh * np.log(np.clip(probs, 1e-7, 1)), axis=1))&#10;        total_loss += loss&#10;        correct += np.sum(np.argmax(probs, axis=1) == y_b)&#10;        &#10;        grads = net.backward(y_oh)&#10;        net.adam(grads)&#10;    &#10;    nb = max(1, N // batch_size)&#10;    train_acc = correct / N * 100&#10;    &#10;    # Test accuracy&#10;    test_probs = net.forward(X_test)&#10;    test_acc = np.sum(np.argmax(test_probs, axis=1) == y_test) / len(y_test) * 100&#10;    &#10;    print(f&quot;Epoch {epoch+1:2d}/10 | Loss: {total_loss/nb:.4f} | Train: {train_acc:.1f}% | Test: {test_acc:.1f}%&quot;)&#10;&#10;print(f&quot;\n🎯 Final Test Accuracy: {test_acc:.1f}%&quot;)&#10;print(f&quot;   Parameters: {net.W1.size + net.b1.size + net.W2.size + net.b2.size:,}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>What Just Happened?</h2>
+
+<p>Let's unpack the key design decisions:</p>
+
+<h3>Architecture Choice</h3>
+<ul><li><strong>784 → 256 → 10</strong>: One hidden layer is enough for ~97% on MNIST. More layers help marginally but add complexity.</li>
+<li><strong>ReLU hidden activation</strong>: Fast gradients, no vanishing gradient problem.</li>
+<li><strong>Softmax output + CCE loss</strong>: The natural pairing for multi-class classification.</li>
+</ul>
+<h3>Why Adam Over SGD?</h3>
+<p>On MNIST, both work. But Adam reaches good accuracy in fewer epochs because it adapts learning rates per-parameter. With vanilla SGD, you'd need careful learning rate scheduling to match Adam's performance.</p>
+
+<h3>He Initialization</h3>
+<p>Without proper initialization, deep networks fail. He init (<span data-widget="katex" data-latex="W \sim \mathcal{N}(0, \sqrt{2/n_{in}})" data-display="false"></span>) keeps activation variance stable across layers when using ReLU.</p>
+
+<h2>Visualizing Predictions</h2>
+
+<div data-widget="pyrunner" data-cellid="032-cell-3" data-defaultcode="import numpy as np&#10;&#10;# Show some predictions (using trained net from previous cell if available)&#10;# This cell demonstrates the visualization concept&#10;&#10;np.random.seed(42)&#10;# Simulate predictions for demo&#10;true_labels = np.array([3, 7, 1, 9, 0, 5, 2, 8])&#10;pred_labels = np.array([3, 7, 1, 9, 0, 5, 2, 8])  # all correct for demo&#10;confidences = np.array([0.97, 0.95, 0.99, 0.93, 0.98, 0.91, 0.96, 0.94])&#10;&#10;print(&quot;Sample Predictions:&quot;)&#10;print(&quot;─&quot; * 40)&#10;for true, pred, conf in zip(true_labels, pred_labels, confidences):&#10;    status = &quot;✅&quot; if true == pred else &quot;❌&quot;&#10;    bar = &quot;█&quot; * int(conf * 20)&#10;    print(f&quot;  True: {true} | Pred: {pred} | Conf: {conf:.2f} {bar} {status}&quot;)&#10;&#10;print(f&quot;\n💡 To visualize actual digit images, use matplotlib:&quot;)&#10;print(f&quot;   plt.imshow(X_test[i].reshape(28,28), cmap=&#39;gray&#39;)&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Debugging Checklist</h2>
+
+<p>If your network isn't learning:</p>
+
+<blockquote>[!IMPORTANT] Common Pitfalls</blockquote>
+<blockquote>1. <strong>Loss is NaN</strong>: Check softmax numerical stability (subtract max). Clip log inputs.</blockquote>
+<blockquote>2. <strong>Loss doesn't decrease</strong>: Learning rate too high or too low. Try 0.001 with Adam.</blockquote>
+<blockquote>3. <strong>Accuracy stuck at ~10%</strong>: Network is predicting random. Check weight initialization and gradient shapes.</blockquote>
+<blockquote>4. <strong>Overfitting (train >> test)</strong>: Add regularization (next chapter) or reduce hidden size.</blockquote>
+<blockquote>5. <strong>Gradient shapes mismatch</strong>: Print every shape. <code>dW</code> must match <code>W</code> shape exactly.</blockquote>
+
+<h2>Next Steps</h2>
+
+<p>You've built a working neural network from scratch. From here:</p>
+<ul><li><strong>Chapter 033</strong>: Regularization (dropout, weight decay, batch norm)</li>
+<li><strong>Chapter 034</strong>: Evaluation metrics beyond accuracy</li>
+<li><strong>Chapter 036</strong>: CNNs — because MLPs waste spatial structure in images</li>
+</ul>
+
+<div data-widget="quiz" data-chapterslug="032-mnist-from-scratch" data-quizid="quiz-032-mnist-from-scratch"></div>
+
+<script type="application/json" id="quiz-032-mnist-from-scratch">[{"id":"q1","type":"multiple-choice","prompt":"What are the dimensions of each MNIST image?","options":["28×28 grayscale pixels (784 features when flattened)","32×32 RGB","28×28 RGB","64×64 grayscale"],"correctIndex":0,"explanation":"MNIST images are 28×28 single-channel (grayscale). Flattened to a 784-dimensional vector for MLP input.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why do we normalize MNIST pixel values by dividing by 255?","options":["To keep activations and gradients in a reasonable range, preventing explosion","To make images look better","Because softmax requires [0,1] inputs","To convert to integers"],"correctIndex":0,"explanation":"Raw pixels (0–255) produce large activations → large gradients → numerical instability. Normalizing to [0,1] keeps everything well-behaved.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"How many trainable parameters does a 784→256→10 network have?","options":["203,530","200,960","200,704","203,786"],"correctIndex":0,"explanation":"W1: 784×256=200,704 + b1: 256 + W2: 256×10=2,560 + b2: 10 = 203,530 total.","randomize":false},{"id":"q4","type":"multiple-choice","prompt":"How many training and test samples does MNIST contain?","options":["60,000 train + 10,000 test","50,000 train + 10,000 test","100,000 train + 10,000 test","60,000 train + 60,000 test"],"correctIndex":0,"explanation":"Standard MNIST split: 60K training images and 10K test images of handwritten digits 0–9.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"If your MNIST network achieves ~10% accuracy consistently, what's most likely wrong?","options":["Network predicts randomly — check initialization, gradients, and label encoding","Learning rate is too high","Need more hidden layers","MLPs can't solve MNIST"],"correctIndex":0,"explanation":"10% = random chance for 10 classes. The network isn't learning. Check: gradient signs, softmax stability, one-hot encoding, weight init.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"What activation function is used in the hidden layer of the MNIST MLP?","options":["ReLU","Sigmoid","Tanh","Softmax"],"correctIndex":0,"explanation":"ReLU is the default for hidden layers: fast, no vanishing gradient for positive inputs, sparse activation.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"What output activation and loss are used for MNIST classification?","options":["Softmax + Categorical Cross-Entropy","Sigmoid + BCE","Linear + MSE","ReLU + MSE"],"correctIndex":0,"explanation":"10-class classification → softmax output (probability distribution) + CCE loss. The natural pairing.","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"Why use He initialization (randn × sqrt(2/fan_in)) for ReLU networks?","options":["Maintains activation variance across layers, accounting for ReLU halving the variance","Makes weights larger","It's the only option for ReLU","Prevents dead neurons entirely"],"correctIndex":0,"explanation":"ReLU zeros out ~half the activations. He init compensates with sqrt(2/n) to keep signal magnitude stable through layers.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"Why is Adam preferred over vanilla SGD for MNIST training?","options":["Adapts learning rates per-parameter, reaching good accuracy in fewer epochs","Uses less memory","Produces better generalization always","Doesn't need backprop"],"correctIndex":0,"explanation":"Adam's adaptive LR handles different parameter scales automatically. SGD needs careful LR scheduling to match performance.","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"What does shuffling data each epoch prevent?","options":["Biased gradient estimates from ordered batches","Overfitting","Memory issues","Slow computation"],"correctIndex":0,"explanation":"Without shuffling, consecutive batches may be similar (e.g., all digit '0's), giving biased gradients and poor convergence.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"If loss is NaN during training, what should you check first?","options":["Softmax numerical stability (subtract max) and log clipping","Increase learning rate","Add more layers","Switch optimizer"],"correctIndex":0,"explanation":"NaN usually means exp overflow in softmax or log(0) in cross-entropy. Subtract max before exp, clip before log.","randomize":true},{"id":"q12","type":"multiple-choice","prompt":"If loss doesn't decrease at all, what's the most likely fix?","options":["Adjust learning rate — try 0.001 with Adam","Add more layers","Use sigmoid instead of ReLU","Increase batch size"],"correctIndex":0,"explanation":"LR too high → divergence. LR too low → no progress. Start with Adam lr=0.001 as baseline.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"What accuracy should a well-trained 2-layer MLP achieve on MNIST?","options":["~97%+","~90%","~80%","~99.5%"],"correctIndex":0,"explanation":"A simple 784→256→10 MLP with proper training reaches ~97%. CNNs push this to ~99%+.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"Why store Z1 (pre-activations) during forward pass?","options":["Needed for ReLU derivative mask (Z1 > 0) during backward pass","To compute the loss","For visualization only","Not needed — can recompute"],"correctIndex":0,"explanation":"Backward pass needs to know which neurons were active. The mask (Z1 > 0) gates the gradient through ReLU.","randomize":true},{"id":"q15","type":"multiple-choice","prompt":"What shape should the input X have for a batch of 64 MNIST images?","options":["(64, 784)","(64, 28, 28)","(784, 64)","(64,)"],"correctIndex":0,"explanation":"Each image is flattened to 784 features. Batch dimension first: (batch_size, 784).","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"If train accuracy >> test accuracy, what problem do you have?","options":["Overfitting — add regularization or reduce model capacity","Underfitting","Data loading bug","Learning rate too low"],"correctIndex":0,"explanation":"Large train/test gap = overfitting. Solutions: dropout, weight decay, data augmentation, smaller network.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"What does np.argmax(probs, axis=1) give you?","options":["Predicted class labels for each sample in the batch","Confidence scores","Loss values","Gradient directions"],"correctIndex":0,"explanation":"argmax picks the index of the highest probability for each row → predicted digit class.","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"Why is one-hot encoding needed for CCE loss?","options":["CCE multiplies y_true × log(y_pred) element-wise; one-hot selects only the true class contribution","It's not needed — integer labels work fine","For visualization purposes","To normalize labels"],"correctIndex":0,"explanation":"With one-hot y, only the true class position contributes to −Σ y_c·log(ŷ_c). All other terms are 0×log(...) = 0.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"What's the main limitation of using an MLP for image classification vs a CNN?","options":["MLPs ignore spatial structure — nearby pixels are treated the same as distant ones","MLPs are slower","MLPs can't handle images at all","MLPs require more data"],"correctIndex":0,"explanation":"Flattening destroys spatial relationships. CNNs use local receptive fields and weight sharing to exploit spatial structure.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"During training, why compute both train and test accuracy each epoch?","options":["To monitor for overfitting (diverging train/test curves) and underfitting (both low)","Test accuracy is required for backprop","Only test accuracy matters","To speed up training"],"correctIndex":0,"explanation":"Train acc shows learning progress. Test acc shows generalization. Diverging curves = overfitting. Both low = underfitting.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/031-gradient-descent-optimizers.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/033-regularization.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

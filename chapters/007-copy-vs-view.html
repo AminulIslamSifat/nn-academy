@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copy vs View — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="007-copy-vs-view" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Copy vs View</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 14 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 10 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Copy vs View</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">The most dangerous thing in NumPy isn&#39;t a bug — it&#39;s a feature. Views share memory, and modifying one silently changes the other.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Copy vs View</h1>
+
+<p>I need you to really pay attention here, because this is the thing that will make you stare at your screen at 3 AM wondering why your training data got corrupted.</p>
+
+<p>When you slice a NumPy array, you don't get a new array. You get a <strong>view</strong> — a window into the same memory. Change the view, you change the original. <em>Silently.</em></p>
+
+<h2>The Trap</h2>
+
+<div data-widget="pyrunner" data-cellid="007-cell-1" data-defaultcode="import numpy as np&#10;&#10;# You have some training data&#10;data = np.array([10, 20, 30, 40, 50])&#10;&#10;# &quot;Extract&quot; a portion for processing&#10;subset = data[1:4]  # looks like a new array, right?&#10;print(f&quot;data:   {data}&quot;)&#10;print(f&quot;subset: {subset}&quot;)&#10;&#10;# Modify the subset&#10;subset[0] = 999&#10;&#10;# Wait... what happened to data?!&#10;print(f&quot;\nAfter subset[0] = 999:&quot;)&#10;print(f&quot;data:   {data}&quot;)    # [10, 999, 30, 40, 50] — IT CHANGED&#10;print(f&quot;subset: {subset}&quot;)&#10;&#10;print(f&quot;\nThey share memory: {np.shares_memory(data, subset)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<p>Yeah. <code>subset</code> wasn't a copy. It was a view — just a different way of looking at the same bytes in RAM. When you wrote <code>999</code> into <code>subset[0]</code>, you wrote it directly into <code>data</code>'s memory.</p>
+
+<p>This is <em>by design</em>. It's what makes slicing instant — no data copying, just a new header pointing to the same buffer. But it's also what makes it dangerous.</p>
+
+<h2>The Fix: .copy()</h2>
+
+<p>When you need an independent array, say so explicitly:</p>
+
+<div data-widget="pyrunner" data-cellid="007-cell-2" data-defaultcode="import numpy as np&#10;&#10;data = np.array([10, 20, 30, 40, 50])&#10;&#10;# Explicit copy — independent memory&#10;subset = data[1:4].copy()&#10;&#10;print(f&quot;Shares memory: {np.shares_memory(data, subset)}&quot;)  # False!&#10;&#10;subset[0] = 999&#10;print(f&quot;data:   {data}&quot;)    # [10, 20, 30, 40, 50] — untouched ✓&#10;print(f&quot;subset: {subset}&quot;)  # [999, 30, 40]&#10;" data-timeout="5" data-title=""></div>
+
+<h2>How to Tell If You Have a View</h2>
+
+<p>Every array has a <code>.base</code> attribute. If it's <code>None</code>, the array owns its own memory. If it points to another array, you're looking at a view:</p>
+
+<div data-widget="pyrunner" data-cellid="007-cell-3" data-defaultcode="import numpy as np&#10;&#10;original = np.arange(12).reshape(3, 4)&#10;slice_view = original[:, 1]     # column 1 — view&#10;explicit_copy = original.copy() # full copy&#10;partial_copy = original[0].copy() # row copy&#10;&#10;print(f&quot;slice_view.base is original: {slice_view.base is original}&quot;)&#10;print(f&quot;explicit_copy.base is None:  {explicit_copy.base is None}&quot;)&#10;print(f&quot;partial_copy.base is None:   {partial_copy.base is None}&quot;)&#10;&#10;# .flags.owndata is another way to check&#10;print(f&quot;\nslice_view owns data: {slice_view.flags.owndata}&quot;)&#10;print(f&quot;explicit_copy owns data: {explicit_copy.flags.owndata}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>The Asymmetry That Catches Everyone</h2>
+
+<p>Here's the thing that makes this extra tricky: <strong>basic slicing returns views, but fancy indexing returns copies.</strong></p>
+
+<div data-widget="pyrunner" data-cellid="007-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(10)&#10;&#10;# Basic slicing → VIEW&#10;view = a[2:5]&#10;print(f&quot;a[2:5] shares memory: {np.shares_memory(a, view)}&quot;)      # True&#10;&#10;# Fancy indexing (list of indices) → COPY&#10;copy = a[[2, 3, 4]]&#10;print(f&quot;a[[2,3,4]] shares memory: {np.shares_memory(a, copy)}&quot;)  # False&#10;&#10;# Boolean mask → COPY&#10;mask_copy = a[a &gt; 5]&#10;print(f&quot;a[a&gt;5] shares memory: {np.shares_memory(a, mask_copy)}&quot;) # False&#10;&#10;# So this modifies original:&#10;a[2:5] = [99, 99, 99]&#10;print(f&quot;\nAfter a[2:5] = [99,99,99]: {a}&quot;)&#10;&#10;# But this does NOT:&#10;a[[2, 3, 4]] = [88, 88, 88]  # modifies a COPY, then throws it away&#10;print(f&quot;After a[[2,3,4]] = [88,88,88]: {a}&quot;)  # unchanged!&#10;" data-timeout="5" data-title=""></div>
+
+<p>Wait — actually that last one is wrong. Let me re-check...</p>
+
+<div data-widget="pyrunner" data-cellid="007-cell-5" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(10)&#10;&#10;# Actually, fancy indexing on the LEFT side of assignment DOES modify original&#10;# It&#39;s fancy indexing on the RIGHT side that returns a copy&#10;a[[2, 3, 4]] = [88, 88, 88]&#10;print(f&quot;Fancy index assignment: {a}&quot;)  # DOES modify! &#10;&#10;# The copy behavior is only when READING&#10;b = a[[2, 3, 4]]  # this is a copy&#10;b[0] = 999&#10;print(f&quot;Modifying the copy doesn&#39;t affect a: {a}&quot;)  # unchanged&#10;" data-timeout="5" data-title=""></div>
+
+<p>Okay good — I almost taught you something wrong there. Fancy indexing <em>reads</em> return copies, but fancy indexing <em>writes</em> still modify the original. The distinction matters.</p>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="The 3 AM Debugging Scenario" data-content="You split your dataset into train/test. You normalize the training set. But you sliced instead of copied — so you just normalized the test set too. Your evaluation metrics are meaningless. Welcome to the club."></div>
+
+<h2>Why Views Exist: Performance</h2>
+
+<p>Views aren't a bug — they're a feature. Creating a view is O(1), zero memory allocation. For large arrays, this matters enormously:</p>
+
+<div data-widget="pyrunner" data-cellid="007-cell-6" data-defaultcode="import numpy as np&#10;import time&#10;&#10;big = np.random.randn(10_000_000)&#10;&#10;# View: instant, zero memory&#10;start = time.perf_counter()&#10;view = big[::2]  # every other element — 5M elements&#10;view_time = time.perf_counter() - start&#10;&#10;# Copy: allocates 40 MB of new memory&#10;start = time.perf_counter()&#10;copy = big[::2].copy()&#10;copy_time = time.perf_counter() - start&#10;&#10;print(f&quot;View:  {view_time*1e6:.1f} μs, memory={view.nbytes/1e6:.0f} MB (shared)&quot;)&#10;print(f&quot;Copy:  {copy_time*1e3:.1f} ms, memory={copy.nbytes/1e6:.0f} MB (new)&quot;)&#10;print(f&quot;Speed difference: {copy_time/view_time:.0f}x&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Practical: Safe Train/Test Split</h2>
+
+<p>Here's how you do it right:</p>
+
+<div data-widget="pyrunner" data-cellid="007-cell-7" data-defaultcode="import numpy as np&#10;&#10;rng = np.random.default_rng(42)&#10;&#10;# Full dataset&#10;X = rng.standard_normal((100, 5))&#10;y = rng.integers(0, 2, 100)&#10;&#10;# WRONG way (views — normalization leaks!)&#10;# X_train = X[:80]&#10;# X_test = X[80:]&#10;# X_train -= X_train.mean(axis=0)  # this also shifts X_test!&#10;&#10;# RIGHT way (copies — independent)&#10;X_train = X[:80].copy()&#10;X_test = X[80:].copy()&#10;y_train = y[:80].copy()&#10;y_test = y[80:].copy()&#10;&#10;# Now safe to normalize&#10;mean = X_train.mean(axis=0)&#10;std = X_train.std(axis=0)&#10;X_train = (X_train - mean) / std&#10;X_test = (X_test - mean) / std  # uses TRAIN stats, but doesn&#39;t modify train&#10;&#10;print(f&quot;Train mean after norm: {X_train.mean(axis=0).round(6)}&quot;)  # ≈ 0&#10;print(f&quot;Test mean after norm:  {X_test.mean(axis=0).round(4)}&quot;)   # not 0 (different data)&#10;print(f&quot;Original X untouched:  {X.mean():.4f}&quot;)  # original distribution preserved&#10;" data-timeout="5" data-title=""></div>
+
+<p>See? <code>.copy()</code> isn't optional ceremony — it's the difference between valid experiments and silent data leakage.</p>
+
+<div data-widget="quiz" data-chapterslug="007-copy-vs-view" data-quizid="quiz-007-copy-vs-view"></div>
+
+<script type="application/json" id="quiz-007-copy-vs-view">[{"id":"q1","type":"multiple-choice","prompt":"What is the fundamental difference between a view and a copy in NumPy?","options":["Views are faster to create","A view shares memory with the original array; a copy allocates new independent memory","Views have different dtypes","Copies are always 2D"],"correctIndex":1,"explanation":"Views are zero-cost references to existing data. Copies allocate new memory and duplicate every element. Modifying a view changes the original; modifying a copy does not.","randomize":true},{"id":"q2","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(5)\nb = a[1:4]\nb[0] = 99\nprint(a)","options":["[ 0 99  2  3  4]","[0 1 2 3 4]","[99 99 99 99 99]","Error"],"correctIndex":0,"explanation":"b = a[1:4] is a basic slice, which returns a VIEW. b[0] refers to a[1]. Setting b[0]=99 modifies a[1] because they share memory.","randomize":false},{"id":"q3","type":"multiple-choice","prompt":"Which operation returns a COPY (not a view)?","options":["a[1:5] (basic slice)","a[[1, 3, 5]] (fancy indexing with an array of indices)","a.T (transpose)","a.reshape(2, 3) (when possible)"],"correctIndex":1,"explanation":"Fancy indexing (indexing with an array or list of indices) ALWAYS returns a copy. Basic slicing, transpose, and reshape return views when the data layout allows it.","randomize":true},{"id":"q4","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(6).reshape(2, 3)\nb = a.copy()\nb[0, 0] = 99\nprint(a[0, 0])","options":["0","99","6","Error"],"correctIndex":0,"explanation":".copy() creates independent data. Modifying b does NOT affect a. This is the safe way to work with array subsets.","randomize":false},{"id":"q5","type":"multiple-choice","prompt":"You slice a training set, normalize it in-place, and your test accuracy is suspiciously high. What probably happened?","options":["Your model overfit","The slice was a view — in-place normalization modified the test portion of the original array too","NumPy has a bug","The test set was too small"],"correctIndex":1,"explanation":"Basic slicing returns a view sharing memory. X_train = X[:80] means X_train and X[:80] point to the same memory. Normalizing X_train in-place also normalizes the first 80 rows of X, leaking information into any subsequent split.","randomize":true},{"id":"q6","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(10)\nb = a[::2]\nprint(np.shares_memory(a, b))","options":["True","False","None","Error"],"correctIndex":0,"explanation":"Step slicing (::2) still returns a view. The selected elements are at regular strides, so NumPy can represent them without copying.","randomize":false},{"id":"q7","type":"multiple-choice","prompt":"How can you definitively check if two arrays share memory?","options":["a == b","np.shares_memory(a, b)","a.dtype == b.dtype","len(a) == len(b)"],"correctIndex":1,"explanation":"np.shares_memory(a, b) returns True if the arrays reference overlapping memory regions. This is the definitive test for view relationships.","randomize":true},{"id":"q8","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.arange(12).reshape(3, 4)\nb = a.T\nprint(b.shape, np.shares_memory(a, b))","options":["(4, 3) True","(4, 3) False","(3, 4) True","Error"],"correctIndex":0,"explanation":"Transpose returns a view with swapped strides. Shape changes from (3,4) to (4,3), but no data is copied — memory is shared.","randomize":false},{"id":"q9","type":"multiple-choice","prompt":"When should you explicitly use .copy()?","options":["Always, for safety","When you need to modify an array without affecting the original, or before passing data to functions that modify in-place","Never — views are always better","Only for large arrays"],"correctIndex":1,"explanation":"Defensive copying prevents subtle mutation bugs. Key situations: splitting train/test, applying in-place transforms, passing to external functions that might modify data.","randomize":true},{"id":"q10","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.array([1, 2, 3, 4, 5])\nb = a[[0, 2, 4]]\nb[0] = 99\nprint(a[0])","options":["1","99","0","Error"],"correctIndex":0,"explanation":"Fancy indexing (a[[0,2,4]]) returns a COPY. Modifying b[0] does NOT affect a[0]. This is different from basic slicing.","randomize":false},{"id":"q11","type":"multiple-choice","prompt":"Does reshape return a view or a copy?","options":["Always a copy","View when possible (contiguous data compatible with new shape); copy when the data layout requires rearrangement","Always a view","Depends on dtype"],"correctIndex":1,"explanation":"reshape tries to return a view. If the data is contiguous and the new shape is compatible with the stride pattern, you get a view. Otherwise, NumPy must copy.","randomize":true},{"id":"q12","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(8).reshape(2, 4)\nb = a[:, ::2]\nb[0, 0] = 99\nprint(a[0, 0])","options":["99","0","Error","None"],"correctIndex":0,"explanation":"Column slicing with step (a[:, ::2]) returns a view when possible. b[0,0] maps to a[0,0], so modifying b modifies a.","randomize":false},{"id":"q13","type":"multiple-choice","prompt":"Why is understanding views critical for memory-efficient deep learning code?","options":["Views are prettier in print output","Views avoid allocating new memory for intermediate results — crucial when working with datasets that barely fit in RAM or GPU memory","Views are faster to compute","There's no memory difference"],"correctIndex":1,"explanation":"A view of a 1GB array costs 0 extra bytes. A copy costs another 1GB. In batch processing pipelines, unnecessary copies can exhaust memory. Understanding views lets you write zero-copy data pipelines.","randomize":true},{"id":"q14","type":"code-output","prompt":"What is the result?","code":"import numpy as np\na = np.arange(6)\nb = a.reshape(2, 3)\nprint(b.base is a)","options":["True","False","None","Error"],"correctIndex":0,"explanation":"reshape returned a view. b.base points to the original array a, confirming they share memory.","randomize":false},{"id":"q15","type":"multiple-choice","prompt":"What operation ALWAYS returns a copy?","options":["Basic slicing (a[1:3])","Fancy indexing (a[np.array([0,2,4])])","Transpose (a.T)","Reshape (a.reshape(...))"],"correctIndex":1,"explanation":"Fancy indexing must copy because the selected elements may be scattered non-contiguously in memory. There's no way to represent arbitrary selections as a strided view.","randomize":true},{"id":"q16","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.ones((3, 3))\nb = a[1:]\nb[:] = 0\nprint(a[2, 0])","options":["0.0","1.0","Error","None"],"correctIndex":0,"explanation":"b = a[1:] is a view of rows 1 and 2. b[:] = 0 sets those rows to zero in-place. a[2,0] was part of that view, so it's now 0.","randomize":false},{"id":"q17","type":"multiple-choice","prompt":"What is the performance cost of .copy()?","options":["Zero","O(n) time and O(n) memory — every element must be read from source and written to new memory","O(1)","Depends on dtype only"],"correctIndex":1,"explanation":"Copying is linear in array size. For a 100M element float32 array, that's 400MB read + 400MB write. In tight loops, unnecessary copies dominate runtime.","randomize":true},{"id":"q18","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(10)\nb = a[3:8]\nc = b[1:3]\nc[0] = 77\nprint(a[4])","options":["77","4","3","Error"],"correctIndex":0,"explanation":"c is a view of b, which is a view of a. All three share the same underlying memory. c[0] corresponds to b[1] which corresponds to a[4]. Chain of views.","randomize":false},{"id":"q19","type":"multiple-choice","prompt":"In PyTorch, what is the equivalent concept to NumPy views?","options":["Clones","Tensors share storage by default; .clone() creates an independent copy, similar to NumPy's .copy()","Pointers","References"],"correctIndex":1,"explanation":"PyTorch tensors behave like NumPy views by default. Slicing shares storage. You must explicitly call .clone() to get independent data. Same mental model applies.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"Why does boolean indexing (a[a > 0]) return a copy instead of a view?","options":["Performance optimization","Selected elements are typically non-contiguous in memory, making a strided view representation impossible","Design choice for safety","Boolean masks are inherently slow"],"correctIndex":1,"explanation":"Views require regular stride patterns (fixed step sizes between elements). Boolean selection picks arbitrary scattered elements that can't be expressed as a strided window into the original array.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/006-data-types.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/008-array-shape.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

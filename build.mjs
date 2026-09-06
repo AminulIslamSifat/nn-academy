@@ -18,11 +18,13 @@ fs.mkdirSync(OUT_DIR, { recursive: true })
 const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf-8'))
 const template = fs.readFileSync(TEMPLATE_PATH, 'utf-8')
 
-// Build slug list in order
+// Build slug list in order (modules -> tracks -> chapters)
 const allSlugs = []
-for (const track of manifest.tracks) {
-  for (const slug of track.chapters) {
-    allSlugs.push(slug)
+for (const module of manifest.modules) {
+  for (const track of module.tracks) {
+    for (const slug of track.chapters) {
+      allSlugs.push(slug)
+    }
   }
 }
 

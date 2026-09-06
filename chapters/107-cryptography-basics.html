@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TITLE}} — Academia</title>
+  <title>Applied Cryptography — Academia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
     }
   </script>
 </head>
-<body class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+<body data-slug="107-cryptography-basics" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
 
   <!-- Mobile overlay -->
   <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
@@ -63,29 +63,57 @@
           <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
             <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
             <span style="color: var(--text-muted);">/</span>
-            <span style="color: var(--text-secondary);">{{TITLE}}</span>
+            <span style="color: var(--text-secondary);">Applied Cryptography</span>
           </nav>
         </div>
         <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
-          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> {{READ_TIME}} min</span>
-          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> {{CODE_TIME}} min</span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
         </div>
       </div>
     </header>
 
     <!-- Chapter content -->
     <article class="mx-auto max-w-3xl px-6 py-12">
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">{{TITLE}}</h1>
-      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">{{DESCRIPTION}}</p>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Applied Cryptography</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Symmetric and asymmetric encryption, hashing, and how they combine to secure real systems.</p>
 
       <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
-        {{CONTENT}}
+        
+<h2>The Three Primitives</h2>
+
+<ul><li><strong>Symmetric encryption</strong> — one shared key (AES). Fast, used for bulk data.</li>
+<li><strong>Asymmetric encryption</strong> — public/private key pair (RSA, ECC). Slow, used for key exchange and signatures.</li>
+<li><strong>Hashing</strong> — one-way digest (SHA-256). Integrity and password storage.</li>
+</ul>
+<h2>Confidentiality in Practice</h2>
+
+<p><span data-widget="katex" data-latex="C = E_k(P)" data-display="false"></span> where <span data-widget="katex" data-latex="E" data-display="false"></span> encrypts plaintext <span data-widget="katex" data-latex="P" data-display="false"></span> with key <span data-widget="katex" data-latex="k" data-display="false"></span>. Only someone holding <span data-widget="katex" data-latex="k" data-display="false"></span> can recover <span data-widget="katex" data-latex="P" data-display="false"></span>.</p>
+
+<h2>Key Exchange</h2>
+
+<p>Asymmetric crypto lets two strangers agree on a symmetric key over an open channel (Diffie-Hellman). Then they use the fast symmetric cipher for the session. This is exactly how TLS works.</p>
+
+<h2>Hashing Is Not Encryption</h2>
+
+<p>A hash cannot be reversed. You store password hashes, never plaintext. To resist brute force you add a <strong>salt</strong> and a slow function (bcrypt, scrypt, Argon2).</p>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Never store plaintext passwords" data-content="Storing plaintext passwords is an automatic breach the moment your database leaks. Hash with a strong, salted, slow algorithm."></div>
+
+<h2>Digital Signatures</h2>
+
+<p>Sign with your private key; anyone with your public key can verify. This gives authenticity and non-repudiation.</p>
+
+<h2>Summary</h2>
+
+<p>Encryption provides confidentiality, hashing provides integrity, signatures provide authenticity. Real systems weave all three together.</p>
+
       </div>
 
       <!-- Prev / Next -->
       <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
-        {{PREV_LINK}}
-        {{NEXT_LINK}}
+        <a href="/chapters/106-firewalls-ids-ips.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/108-wireless-security.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
       </nav>
     </article>
   </main>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attention Mechanism — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="046-attention-mechanism" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Attention Mechanism</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 28 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 22 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Attention Mechanism</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Break the fixed-context bottleneck. Implement query-key-value attention, attention weights, and context vectors from scratch in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Attention Mechanism</h1>
+
+<p>Seq2seq compresses the whole input into one vector. That bottleneck destroys long-range information. ==Attention lets the decoder look back at every encoder state and decide what matters right now.==</p>
+
+<p>Instead of one fixed context vector, we compute a fresh context vector at each decoder step.</p>
+
+<h2>The Core Idea</h2>
+
+<p>For a decoder state <span data-widget="katex" data-latex="q" data-display="false"></span> and encoder states <span data-widget="katex" data-latex="K,V" data-display="false"></span>:</p>
+
+<div data-widget="katex" data-latex="\text{score}_i = q \cdot k_i" data-display="true"></div>
+
+<div data-widget="katex" data-latex="\alpha_i = \text{softmax}(\text{score})_i" data-display="true"></div>
+
+<div data-widget="katex" data-latex="\text{context} = \sum_i \alpha_i v_i" data-display="true"></div>
+
+<p>In words:</p>
+
+<ul><li><strong>Query</strong>: what am I looking for?</li>
+<li><strong>Key</strong>: what does each source position contain?</li>
+<li><strong>Value</strong>: what information should I retrieve?</li>
+</ul>
+
+<div data-widget="visualizer" data-mode="matmul" data-shapea="8, 64" data-shapeb="64, 8" data-title="Attention: Q(T×D) @ K(D×T) → scores(T×T)"></div>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def softmax(x, axis=-1):&#10;    x = x - np.max(x, axis=axis, keepdims=True)&#10;    e = np.exp(x)&#10;    return e / np.sum(e, axis=axis, keepdims=True)&#10;&#10;def dot_attention(query, keys, values):&#10;    &quot;&quot;&quot;query: (D,), keys: (T,D), values: (T,Dv)&quot;&quot;&quot;&#10;    scores = keys @ query&#10;    weights = softmax(scores)&#10;    context = weights @ values&#10;    return context, weights</code></pre>
+
+<div data-widget="pyrunner" data-cellid="046-cell-1" data-defaultcode="import numpy as np&#10;np.random.seed(42)&#10;&#10;def softmax(x):&#10;    x = x - np.max(x)&#10;    e = np.exp(x)&#10;    return e / e.sum()&#10;&#10;sentence = [&quot;the&quot;, &quot;cat&quot;, &quot;sat&quot;, &quot;down&quot;]&#10;T, D = len(sentence), 6&#10;keys = np.random.randn(T, D)&#10;values = np.random.randn(T, D)&#10;query = keys[1] + np.random.randn(D) * 0.2  # similar to &quot;cat&quot;&#10;&#10;scores = keys @ query&#10;weights = softmax(scores)&#10;context = weights @ values&#10;&#10;print(&quot;Attention weights:&quot;)&#10;for word, score, w in zip(sentence, scores, weights):&#10;    bar = &quot;█&quot; * int(w * 30)&#10;    print(f&quot;  {word:&gt;5}: score={score:+6.3f}, weight={w:.3f} {bar}&quot;)&#10;&#10;print(f&quot;\nContext vector shape: {context.shape}&quot;)&#10;print(&quot;💡 Query was similar to &#39;cat&#39;, so attention focuses there&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Scaled Dot-Product Attention</h2>
+
+<p>For high-dimensional vectors, dot products grow large. Softmax saturates, gradients vanish. Scale by <span data-widget="katex" data-latex="\sqrt{d_k}" data-display="false"></span>:</p>
+
+<div data-widget="katex" data-latex="\text{Attention}(Q,K,V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V" data-display="true"></div>
+
+<pre><code class="language-python">def scaled_dot_product_attention(Q, K, V, mask=None):&#10;    d_k = Q.shape[-1]&#10;    scores = Q @ K.T / np.sqrt(d_k)&#10;    if mask is not None:&#10;        scores = np.where(mask, scores, -1e9)&#10;    weights = softmax(scores, axis=-1)&#10;    return weights @ V, weights</code></pre>
+
+<div data-widget="pyrunner" data-cellid="046-cell-2" data-defaultcode="import numpy as np&#10;np.random.seed(0)&#10;&#10;def softmax(x, axis=-1):&#10;    x = x - np.max(x, axis=axis, keepdims=True)&#10;    e = np.exp(x)&#10;    return e / e.sum(axis=axis, keepdims=True)&#10;&#10;seq_len, d_k, d_v = 5, 16, 8&#10;Q = np.random.randn(seq_len, d_k)&#10;K = np.random.randn(seq_len, d_k)&#10;V = np.random.randn(seq_len, d_v)&#10;&#10;scores_unscaled = Q @ K.T&#10;scores_scaled = scores_unscaled / np.sqrt(d_k)&#10;w_unscaled = softmax(scores_unscaled, axis=1)&#10;w_scaled = softmax(scores_scaled, axis=1)&#10;&#10;print(&quot;Effect of scaling:&quot;)&#10;print(f&quot;  Unscaled score std: {scores_unscaled.std():.3f}&quot;)&#10;print(f&quot;  Scaled score std:   {scores_scaled.std():.3f}&quot;)&#10;print(f&quot;  Unscaled entropy:   {-np.mean(np.sum(w_unscaled*np.log(w_unscaled+1e-8), axis=1)):.3f}&quot;)&#10;print(f&quot;  Scaled entropy:     {-np.mean(np.sum(w_scaled*np.log(w_scaled+1e-8), axis=1)):.3f}&quot;)&#10;print(&quot;\nScaling prevents attention from becoming too peaky too early.&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Attention Masking</h2>
+
+<p>For generation, a token must not see future tokens. Causal mask:</p>
+
+<pre><code class="language-python">def causal_mask(T):&#10;    return np.tril(np.ones((T, T), dtype=bool))</code></pre>
+
+<div data-widget="pyrunner" data-cellid="046-cell-3" data-defaultcode="import numpy as np&#10;&#10;T = 6&#10;mask = np.tril(np.ones((T, T), dtype=int))&#10;print(&quot;Causal mask (1 = allowed, 0 = blocked):&quot;)&#10;print(mask)&#10;print(&quot;\nRow t can only attend to columns &lt;= t&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Additive Attention</h2>
+
+<p>Older seq2seq models often used additive attention:</p>
+
+<div data-widget="katex" data-latex="e_{t,i} = v^T \tanh(W_q q_t + W_k k_i)" data-display="true"></div>
+
+<p>It uses a small neural network to compute compatibility instead of a dot product. Dot-product attention is faster and became standard in Transformers.</p>
+
+<h2>Why Attention Changed Everything</h2>
+
+<p>Attention gives direct paths between any two positions. Distance no longer matters. In RNNs, information from token 1 to token 100 travels through 99 recurrent steps. With attention, token 100 can directly attend to token 1 in one operation.</p>
+
+<blockquote>[!IMPORTANT] Key Takeaway</blockquote>
+<blockquote>Attention is differentiable memory retrieval. Queries ask questions, keys are addresses, values are content. Softmax turns similarity scores into a weighted read from memory.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="046-attention-mechanism" data-quizid="quiz-046-attention-mechanism"></div>
+
+<script type="application/json" id="quiz-046-attention-mechanism">[{"id":"q1","type":"multiple-choice","prompt":"Why divide QKᵀ by √d_k in scaled dot-product attention?","options":["To reduce parameter count","Dot product variance grows linearly with d_k; scaling keeps scores in a range where softmax produces non-saturated distributions with healthy gradients","To make attention symmetric","Because values must be normalized first"],"correctIndex":1,"explanation":"A dot product of two d_k-dim vectors has variance proportional to d_k. Without scaling, large d_k produces extreme scores → near-one-hot softmax → vanishing gradients. Dividing by √d_k normalizes variance to ~1.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What does a causal mask prevent?","options":["Overfitting to training data","A token attending to future tokens during autoregressive generation — it enforces left-to-right information flow","Gradient explosion in deep networks","Repeated word generation"],"correctIndex":1,"explanation":"In language generation, token t must only depend on tokens ≤ t. A causal mask sets future attention scores to -∞ before softmax, making their weights exactly zero.","randomize":false},{"id":"q3","type":"multiple-choice","prompt":"In attention, what do Query, Key, and Value represent conceptually?","options":["Input, hidden state, output","Query = what am I looking for, Key = what does each position contain (address), Value = what information to retrieve (content)","Encoder, decoder, context","Weights, biases, activations"],"correctIndex":1,"explanation":"Analogy to database retrieval: query is the search term, keys are indexed addresses, values are stored content. Attention computes similarity between query and each key, then retrieves a weighted combination of values.","randomize":true},{"id":"q4","type":"shape-prediction","prompt":"If Q has shape (T_q, D) and K has shape (T_k, D), what shape is the attention score matrix Q @ K.T?","options":["(T_q, T_k)","(D, D)","(T_q, D)","(T_k, T_q)"],"correctIndex":0,"explanation":"Q(T_q, D) @ K.T(D, T_k) = (T_q, T_k). Each entry [i,j] is the similarity between query i and key j. This matrix determines how much each query attends to each key.","randomize":true},{"id":"q5","type":"code-output","prompt":"What does np.tril produce for T=4?","code":"import numpy as np\nprint(np.tril(np.ones((4,4), dtype=int)))","options":["[[1 0 0 0]\n [1 1 0 0]\n [1 1 1 0]\n [1 1 1 1]]","[[1 1 1 1]\n [0 1 1 1]\n [0 0 1 1]\n [0 0 0 1]]","Identity matrix","All ones"],"correctIndex":0,"explanation":"np.tril creates a lower triangular matrix. Row t has 1s for columns ≤ t and 0s for columns > t. This is the causal mask: position t can attend to positions 0..t but not t+1..T.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"How does attention solve the context vector bottleneck of basic seq2seq?","options":["It uses a larger context vector","Instead of compressing everything into one fixed vector, attention computes a fresh context at each decoder step by directly accessing all encoder states. No information needs to be pre-compressed.","It removes the encoder entirely","It uses multiple context vectors in parallel"],"correctIndex":1,"explanation":"The decoder queries relevant encoder states at each generation step. Long-range dependencies are handled in O(1) instead of O(T) recurrent steps. Information flows directly from any encoder position to any decoder position.","randomize":true},{"id":"q7","type":"fill-blank","prompt":"Attention weights α_i are computed via ___ over the raw scores, ensuring they sum to ___ and are all non-negative.","options":["softmax, 1","sigmoid, 0","ReLU, 1","normalization, 0"],"correctIndex":0,"explanation":"Softmax converts arbitrary real-valued scores into a valid probability distribution: all positive, summing to 1. This makes attention weights interpretable as 'how much to focus on each position'.","randomize":false},{"id":"q8","type":"multiple-choice","prompt":"What happens if you forget to apply the causal mask during autoregressive generation training?","options":["Nothing — the model still works","The model cheats by attending to future tokens it shouldn't see. Training loss looks great but inference fails because future tokens aren't available at generation time.","Training becomes slower","Gradients explode"],"correctIndex":1,"explanation":"Without masking, the model learns to copy future tokens directly rather than predicting from past context. This train/test mismatch causes catastrophic failure at inference when future tokens don't exist.","randomize":true},{"id":"q9","type":"code-output","prompt":"What is the effect of setting masked positions to -1e9 before softmax?","code":"import numpy as np\nscores = np.array([1.0, 2.0, -1e9, -1e9])\nshifted = scores - scores.max()\nprobs = np.exp(shifted) / np.exp(shifted).sum()\nprint(probs.round(4))","options":["[0.2689 0.7311 0.     0.    ]","[0.25 0.25 0.25 0.25]","[0. 0. 0.5 0.5]","Error"],"correctIndex":0,"explanation":"exp(-1e9) ≈ 0, so masked positions get zero probability. The remaining positions share the probability mass normally. This is how causal/padding masks work in practice.","randomize":true},{"id":"q10","type":"ordering","prompt":"Order the scaled dot-product attention computation:","items":["Compute scores: Q @ K.T","Scale by 1/√d_k","Apply mask (if any)","Softmax over scores","Weighted sum: weights @ V"],"correctOrder":[0,1,2,3,4],"explanation":"Scores → scale → mask → softmax → aggregate. Scaling before softmax prevents saturation. Masking before softmax ensures blocked positions get zero weight. Final matmul retrieves content.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"How does additive attention differ from dot-product attention?","options":["Additive attention is faster","Additive uses a learned neural network (vᵀ·tanh(W_q·q + W_k·k)) to compute compatibility. Dot-product uses simple matrix multiplication. Dot-product is faster and became standard in Transformers.","They're mathematically identical","Additive attention doesn't use softmax"],"correctIndex":1,"explanation":"Additive attention (Bahdanau) learns a compatibility function via a small MLP. Dot-product attention assumes similarity is captured by inner product. Dot-product is computationally cheaper and scales better, winning out in Transformer architectures.","randomize":true},{"id":"q12","type":"multiple-choice","prompt":"Why is attention described as 'differentiable memory retrieval'?","options":["It stores data in GPU memory","Keys act as addresses, values as stored content, and softmax-weighted retrieval is fully differentiable — gradients flow through the attention weights back to Q, K, and V","It replaces RAM with neural storage","It's an analogy with no mathematical basis"],"correctIndex":1,"explanation":"Unlike hard memory lookup (non-differentiable), soft attention retrieves a weighted combination of all values. The weighting depends on learnable parameters, so the entire retrieval process can be trained end-to-end via backpropagation.","randomize":true},{"id":"q13","type":"shape-prediction","prompt":"If attention weights have shape (T_q, T_k) and V has shape (T_k, D_v), what shape is the attention output (weights @ V)?","options":["(T_q, D_v)","(T_k, D_v)","(T_q, T_k)","(D_v, T_q)"],"correctIndex":0,"explanation":"(T_q, T_k) @ (T_k, D_v) = (T_q, D_v). Each query position gets its own D_v-dimensional context vector — a weighted combination of all value vectors.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"In RNNs, information from token 1 to token 100 travels through 99 recurrent steps. How does attention change this?","options":["It still requires 99 steps but processes them in parallel","Token 100 can directly attend to token 1 in a single operation — distance becomes irrelevant. This eliminates the long-range dependency problem entirely.","It reduces it to log(99) steps","Attention doesn't help with long-range dependencies"],"correctIndex":1,"explanation":"Attention creates direct connections between any two positions regardless of distance. The path length from any token to any other is O(1), compared to O(T) for RNNs. This is why Transformers dominate sequence modeling.","randomize":true},{"id":"q15","type":"fill-blank","prompt":"The context vector is computed as the ___ sum of value vectors, weighted by the attention ___.","options":["weighted, probabilities","simple, scores","unweighted, keys","cumulative, queries"],"correctIndex":0,"explanation":"context = Σ α_i · v_i where α_i are softmax-normalized attention weights. High-weight positions contribute more to the context; low-weight positions contribute less. This is a soft, differentiable selection mechanism.","randomize":false},{"id":"q16","type":"multiple-choice","prompt":"Your attention weights are nearly uniform (all ≈ 1/T) even after training. What might be wrong?","options":["This is expected behavior","The model isn't learning meaningful query-key relationships. Possible causes: poor initialization, learning rate too low, missing scaling factor causing gradient issues, or insufficient training data.","Uniform attention is optimal","The vocabulary is too small"],"correctIndex":1,"explanation":"Uniform attention means the model treats all positions equally — equivalent to simple averaging. Attention should learn selective focus patterns. Check gradient flow through Q/K projections and verify the scaling factor is applied.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"What is the computational complexity of self-attention for a sequence of length T with dimension D?","options":["O(T × D)","O(T² × D) — quadratic in sequence length due to the T×T score matrix","O(T × D²)","O(D³)"],"correctIndex":1,"explanation":"Computing Q@K.T produces a T×T matrix (O(T²D)), and weights@V also costs O(T²D). This quadratic scaling is why Transformers struggle with very long sequences and motivated efficient attention variants.","randomize":true},{"id":"q18","type":"code-output","prompt":"For d_k=64, what is the scaling factor 1/√d_k?","code":"import numpy as np\nd_k = 64\nprint(f'{1/np.sqrt(d_k):.4f}')","options":["0.1250","0.0156","1.0000","0.2500"],"correctIndex":0,"explanation":"1/√64 = 1/8 = 0.125. This scales down dot products by 8× for d_k=64, preventing the variance from growing too large and keeping softmax in a well-behaved regime.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"Why is self-attention called 'self'?","options":["It attends to itself recursively","Queries, keys, and values all come from the SAME sequence — each position attends to all other positions in its own input, unlike cross-attention where Q and K/V come from different sources","It's a self-supervised technique","It only works on single sentences"],"correctIndex":1,"explanation":"In self-attention, Q=K=V=X (same source). Each token looks at every other token in the same sequence. Cross-attention uses Q from one sequence and K,V from another (e.g., decoder attending to encoder).","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"You're building a translation model. Where would you use causal masking vs no masking?","options":["Causal mask everywhere","Encoder self-attention: NO mask (bidirectional context). Decoder self-attention: CAUSAL mask (no future peeking). Encoder-decoder cross-attention: NO mask (decoder can see all encoder states).","No mask anywhere","Causal mask only in the encoder"],"correctIndex":1,"explanation":"Encoder reads the full input bidirectionally. Decoder generates left-to-right, needing causal masking. Cross-attention lets each decoder position access the complete encoded input. Different masking serves different information flow requirements.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/045-crnn-ocr-capstone.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/047-multihead-attention.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

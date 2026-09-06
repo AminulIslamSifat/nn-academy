@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TITLE}} — Academia</title>
+  <title>Firewalls, IDS &amp; IPS — Academia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
     }
   </script>
 </head>
-<body class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+<body data-slug="106-firewalls-ids-ips" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
 
   <!-- Mobile overlay -->
   <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
@@ -63,29 +63,56 @@
           <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
             <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
             <span style="color: var(--text-muted);">/</span>
-            <span style="color: var(--text-secondary);">{{TITLE}}</span>
+            <span style="color: var(--text-secondary);">Firewalls, IDS &amp; IPS</span>
           </nav>
         </div>
         <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
-          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> {{READ_TIME}} min</span>
-          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> {{CODE_TIME}} min</span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 9 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 5 min</span>
         </div>
       </div>
     </header>
 
     <!-- Chapter content -->
     <article class="mx-auto max-w-3xl px-6 py-12">
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">{{TITLE}}</h1>
-      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">{{DESCRIPTION}}</p>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Firewalls, IDS &amp; IPS</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">The control plane of network defense: filtering, detecting, and preventing unwanted traffic.</p>
 
       <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
-        {{CONTENT}}
+        
+<h2>Firewalls</h2>
+
+<p>A firewall enforces an allow/deny policy between networks.</p>
+
+<ul><li><strong>Packet-filter</strong> — matches on IP/port, fast but shallow.</li>
+<li><strong>Stateful</strong> — tracks connection state, understands handshakes.</li>
+<li><strong>Next-gen / WAF</strong> — inspects application content (e.g. HTTP).</li>
+</ul>
+<p>Default policy should be <strong>deny-all, allow-by-exception</strong>.</p>
+
+<h2>IDS vs IPS</h2>
+
+<ul><li><strong>IDS (Intrusion Detection)</strong> — watches and alerts, does not block.</li>
+<li><strong>IPS (Intrusion Prevention)</strong> — sits inline and actively blocks.</li>
+</ul>
+<p>Detection methods are either <strong>signature-based</strong> (known patterns) or <strong>anomaly-based</strong> (deviation from a learned baseline).</p>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Anomaly detection connects to ML" data-content="Anomaly-based detection is fundamentally a classification problem: normal traffic vs. unusual traffic. The neural-network skills you learned apply directly here."></div>
+
+<h2>Segmentation</h2>
+
+<p>Divide the network into zones (DMZ, internal, management) so a breach in one zone cannot reach all others.</p>
+
+<h2>Summary</h2>
+
+<p>Firewalls decide what may pass, IDS/IPS detect or stop what should not. Together with segmentation they form the network control plane.</p>
+
       </div>
 
       <!-- Prev / Next -->
       <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
-        {{PREV_LINK}}
-        {{NEXT_LINK}}
+        <a href="/chapters/105-network-fundamentals.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/107-cryptography-basics.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
       </nav>
     </article>
   </main>

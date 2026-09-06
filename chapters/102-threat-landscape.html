@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Threat Landscape — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="102-threat-landscape" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">The Threat Landscape</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 14 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">The Threat Landscape</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Who attacks systems, what they want, and the common categories of modern attacks.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Understanding Your Adversaries</h2>
+
+<p>Effective defense starts with understanding who is attacking and why. Different adversaries have different capabilities, motivations, and targets. A defense that stops a script kiddie may be trivial for a nation-state to bypass.</p>
+
+<h3>Adversary Categories</h3>
+
+<ul><li><strong>Script kiddies</strong> — use existing tools with little understanding; motivated by curiosity or notoriety.</li>
+<li><strong>Cybercriminals</strong> — financially motivated; run attacks as organized businesses with ROI calculations.</li>
+<li><strong>Hacktivists</strong> — ideologically motivated disruption; target organizations they oppose politically or socially.</li>
+<li><strong>Nation-states (APTs)</strong> — espionage, sabotage, and strategic advantage; patient, well-funded, and highly capable.</li>
+<li><strong>Insiders</strong> — employees or contractors with legitimate access; motivated by grievance, coercion, or greed.</li>
+</ul>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Insiders are the hardest to detect" data-content="Insider threats bypass perimeter defenses because they already have authorized access. Behavioral analytics and least-privilege access are your primary controls."></div>
+
+<h2>Common Attack Categories</h2>
+
+<p>Modern attacks fall into several broad categories. Most real-world incidents combine multiple techniques:</p>
+
+<li><strong>Malware</strong> — malicious software including viruses, worms, trojans, ransomware, and spyware.</li>
+<li><strong>Phishing & Social Engineering</strong> — manipulating humans to steal credentials, deliver payloads, or authorize fraudulent transactions.</li>
+<li><strong>Denial of Service (DoS/DDoS)</strong> — overwhelming availability through volume, protocol abuse, or application-layer exhaustion.</li>
+<li><strong>Man-in-the-Middle (MitM)</strong> — intercepting or altering communication between two parties.</li>
+<li><strong>Supply Chain Attacks</strong> — compromising a trusted dependency, vendor, or update mechanism to reach downstream targets.</li>
+<li><strong>Web Application Attacks</strong> — SQL injection, XSS, CSRF, and other exploits targeting application logic.</li>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Ransomware is a business model" data-content="Ransomware-as-a-service (RaaS) franchises let unskilled actors rent attack tooling, splitting profits with developers. This lowered the barrier to entry and exploded incident volumes after 2019."></div>
+
+<h2>The Cyber Kill Chain</h2>
+
+<p>Most targeted attacks follow a predictable pattern called the kill chain. Understanding each phase lets you place defenses where they interrupt the attack lifecycle:</p>
+
+<li><strong>Reconnaissance</strong> — attacker gathers information about the target (OSINT, scanning, social media).</li>
+<li><strong>Weaponization</strong> — attacker creates a payload tailored to the target's vulnerabilities.</li>
+<li><strong>Delivery</strong> — payload reaches the target via email, website, USB, or supply chain.</li>
+<li><strong>Exploitation</strong> — payload executes and exploits a vulnerability.</li>
+<li><strong>Installation</strong> — malware establishes persistence on the compromised system.</li>
+<li><strong>Command & Control (C2)</strong> — attacker establishes communication channel for remote control.</li>
+<li><strong>Actions on Objectives</strong> — attacker achieves their goal (data theft, encryption, sabotage).</li>
+
+<p>Defenses can interrupt any stage. Email filtering blocks delivery. Patching prevents exploitation. Network segmentation limits C2. Backups neutralize ransomware actions.</p>
+
+<h2>Worked Example: Mapping Incidents to Kill Chain Phases</h2>
+
+<p>Security analysts must quickly identify which kill chain phase an observed indicator represents. The exercise below parses sample threat intelligence and classifies each observation.</p>
+
+<div data-widget="pyrunner" data-cellid="threat-landscape-cell-1" data-defaultcode="kill_chain_phases = [&#10;    &#39;Reconnaissance&#39;,&#10;    &#39;Weaponization&#39;, &#10;    &#39;Delivery&#39;,&#10;    &#39;Exploitation&#39;,&#10;    &#39;Installation&#39;,&#10;    &#39;Command and Control&#39;,&#10;    &#39;Actions on Objectives&#39;&#10;]&#10;&#10;indicators = [&#10;    (&#39;Shodan scan of public IP range&#39;, &#39;Reconnaissance&#39;),&#10;    (&#39;Crafted PDF with embedded exploit&#39;, &#39;Weaponization&#39;),&#10;    (&#39;Spear-phishing email with attachment&#39;, &#39;Delivery&#39;),&#10;    (&#39;CVE-2024-1234 triggered on endpoint&#39;, &#39;Exploitation&#39;),&#10;    (&#39;Registry key added for persistence&#39;, &#39;Installation&#39;),&#10;    (&#39;Beacon traffic to 198.51.100.23:443&#39;, &#39;Command and Control&#39;),&#10;    (&#39;Database exfiltration over DNS tunnel&#39;, &#39;Actions on Objectives&#39;),&#10;]&#10;&#10;print(&#39;=== Kill Chain Phase Mapping ===&#39;)&#10;print()&#10;for indicator, phase in indicators:&#10;    phase_num = kill_chain_phases.index(phase) + 1&#10;    print(f&#39;Phase {phase_num}: {phase}&#39;)&#10;    print(f&#39;  Indicator: {indicator}&#39;)&#10;    print()&#10;&#10;print(f&#39;Total phases covered: {len(set(p for _, p in indicators))}/{len(kill_chain_phases)}&#39;)" data-timeout="8" data-title="Map Threat Indicators to Kill Chain Phases"></div>
+
+<h2>Threat Intelligence and MITRE ATT&CK</h2>
+
+<p>The MITRE ATT&CK framework catalogs adversary tactics and techniques based on real-world observations. Unlike the kill chain's linear model, ATT&CK provides a detailed matrix of hundreds of specific techniques organized by tactic.</p>
+
+<p>Use ATT&CK to:</p>
+<ul><li>Map your defenses against known techniques</li>
+<li>Identify coverage gaps</li>
+<li>Communicate precisely about adversary behavior</li>
+<li>Prioritize detection engineering efforts</li>
+</ul>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Start with your industry" data-content="MITRE publishes sector-specific threat profiles. Search for your industry vertical to see which techniques adversaries actually use against similar organizations."></div>
+
+<h2>Emerging Threat Trends</h2>
+
+<p>The threat landscape evolves constantly. Current trends include:</p>
+
+<ul><li><strong>AI-powered attacks</strong> — automated vulnerability discovery, deepfake social engineering, adaptive malware.</li>
+<li><strong>IoT/OT convergence</strong> — operational technology connected to IT networks expands attack surface.</li>
+<li><strong>Cloud-native attacks</strong> — misconfigured containers, serverless abuse, identity-based cloud compromises.</li>
+<li><strong>Living-off-the-land</strong> — attackers using legitimate system tools (PowerShell, WMI, certutil) to avoid detection.</li>
+</ul>
+<h2>Summary</h2>
+
+<p>Understanding attacker motivation, capabilities, and the attack lifecycle lets you place defenses where they matter most. Threat intelligence frameworks like MITRE ATT&CK turn abstract knowledge into actionable defense priorities. Stay current: the landscape shifts monthly.</p>
+
+<div data-widget="quiz" data-chapterslug="102-threat-landscape" data-quizid="quiz-102-threat-landscape"></div>
+
+<script type="application/json" id="quiz-102-threat-landscape">[{"id":"q1","type":"multiple-choice","prompt":"Which kill chain phase involves establishing persistent access on a compromised system?","options":["Delivery","Exploitation","Installation","Command and Control"],"correctIndex":2,"explanation":"Installation is the phase where malware establishes persistence through registry keys, scheduled tasks, or other mechanisms.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What makes insider threats particularly difficult to defend against?","options":["They use advanced zero-day exploits","They already have authorized access and bypass perimeter controls","They always work with nation-states","They only attack during business hours"],"correctIndex":1,"explanation":"Insiders have legitimate credentials and access, making their malicious activity blend in with normal behavior.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the primary purpose of the MITRE ATT&CK framework?","options":["To replace antivirus software","To catalog adversary tactics and techniques based on real-world observations","To automate incident response","To calculate risk scores"],"correctIndex":1,"explanation":"MITRE ATT&CK provides a comprehensive knowledge base of adversary tactics and techniques derived from actual incident data.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Which attack category involves compromising a trusted vendor to reach downstream targets?","options":["Phishing","Denial of Service","Supply chain attack","Man-in-the-Middle"],"correctIndex":2,"explanation":"Supply chain attacks compromise a trusted dependency or vendor to indirectly reach the ultimate target organization.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/101-security-foundations.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/103-cia-triad-principles.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

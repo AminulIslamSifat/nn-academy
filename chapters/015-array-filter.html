@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtering Arrays — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="015-array-filter" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Filtering Arrays</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Filtering Arrays</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Boolean masking, fancy indexing, and np.take/put for selective element access and modification.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Filtering Arrays</h1>
+
+<p>Boolean masks are NumPy's most powerful filtering tool — expressive, fast, and composable.</p>
+
+<h2>Boolean Masking</h2>
+
+<div data-widget="pyrunner" data-cellid="015-cell-1" data-defaultcode="import numpy as np&#10;&#10;a = np.array([15, 3, 28, 7, 42, 11, 33])&#10;&#10;# Create a boolean mask&#10;mask = a &gt; 20&#10;print(f&quot;Array: {a}&quot;)&#10;print(f&quot;Mask:  {mask}&quot;)&#10;print(f&quot;Filtered: {a[mask]}&quot;)&#10;&#10;# Combine conditions with &amp; | ~&#10;print(f&quot;&#10;Between 10 and 30: {a[(a &gt; 10) &amp; (a &lt; 30)]}&quot;)&#10;print(f&quot;Not divisible by 3: {a[~(a % 3 == 0)]}&quot;)&#10;print(f&quot;Either &lt; 5 or &gt; 30: {a[(a &lt; 5) | (a &gt; 30)]}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Use &amp; | ~ not and or not" data-content="Python&#39;s `and`/`or`/`not` don&#39;t work element-wise on arrays. Always use `&amp;` (and), `|` (or), `~` (not) with parentheses around each condition."></div>
+
+<h2>Modifying with Masks</h2>
+
+<div data-widget="pyrunner" data-cellid="015-cell-2" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(10)&#10;print(f&quot;Before: {a}&quot;)&#10;&#10;# Set all even numbers to -1&#10;a[a % 2 == 0] = -1&#10;print(f&quot;After masking evens: {a}&quot;)&#10;&#10;# Clip values to a range&#10;b = np.random.randn(8) * 10&#10;print(f&quot;&#10;Random: {b.round(2)}&quot;)&#10;b[np.abs(b) &gt; 5] = np.sign(b[np.abs(b) &gt; 5]) * 5&#10;print(f&quot;Clipped to ±5: {b.round(2)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Fancy Indexing</h2>
+
+<p>Pass arrays of indices to select arbitrary elements:</p>
+
+<div data-widget="pyrunner" data-cellid="015-cell-3" data-defaultcode="import numpy as np&#10;&#10;a = np.array([10, 20, 30, 40, 50, 60])&#10;&#10;# Select specific indices&#10;indices = [0, 2, 5]&#10;print(f&quot;Fancy index [0,2,5]: {a[indices]}&quot;)&#10;&#10;# 2D fancy indexing&#10;matrix = np.arange(12).reshape(3, 4)&#10;rows = [0, 1, 2]&#10;cols = [1, 2, 3]&#10;print(f&quot;&#10;Matrix:&#10;{matrix}&quot;)&#10;print(f&quot;matrix[[0,1,2], [1,2,3]] = {matrix[rows, cols]}&quot;)&#10;&#10;# Reorder rows&#10;print(f&quot;&#10;Reversed rows:&#10;{matrix[[2, 1, 0]]}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>take and put</h2>
+
+<div data-widget="pyrunner" data-cellid="015-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.array([10, 20, 30, 40, 50])&#10;&#10;# take: like fancy indexing but as a method&#10;print(f&quot;take([1,3,4]): {a.take([1, 3, 4])}&quot;)&#10;&#10;# put: modify specific indices in-place&#10;a.put([0, 2, 4], [99, 88, 77])&#10;print(f&quot;after put: {a}&quot;)&#10;&#10;# take along axis&#10;matrix = np.arange(12).reshape(3, 4)&#10;print(f&quot;&#10;take along axis=1: {matrix.take([0, 2], axis=1)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="015-array-filter" data-quizid="quiz-015-array-filter"></div>
+
+<script type="application/json" id="quiz-015-array-filter">[{"id":"q1","type":"multiple-choice","prompt":"What is a boolean mask in NumPy?","options":["An array of True/False values used to select elements from another array","A function that hides certain array elements","A dtype for storing binary data","A way to encrypt array contents"],"correctIndex":0,"explanation":"A boolean mask is an array of the same shape with True/False values. Indexing with it selects only the True positions.","randomize":true},{"id":"q2","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([1,2,3,4,5])\nprint(a[a % 2 == 0])","options":["[2 4]","[1 3 5]","[True False True False True]","Error"],"correctIndex":0,"explanation":"The mask a % 2 == 0 is [False, True, False, True, False]. Selecting with it gives [2, 4].","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"Why must you use & instead of 'and' for combining NumPy boolean conditions?","options":["'and' evaluates truthiness of the whole array; & operates element-wise","They are interchangeable","& is simply faster","'and' causes a syntax error"],"correctIndex":0,"explanation":"Python's 'and' tries to evaluate the entire array as a single boolean (which raises ValueError). & performs element-wise logical AND.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Which operator is the element-wise NOT for boolean arrays?","options":["~ (tilde)","not","!","neg()"],"correctIndex":0,"explanation":"~ is the bitwise NOT operator that works element-wise on boolean arrays. Python's 'not' doesn't work on arrays.","randomize":true},{"id":"q5","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([15, 3, 28, 7, 42])\nprint(a[(a > 10) & (a < 30)])","options":["[15 28]","[15 3 28 7 42]","[3 7]","[42]"],"correctIndex":0,"explanation":"Elements >10 AND <30: 15 and 28 qualify. Each condition must be parenthesized when combined with &.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"Does fancy indexing (a[[1,3,5]]) return a view or a copy?","options":["Copy — modifying the result won't change the original","View — modifying the result changes the original","Depends on the array size","Neither"],"correctIndex":0,"explanation":"Fancy indexing always returns a copy. Basic slicing (a[1:4]) returns a view, but index arrays create independent copies.","randomize":true},{"id":"q7","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.arange(10)\na[a % 2 == 0] = -1\nprint(a)","options":["[-1  1 -1  3 -1  5 -1  7 -1  9]","[-1 -1 -1 -1 -1  5  6  7  8  9]","[0 1 2 3 4 5 6 7 8 9]","Error"],"correctIndex":0,"explanation":"The mask selects even indices (0,2,4,6,8). Those positions are set to -1 in-place.","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"What does a[[0, 2, 5]] do?","options":["Selects elements at indices 0, 2, and 5 (fancy indexing)","Selects a slice from 0 to 5 with step 2","Creates a 3D array","Raises an error"],"correctIndex":0,"explanation":"Passing a list/array of integers triggers fancy indexing, selecting exactly those positions.","randomize":true},{"id":"q9","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nmatrix = np.arange(12).reshape(3, 4)\nrows = [0, 1, 2]\ncols = [1, 2, 3]\nprint(matrix[rows, cols])","options":["[1 6 11]","[[1 2 3]\n [5 6 7]\n [9 10 11]]","[0 5 10]","Error"],"correctIndex":0,"explanation":"Paired fancy indexing: matrix[0,1]=1, matrix[1,2]=6, matrix[2,3]=11 → [1, 6, 11].","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"What does np.take(a, [1, 3, 4]) do compared to a[[1, 3, 4]]?","options":["Same result — take is a function form of fancy indexing","take is faster","take returns a view while fancy indexing returns a copy","They produce different results"],"correctIndex":0,"explanation":"take and fancy indexing produce identical results. take also supports an axis parameter for multi-dimensional selection.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"What does np.put(a, [0, 2, 4], [99, 88, 77]) do?","options":["Sets a[0]=99, a[2]=88, a[4]=77 in-place","Returns a new array with those values replaced","Appends values to the array","Extracts values at those indices"],"correctIndex":0,"explanation":"put modifies the array in-place, assigning the given values at the specified indices.","randomize":true},{"id":"q12","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([10, 20, 30, 40, 50])\nprint(a.take([1, 3, 4]))","options":["[20 40 50]","[10 30 50]","[1 3 4]","Error"],"correctIndex":0,"explanation":"take selects elements at indices 1, 3, 4: values 20, 40, 50.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"Can boolean masks be used to assign values, not just read them?","options":["Yes — a[mask] = value sets all masked positions","No — masks are read-only","Only with np.put","Only for 1D arrays"],"correctIndex":0,"explanation":"Boolean indexing works on both sides of assignment. a[a < 0] = 0 clips negatives to zero in-place.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"What shape must a boolean mask have to index an array?","options":["The same shape as the array (or broadcastable to it)","Always 1D","Always 2D","Any shape works"],"correctIndex":0,"explanation":"The mask must match the array's shape or be broadcastable to it. Mismatched shapes raise IndexError.","randomize":true},{"id":"q15","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([5, 3, 8, 1, 9])\nmask = (a > 2) & (a < 8)\nprint(mask.sum())","options":["3","2","5","0"],"correctIndex":0,"explanation":"Elements >2 AND <8: 5✓, 3✓, 8✗(not <8), 1✗(not >2), 9✗(not <8). Two elements match, so sum = 2.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"How do you select all rows of a matrix where column 0 is greater than 5?","options":["matrix[matrix[:, 0] > 5]","matrix[matrix > 5]","matrix[:, matrix[0] > 5]","np.where(matrix[:, 0] > 5)"],"correctIndex":0,"explanation":"matrix[:, 0] > 5 creates a 1D boolean mask over rows. Indexing with it selects matching rows entirely.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"What happens if you use Python's 'or' instead of '|' in a boolean mask expression?","options":["ValueError: truth value of an array is ambiguous","It works but slower","It silently gives wrong results","SyntaxError"],"correctIndex":0,"explanation":"Python's 'or' tries to evaluate the array as a single boolean, which raises ValueError because arrays don't have a single truth value.","randomize":true},{"id":"q18","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nmatrix = np.arange(12).reshape(3, 4)\nprint(matrix.take([0, 2], axis=1))","options":["[[0 2]\n [4 6]\n [8 10]]","[[0 1]\n [8 9]]","[[0 2]\n [4 6]]","Error"],"correctIndex":0,"explanation":"take along axis=1 selects columns 0 and 2 from every row. Row 0: [0,2], Row 1: [4,6], Row 2: [8,10].","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"In ML preprocessing, how would you normalize only positive values in an array?","options":["mask = a > 0; a[mask] = a[mask] / a[mask].max()","a / a.max()","np.where(a > 0, a / a.max(), a)","Both A and C work"],"correctIndex":0,"explanation":"Both approaches work. Boolean mask assignment modifies in-place. np.where returns a new array. Both correctly target only positive values.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"You have a predictions array and want to compute accuracy. Which expression gives the fraction correct?","options":["(predictions == labels).mean()","np.sum(predictions == labels)","np.count_nonzero(predictions == labels)","(predictions == labels).sum() / len(predictions.shape)"],"correctIndex":0,"explanation":"== produces a boolean array. .mean() treats True as 1 and False as 0, giving the fraction of correct predictions directly.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/014-array-sort.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/003-vectorization.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

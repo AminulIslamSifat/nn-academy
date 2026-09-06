@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weight Initialization Strategies — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="065-initialization-strategies" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Weight Initialization Strategies</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 20 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 15 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Weight Initialization Strategies</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Why zero initialization fails, how Xavier and He initialization keep signal flowing through deep networks, and practical initialization recipes.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Weight Initialization Strategies</h1>
+
+<p>Bad initialization kills deep networks before training even starts. ==The right initialization keeps activations and gradients at reasonable scales across all layers.==</p>
+
+<h2>Why Not Zeros?</h2>
+
+<p>If all weights are zero, every neuron in a layer computes the same output and receives the same gradient. They'll never differentiate — ==symmetry is never broken==.</p>
+
+<div data-widget="pyrunner" data-cellid="065-cell-1" data-defaultcode="import numpy as np&#10;&#10;# Zero init: all neurons identical&#10;np.random.seed(42)&#10;X = np.random.randn(4, 10)&#10;W_zero = np.zeros((10, 5))&#10;b_zero = np.zeros(5)&#10;&#10;out_zero = np.maximum(0, X @ W_zero + b_zero)&#10;print(&quot;Zero initialization:&quot;)&#10;print(f&quot;  All outputs identical: {np.all(out_zero == out_zero[:, :1])}&quot;)&#10;print(f&quot;  All gradients will be identical → neurons never specialize&quot;)&#10;&#10;# Random init: neurons differentiate&#10;W_rand = np.random.randn(10, 5) * 0.1&#10;out_rand = np.maximum(0, X @ W_rand)&#10;print(f&quot;\nRandom initialization:&quot;)&#10;print(f&quot;  Output std across neurons: {out_rand.std(axis=1).mean():.4f}&quot;)&#10;print(f&quot;  Neurons produce different outputs ✅&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Xavier/Glorot Initialization</h2>
+
+<p>For tanh/sigmoid activations. Keeps activation variance constant across layers:</p>
+
+<div data-widget="katex" data-latex="W \sim \mathcal{N}\left(0, \frac{2}{n_{in} + n_{out}}\right)" data-display="true"></div>
+
+<h2>He Initialization</h2>
+
+<p>For ReLU activations. Accounts for ReLU zeroing half the values:</p>
+
+<div data-widget="katex" data-latex="W \sim \mathcal{N}\left(0, \frac{2}{n_{in}}\right)" data-display="true"></div>
+
+<div data-widget="pyrunner" data-cellid="065-cell-2" data-defaultcode="import numpy as np&#10;&#10;np.random.seed(42)&#10;&#10;# Track activation variance through 10 layers&#10;n_in = 256&#10;depth = 10&#10;X = np.random.randn(64, n_in)&#10;&#10;print(f&quot;Activation variance through {depth} layers (64 samples, 256 dims):&quot;)&#10;print(f&quot;{&#39;Init&#39;:&lt;12} | {&#39;Layer 1&#39;:&gt;8} | {&#39;Layer 5&#39;:&gt;8} | {&#39;Layer 10&#39;:&gt;9} | Stable?&quot;)&#10;print(&quot;─&quot; * 55)&#10;&#10;for name, scale_fn in [&#10;    (&quot;Too small&quot;, lambda n: 0.001),&#10;    (&quot;Too large&quot;, lambda n: 1.0),&#10;    (&quot;Xavier&quot;, lambda n: np.sqrt(2.0/(n+n))),&#10;    (&quot;He&quot;, lambda n: np.sqrt(2.0/n)),&#10;]:&#10;    h = X.copy()&#10;    variances = []&#10;    for layer in range(depth):&#10;        W = np.random.randn(n_in, n_in) * scale_fn(n_in)&#10;        h = np.maximum(0, h @ W)  # ReLU&#10;        variances.append(h.var())&#10;    &#10;    stable = &quot;✅&quot; if 0.1 &lt; variances[-1] &lt; 10 else &quot;❌&quot;&#10;    print(f&quot;{name:&lt;12} | {variances[0]:8.4f} | {variances[4]:8.4f} | {variances[9]:9.4f} | {stable}&quot;)&#10;&#10;print(f&quot;\n💡 He init keeps variance ~1 across all layers with ReLU&quot;)&#10;print(f&quot;   Too small → vanishing activations&quot;)&#10;print(f&quot;   Too large → exploding activations&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Initialization Cheat Sheet</h2>
+
+<table><tr><td>Activation</td><td>Init</td><td>Formula</td></tr>
+</table>
+<table><tr><td>ReLU</td><td>He</td><td><span data-widget="katex" data-latex="\sigma = \sqrt{2/n_{in}}" data-display="false"></span></td></tr>
+<tr><td>Tanh/Sigmoid</td><td>Xavier</td><td><span data-widget="katex" data-latex="\sigma = \sqrt{2/(n_{in}+n_{out})}" data-display="false"></span></td></tr>
+<tr><td>Linear</td><td>Xavier</td><td>Same as above</td></tr>
+<tr><td>Batch Norm layers</td><td>Any</td><td>BN compensates</td></tr>
+<tr><td>Embedding</td><td>Small normal</td><td><span data-widget="katex" data-latex="\sigma = 0.01-0.02" data-display="false"></span></td></tr>
+</table>
+<blockquote>[!IMPORTANT] Practical Rule</blockquote>
+<blockquote>Use He initialization for any network with ReLU. Use Xavier for tanh/sigmoid. If using BatchNorm, initialization matters less but He is still a safe default.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="065-initialization-strategies" data-quizid="quiz-065-initialization-strategies"></div>
+
+<script type="application/json" id="quiz-065-initialization-strategies">[{"id":"q1","type":"multiple-choice","prompt":"Why does He initialization use sqrt(2/fan_in) instead of Xavier's sqrt(2/(fan_in+fan_out))?","options":["It's arbitrary","ReLU zeros out ~half the activations, halving the variance; He compensates by using only fan_in (effectively doubling the variance compared to Xavier)","He is always better","Xavier doesn't work with ReLU"],"correctIndex":1,"explanation":"With ReLU, E[ReLU(x)²] ≈ 0.5 × E[x²] for symmetric x. To maintain unit variance through ReLU, the weight variance needs to be 2/fan_in instead of 2/(fan_in+fan_out).","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What happens if you initialize all weights to the same small non-zero value (e.g., 0.01)?","options":["Works fine","All neurons in each layer still compute identical outputs and receive identical gradients — symmetry is not broken","Better than random","Only works for CNNs"],"correctIndex":1,"explanation":"Any constant initialization (zero or non-zero) creates symmetry: all neurons are identical and stay identical throughout training. Random initialization breaks this symmetry.","randomize":false}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/064-gradient-clipping.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/101-security-foundations.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>
