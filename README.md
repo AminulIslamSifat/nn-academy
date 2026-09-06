@@ -2,7 +2,7 @@
 
 > Learn by building. Two rigorous tracks taught from first principles — no hand-waving.
 
-An interactive curriculum with in-browser execution, live visualizers, and rigorous assessments. 88 chapters across 2 modules and 18 tracks. No server, no setup — everything runs in the browser.
+An interactive curriculum with in-browser execution, live visualizers, and rigorous assessments. 117 chapters across 2 modules and 25 tracks. No server, no setup — everything runs in the browser.
 
 ***
 
@@ -27,7 +27,7 @@ Build deep learning from the ground up with raw array math. 57 chapters across 1
 
 ### 🛡️ Cybersecurity — *Offense · Defense · First Principles*
 
-Learn to think like an attacker and defend like a professional. 31 chapters across 8 tracks.
+Learn to think like an attacker and defend like a professional. 60 chapters across 15 tracks — beginner to pro.
 
 | Track | Chapters | Description |
 |---|---|---|
@@ -39,6 +39,13 @@ Learn to think like an attacker and defend like a professional. 31 chapters acro
 | 📊 Security Operations | 4 | SOC/SIEM, threat intelligence, forensics, zero trust |
 | 💻 Hands-On Security Tooling | 4 | Nmap, proxy testing, password attacks, Python automation |
 | ⚖️ Governance & Human Factor | 4 | Compliance, architecture, social engineering, careers |
+| 🖥️ OS Internals & System Security | 4 | Linux/Windows internals, hardening, log analysis |
+| 🔬 Reverse Engineering & Binary Exploitation | 5 | Assembly, Ghidra, buffer overflows, format strings, mitigations |
+| ⛈️ Cloud-Native Security & Attacks | 4 | AWS security, misconfigurations, serverless/API, multi-cloud |
+| 💀 Red Team Operations | 4 | AD attacks, C2/evasion, lateral movement, reporting |
+| 📡 Detection Engineering & Blue Team | 4 | Sigma rules, YARA, home SOC lab, threat hunting |
+| 📱 Mobile & IoT Security | 3 | Android/iOS security, IoT firmware analysis |
+| 🧪 Real-World Labs & Case Studies | 5 | AD lab build, SolarWinds, Log4Shell, Equifax, capstone |
 
 ***
 

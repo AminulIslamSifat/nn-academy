@@ -2,7 +2,7 @@
 import { getProgress, getCompletedCount, markCompleted } from './store.js'
 import { mountPyRunner, mountQuiz, mountVisualizer, mountKaTeX, mountCallout } from './widgets.js'
 
-let manifest = { modules: [], totalChapters: 88 }
+let manifest = { modules: [], totalChapters: 112 }
 try {
   const resp = await fetch('/content/manifest.json')
   manifest = await resp.json()
