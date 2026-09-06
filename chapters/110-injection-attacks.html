@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Injection Attacks — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="110-injection-attacks" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Injection Attacks</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 13 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Injection Attacks</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">SQL injection, command injection, and XSS — why mixing code and data is the root cause, with hands-on demonstrations.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The Root Cause</h2>
+
+<p>Injection happens when <strong>untrusted data is interpreted as code</strong>. The fix is always to keep data and instructions separate. This single principle eliminates SQL injection, command injection, XSS, and every other injection variant.</p>
+
+<h2>SQL Injection</h2>
+
+<h3>The Classic Example</h3>
+
+<p>If you build a query by concatenating user input, an attacker changes its meaning:</p>
+
+<pre><code class="language-python"># Vulnerable: name is concatenated directly&#10;query = &quot;SELECT * FROM users WHERE name = &#39;&quot; + user_input + &quot;&#39;&quot;</code></pre>
+
+<p>Feeding <code>' OR '1'='1</code> makes the condition always true:</p>
+
+<pre><code class="language-sql">SELECT * FROM users WHERE name = &#39;&#39; OR &#39;1&#39;=&#39;1&#39;</code></pre>
+
+<p>This returns <strong>every row</strong> in the users table.</p>
+
+<h3>The Fix: Parameterized Queries</h3>
+
+<pre><code class="language-python"># Safe: parameter binding separates code from data&#10;cursor.execute(&quot;SELECT * FROM users WHERE name = ?&quot;, (name,))</code></pre>
+
+<p>The database driver sends the statement structure and the data separately. The input is never interpreted as SQL.</p>
+
+<h3>Blind SQL Injection</h3>
+
+<p>When the application does not display query results directly, attackers infer data from behavior:</p>
+
+<ul><li><strong>Boolean-based</strong> — <code>AND 1=1</code> vs <code>AND 1=2</code> changes the response.</li>
+<li><strong>Time-based</strong> — <code>AND SLEEP(5)</code> delays the response if the condition is true.</li>
+</ul>
+<pre><code class="language-sql">-- Time-based blind: does the admin user exist?&#10;SELECT * FROM users WHERE id = 1 AND IF(SUBSTRING(password,1,1)=&#39;a&#39;, SLEEP(5), 0)</code></pre>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="ORMs are not immune" data-content="Object-Relational Mappers protect against injection when you use their query builder. But raw SQL strings, even inside an ORM, are still vulnerable. Never concatenate user input into raw SQL."></div>
+
+<h2>Command Injection</h2>
+
+<p>Same idea at the OS level. If you pass user input into a shell command, an attacker appends their own commands:</p>
+
+<pre><code class="language-python"># Vulnerable&#10;import os&#10;os.system(&quot;ping &quot; + user_input)&#10;# Input: &quot;8.8.8.8; cat /etc/passwd&quot;&#10;# Executes: ping 8.8.8.8; cat /etc/passwd</code></pre>
+
+<p>The fix: never invoke a shell with interpolated input. Use argument lists:</p>
+
+<pre><code class="language-python"># Safe: argument list, no shell&#10;import subprocess&#10;subprocess.run([&quot;ping&quot;, &quot;-c&quot;, &quot;1&quot;, target], shell=False)</code></pre>
+
+<h2>Cross-Site Scripting (XSS)</h2>
+
+<p>When a page reflects user input as HTML, an attacker injects script that runs in other users' browsers.</p>
+
+<h3>Types</h3>
+
+<table><tr><td>Type</td><td>How It Works</td><td>Persistence</td></tr>
+</table>
+<table><tr><td><strong>Reflected</strong></td><td>Input echoed in the immediate response</td><td>None</td></tr>
+<tr><td><strong>Stored</strong></td><td>Input saved and served to other users</td><td>Database</td></tr>
+<tr><td><strong>DOM-based</strong></td><td>Client-side JS processes the input unsafely</td><td>None</td></tr>
+</table>
+<h3>Example</h3>
+
+<pre><code class="language-html">&lt;!-- Vulnerable: user input inserted as HTML --&gt;&#10;&lt;div&gt;Welcome, &lt;span id=&quot;name&quot;&gt;&lt;/span&gt;&lt;/div&gt;&#10;&lt;script&gt;&#10;  document.getElementById(&quot;name&quot;).innerHTML = getParam(&quot;name&quot;);&#10;&lt;/script&gt;&#10;&#10;&lt;!-- Attacker sends: ?name=&lt;img src=x onerror=alert(document.cookie)&gt; --&gt;</code></pre>
+
+<h3>Defenses</h3>
+
+<li><strong>Encode output</strong> for its context (HTML, attribute, URL, JavaScript).</li>
+<li><strong>Content-Security-Policy</strong> header restricts what scripts can run.</li>
+<li><strong>Use frameworks</strong> that auto-escape (React, Vue, Angular).</li>
+<li><strong>HttpOnly cookies</strong> prevent JavaScript from reading session tokens.</li>
+
+<h2>Interactive: SQL Injection Simulator</h2>
+
+<div data-widget="pyrunner" data-cellid="110-injection-attacks-cell-1" data-defaultcode="# Simulate SQL injection vs parameterized queries&#10;&#10;users_db = [&#10;    {&quot;id&quot;: 1, &quot;name&quot;: &quot;alice&quot;, &quot;role&quot;: &quot;user&quot;, &quot;email&quot;: &quot;alice@example.com&quot;},&#10;    {&quot;id&quot;: 2, &quot;name&quot;: &quot;bob&quot;, &quot;role&quot;: &quot;admin&quot;, &quot;email&quot;: &quot;bob@example.com&quot;},&#10;    {&quot;id&quot;: 3, &quot;name&quot;: &quot;charlie&quot;, &quot;role&quot;: &quot;user&quot;, &quot;email&quot;: &quot;charlie@example.com&quot;},&#10;]&#10;&#10;def vulnerable_query(name_input):&#10;    &quot;&quot;&quot;Simulates string concatenation (vulnerable)&quot;&quot;&quot;&#10;    # In real SQL: SELECT * FROM users WHERE name = &#39;{input}&#39;&#10;    if name_input == &quot;&#39; OR &#39;1&#39;=&#39;1&quot;:&#10;        return users_db  # Returns ALL users&#10;    return [u for u in users_db if u[&quot;name&quot;] == name_input]&#10;&#10;def safe_query(name_input):&#10;    &quot;&quot;&quot;Simulates parameterized query (safe)&quot;&quot;&quot;&#10;    # Input is treated as a literal value, never as SQL&#10;    return [u for u in users_db if u[&quot;name&quot;] == name_input]&#10;&#10;print(&quot;SQL Injection Demonstration&quot;)&#10;print(&quot;=&quot; * 55)&#10;&#10;test_inputs = [&quot;alice&quot;, &quot;&#39; OR &#39;1&#39;=&#39;1&quot;, &quot;bob&quot;]&#10;&#10;for inp in test_inputs:&#10;    print(f&quot;\nInput: &#39;{inp}&#39;&quot;)&#10;&#10;    vuln_result = vulnerable_query(inp)&#10;    safe_result = safe_query(inp)&#10;&#10;    print(f&quot;  Vulnerable query returns {len(vuln_result)} row(s):&quot;)&#10;    for u in vuln_result:&#10;        print(f&quot;    {u[&#39;name&#39;]} ({u[&#39;role&#39;]})&quot;)&#10;&#10;    print(f&quot;  Safe query returns {len(safe_result)} row(s):&quot;)&#10;    for u in safe_result:&#10;        print(f&quot;    {u[&#39;name&#39;]} ({u[&#39;role&#39;]})&quot;)&#10;&#10;print(&quot;\n--- Key Takeaway ---&quot;)&#10;print(&quot;Parameterized queries treat input as DATA, never as CODE.&quot;)&#10;print(&quot;The vulnerable query returned ALL users with &#39; OR &#39;1&#39;=&#39;1.&quot;)&#10;print(&quot;The safe query correctly found no match.&quot;)" data-timeout="8" data-title="SQL Injection Simulator"></div>
+
+<h2>Interactive: XSS Payload Encoder</h2>
+
+<div data-widget="pyrunner" data-cellid="110-injection-attacks-cell-2" data-defaultcode="import html&#10;&#10;# Simulate XSS payloads and encoding defenses&#10;&#10;payloads = [&#10;    &#39;&lt;script&gt;alert(document.cookie)&lt;/script&gt;&#39;,&#10;    &#39;&lt;img src=x onerror=alert(1)&gt;&#39;,&#10;    &#39;&quot;&gt;&lt;svg onload=alert(1)&gt;&#39;,&#10;    &quot;javascript:alert(1)&quot;,&#10;]&#10;&#10;print(&quot;XSS Encoding Defense Demonstration&quot;)&#10;print(&quot;=&quot; * 60)&#10;&#10;for payload in payloads:&#10;    encoded = html.escape(payload)&#10;    print(f&quot;\n  Raw payload: {payload}&quot;)&#10;    print(f&quot;  HTML-encoded: {encoded}&quot;)&#10;    print(f&quot;  Safe to render: {&#39;Yes&#39; if &#39;&lt;&#39; not in encoded and &#39;&gt;&#39; not in encoded else &#39;Needs review&#39;}&quot;)&#10;&#10;# Demonstrate context-aware encoding&#10;print(&quot;\n--- Context Matters ---&quot;)&#10;user_input = &#39;&quot; onmouseover=&quot;alert(1)&#39;&#10;&#10;contexts = {&#10;    &quot;HTML body&quot;: html.escape(user_input),&#10;    &quot;HTML attribute&quot;: user_input.replace(&#39;&quot;&#39;, &#39;&amp;quot;&#39;),&#10;    &quot;URL parameter&quot;: user_input.replace(&#39;&quot;&#39;, &#39;%22&#39;).replace(&#39; &#39;, &#39;+&#39;),&#10;}&#10;&#10;for ctx, encoded in contexts.items():&#10;    print(f&quot;  {ctx:18s}: {encoded}&quot;)&#10;&#10;print(&quot;\n--- Content-Security-Policy ---&quot;)&#10;csp = &quot;default-src &#39;self&#39;; script-src &#39;self&#39;; style-src &#39;self&#39; &#39;unsafe-inline&#39;&quot;&#10;print(f&quot;  CSP: {csp}&quot;)&#10;print(&quot;  Effect: Blocks inline scripts, external scripts, and eval().&quot;)&#10;print(&quot;  Even if XSS payload executes, it cannot exfiltrate data to external domains.&quot;)" data-timeout="8" data-title="XSS Encoding Lab"></div>
+
+<h2>The Universal Rule</h2>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="Never trust input" data-content="Validate on the way in, and encode or parameterize on the way out. Every injection vulnerability exists because this rule was violated somewhere in the code path."></div>
+
+<h2>Summary</h2>
+
+<p>Injection is one bug class with many faces: SQL injection, command injection, XSS, SSTI, LDAP injection. The root cause is always the same — mixing untrusted data with code. The fix is always the same — keep them separate through parameterization, encoding, and safe APIs.</p>
+
+<div data-widget="quiz" data-chapterslug="110-injection-attacks" data-quizid="quiz-110-injection-attacks"></div>
+
+<script type="application/json" id="quiz-110-injection-attacks">[{"id":"q1","type":"multiple-choice","prompt":"What is the root cause of all injection vulnerabilities?","options":["Weak passwords","Untrusted data being interpreted as code","Missing SSL certificates","Outdated operating systems"],"correctIndex":1,"explanation":"Injection occurs when untrusted data is mixed with code or commands. The attacker's input changes the meaning of the query, command, or markup. Keeping data and instructions separate eliminates injection.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"How do parameterized queries prevent SQL injection?","options":["They encrypt the query","They send the SQL structure and the data separately so input is never interpreted as SQL","They filter out special characters","They use a different database engine"],"correctIndex":1,"explanation":"Parameterized queries (prepared statements) send the query structure to the database first, then bind the data values separately. The database never interprets the data as part of the SQL command.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What type of XSS stores the malicious payload in a database?","options":["Reflected XSS","Stored XSS","DOM-based XSS","Blind XSS"],"correctIndex":1,"explanation":"Stored XSS (persistent XSS) saves the malicious input in the database. Every user who views the affected page receives the payload, making it more dangerous than reflected XSS.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"What does the Content-Security-Policy header help prevent?","options":["SQL injection","Cross-site scripting by restricting which scripts can execute","Command injection","Directory traversal"],"correctIndex":1,"explanation":"CSP restricts which sources can execute scripts, load styles, and make connections. Even if an XSS payload is injected, CSP can prevent it from executing or exfiltrating data.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"Why is subprocess.run with shell=False safer than os.system?","options":["It runs faster","It passes arguments as a list without invoking a shell, preventing command chaining","It encrypts the command","It requires root privileges"],"correctIndex":1,"explanation":"os.system invokes a shell, allowing command chaining with ; && or |. subprocess.run with shell=False passes arguments directly to the program, so special characters are not interpreted as shell syntax.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/109-owasp-top-ten.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/111-authentication-sessions.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

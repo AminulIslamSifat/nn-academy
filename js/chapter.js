@@ -2,7 +2,7 @@
 import { getProgress, getCompletedCount, markCompleted } from './store.js'
 import { mountPyRunner, mountQuiz, mountVisualizer, mountKaTeX, mountCallout } from './widgets.js'
 
-let manifest = { tracks: [], totalChapters: 65 }
+let manifest = { modules: [], totalChapters: 88 }
 try {
   const resp = await fetch('/content/manifest.json')
   manifest = await resp.json()
@@ -20,51 +20,77 @@ function renderSidebar() {
   const completedCount = getCompletedCount()
   const progress = getProgress()
 
-  document.getElementById('progress-text').textContent = `${completedCount}/${totalChapters}`
-  document.getElementById('progress-bar').style.width = `${(completedCount / totalChapters) * 100}%`
+  // Scope the sidebar to the module that contains the current chapter,
+  // so you only see the tracks relevant to the module you're studying.
+  const allModules = manifest.modules || []
+  const activeModule = allModules.find(m => m.tracks.some(t => t.chapters.includes(currentSlug))) || allModules[0]
+  const scopedModules = activeModule ? [activeModule] : []
+
+  const moduleChapters = scopedModules.flatMap(m => m.tracks.flatMap(t => t.chapters))
+  const moduleCompleted = moduleChapters.filter(s => progress[s]?.completed).length
+  document.getElementById('progress-text').textContent = `${moduleCompleted}/${moduleChapters.length}`
+  document.getElementById('progress-bar').style.width = `${(moduleCompleted / Math.max(moduleChapters.length, 1)) * 100}%`
 
   nav.innerHTML = ''
-  for (const track of manifest.tracks) {
-    const trackDiv = document.createElement('div')
-    const trackCompleted = track.chapters.filter(s => progress[s]?.completed).length
+  for (const module of scopedModules) {
+    const accent = module.accent || 'var(--accent)'
 
-    const btn = document.createElement('button')
-    btn.className = 'sidebar-track-btn'
-    btn.setAttribute('aria-expanded', 'true')
-    btn.innerHTML = `<span class="chevron" style="color: var(--text-muted); font-size: 0.7rem;">▾</span><i data-lucide="${track.icon}" style="width:14px;height:14px;color:var(--accent);"></i><span class="flex-1 text-left">${track.title}</span><span style="font-size: 0.7rem; color: var(--text-muted);">${trackCompleted}/${track.chapters.length}</span>`
+    // Module heading
+    const moduleHeading = document.createElement('div')
+    moduleHeading.className = 'sidebar-module-heading'
+    moduleHeading.innerHTML = `<i data-lucide="${module.icon}" style="width:13px;height:13px;color:${accent};"></i><span>${module.title}</span>`
+    nav.appendChild(moduleHeading)
 
-    const chaptersDiv = document.createElement('div')
-    chaptersDiv.className = 'ml-6 space-y-0.5 mt-1'
+    for (const track of module.tracks) {
+      const trackDiv = document.createElement('div')
+      const trackCompleted = track.chapters.filter(s => progress[s]?.completed).length
 
-    for (const slug of track.chapters) {
-      const isActive = slug === currentSlug
-      const isDone = progress[slug]?.completed
-      // Derive a readable title from the slug
-      const title = slug.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-      const link = document.createElement('a')
-      link.href = `/chapters/${slug}.html`
-      link.className = `sidebar-link ${isActive ? 'active' : ''}`
-      link.innerHTML = `
-        ${isDone
-          ? '<span style="color:#10b981;flex-shrink:0">✓</span>'
-          : '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid #3f3f46;flex-shrink:0"></span>'}
-        <span class="truncate">${title}</span>
-      `
-      chaptersDiv.appendChild(link)
+      const btn = document.createElement('button')
+      btn.className = 'sidebar-track-btn'
+      btn.setAttribute('aria-expanded', 'true')
+      btn.innerHTML = `<span class="chevron" style="color: var(--text-muted); font-size: 0.7rem;">▾</span><i data-lucide="${track.icon}" style="width:14px;height:14px;color:${accent};"></i><span class="flex-1 text-left">${track.title}</span><span style="font-size: 0.7rem; color: var(--text-muted);">${trackCompleted}/${track.chapters.length}</span>`
+
+      const chaptersDiv = document.createElement('div')
+      chaptersDiv.className = 'ml-6 space-y-0.5 mt-1'
+
+      for (const slug of track.chapters) {
+        const isActive = slug === currentSlug
+        const isDone = progress[slug]?.completed
+        // Derive a readable title from the slug
+        const title = slug.replace(/^\d+-/, '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+        const link = document.createElement('a')
+        link.href = `/chapters/${slug}.html`
+        link.className = `sidebar-link ${isActive ? 'active' : ''}`
+        link.innerHTML = `
+          ${isDone
+            ? '<span style="color:#10b981;flex-shrink:0">✓</span>'
+            : '<span style="display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid #3f3f46;flex-shrink:0"></span>'}
+          <span class="truncate">${title}</span>
+        `
+        chaptersDiv.appendChild(link)
+      }
+
+      let expanded = true
+      btn.addEventListener('click', () => {
+        expanded = !expanded
+        chaptersDiv.style.display = expanded ? 'block' : 'none'
+        btn.querySelector('.chevron').textContent = expanded ? '▾' : '▸'
+        btn.setAttribute('aria-expanded', String(expanded))
+      })
+
+      trackDiv.appendChild(btn)
+      trackDiv.appendChild(chaptersDiv)
+      nav.appendChild(trackDiv)
     }
-
-    let expanded = true
-    btn.addEventListener('click', () => {
-      expanded = !expanded
-      chaptersDiv.style.display = expanded ? 'block' : 'none'
-      btn.querySelector('.chevron').textContent = expanded ? '▾' : '▸'
-      btn.setAttribute('aria-expanded', String(expanded))
-    })
-
-    trackDiv.appendChild(btn)
-    trackDiv.appendChild(chaptersDiv)
-    nav.appendChild(trackDiv)
   }
+
+  // Link to switch back to the module overview
+  const switchLink = document.createElement('a')
+  switchLink.href = '/'
+  switchLink.className = 'sidebar-link'
+  switchLink.style.marginTop = '0.75rem'
+  switchLink.innerHTML = '<span style="flex-shrink:0">←</span><span class="truncate">All modules</span>'
+  nav.appendChild(switchLink)
 }
 
 renderSidebar()

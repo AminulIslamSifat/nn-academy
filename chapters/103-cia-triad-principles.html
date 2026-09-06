@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The CIA Triad &amp; Security Principles — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="103-cia-triad-principles" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">The CIA Triad &amp; Security Principles</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">The CIA Triad &amp; Security Principles</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Confidentiality, Integrity, Availability — the three pillars every control ultimately serves.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The CIA Triad</h2>
+
+<p>The CIA triad is the universal yardstick for evaluating any security control. Every safeguard you implement protects one or more of these three pillars:</p>
+
+<ul><li><strong>Confidentiality</strong> — only authorized parties can read the data.</li>
+<li><strong>Integrity</strong> — data is accurate and unmodified by unauthorized parties.</li>
+<li><strong>Availability</strong> — authorized users can access data when needed.</li>
+</ul>
+<p>A firewall protects confidentiality by blocking unauthorized access. A cryptographic hash protects integrity by detecting tampering. Redundant servers protect availability by surviving hardware failures.</p>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Trade-offs are inherent" data-content="Encrypting data strengthens confidentiality but can hurt availability if you lose the decryption keys. Strong authentication helps integrity but adds friction. Security is a series of deliberate trade-offs, not absolute guarantees."></div>
+
+<h2>Confidentiality in Practice</h2>
+
+<p>Confidentiality controls prevent unauthorized disclosure:</p>
+
+<ul><li><strong>Encryption</strong> — transforms data so only key holders can read it (AES, TLS).</li>
+<li><strong>Access controls</strong> — restrict who can view resources (RBAC, ABAC).</li>
+<li><strong>Data classification</strong> — label data by sensitivity to apply appropriate controls.</li>
+<li><strong>DLP (Data Loss Prevention)</strong> — detect and block unauthorized data exfiltration.</li>
+</ul>
+<p>Remember: confidentiality applies to data at rest, in transit, and in use. Each state requires different controls.</p>
+
+<h2>Integrity in Practice</h2>
+
+<p>Integrity ensures data has not been altered improperly:</p>
+
+<ul><li><strong>Cryptographic hashes</strong> — SHA-256 fingerprints detect any modification.</li>
+<li><strong>Digital signatures</strong> — prove authenticity and non-repudiation.</li>
+<li><strong>Version control</strong> — track changes with audit trails.</li>
+<li><strong>Input validation</strong> — prevent injection attacks that corrupt data.</li>
+</ul>
+<h3>Worked Example: Verifying Data Integrity with Hashes</h3>
+
+<p>Hash functions produce a fixed-size fingerprint of any input. Even a single-bit change produces a completely different hash. Run the code below to see this property in action.</p>
+
+<div data-widget="pyrunner" data-cellid="cia-triad-cell-1" data-defaultcode="import hashlib&#10;&#10;def compute_hash(data):&#10;    return hashlib.sha256(data.encode()).hexdigest()&#10;&#10;original = &#39;Transfer $1000 to account 4532&#39;&#10;tampered = &#39;Transfer $9000 to account 4532&#39;&#10;&#10;hash_original = compute_hash(original)&#10;hash_tampered = compute_hash(tampered)&#10;&#10;print(&#39;=== Integrity Verification Demo ===&#39;)&#10;print()&#10;print(f&#39;Original message: {original}&#39;)&#10;print(f&#39;SHA-256:          {hash_original}&#39;)&#10;print()&#10;print(f&#39;Tampered message: {tampered}&#39;)&#10;print(f&#39;SHA-256:          {hash_tampered}&#39;)&#10;print()&#10;if hash_original == hash_tampered:&#10;    print(&#39;RESULT: Hashes match - data integrity VERIFIED&#39;)&#10;else:&#10;    print(&#39;RESULT: Hashes differ - TAMPERING DETECTED&#39;)&#10;    print(f&#39;Changed chars: {sum(a != b for a, b in zip(original, tampered))} character(s) modified&#39;)" data-timeout="8" data-title="Verify Data Integrity Using SHA-256 Hashes"></div>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Hashes are one-way" data-content="You cannot reverse a hash to recover the original data. This makes hashes safe for storing password verifiers and verifying file integrity without exposing content."></div>
+
+<h2>Availability in Practice</h2>
+
+<p>Availability ensures systems remain operational when needed:</p>
+
+<ul><li><strong>Redundancy</strong> — multiple servers, disks, network paths eliminate single points of failure.</li>
+<li><strong>Load balancing</strong> — distribute traffic to prevent overload.</li>
+<li><strong>Backups and DR</strong> — restore service after catastrophic failure.</li>
+<li><strong>DDoS mitigation</strong> — absorb or filter volumetric attacks.</li>
+<li><strong>SLAs</strong> — define and measure acceptable downtime.</li>
+</ul>
+<p>Availability is often the most visible pillar to end users. An outage makes headlines; a silent confidentiality breach may go unnoticed for months.</p>
+
+<h2>Supporting Security Principles</h2>
+
+<p>The CIA triad defines <em>what</em> to protect. These principles define <em>how</em>:</p>
+
+<ul><li><strong>Least privilege</strong> — grant only the minimum access needed to perform a task. Revoke when no longer needed.</li>
+<li><strong>Defense in depth</strong> — layer multiple controls so one failure does not cause total compromise.</li>
+<li><strong>Fail secure</strong> — when systems fail, they should deny access rather than grant it. Default-deny over default-allow.</li>
+<li><strong>Zero trust</strong> — never trust by default based on location or network. Always verify identity and context.</li>
+<li><strong>Separation of duties</strong> — split critical tasks among multiple people to prevent fraud or error.</li>
+<li><strong>Security through obscurity is not security</strong> — hiding implementation details is not a substitute for real controls.</li>
+</ul>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Least privilege prevents cascading damage" data-content="When a compromised account has minimal permissions, the blast radius is contained. Overprivileged accounts turn minor breaches into catastrophes."></div>
+
+<h2>AAA Framework</h2>
+
+<p>Access control rests on three pillars:</p>
+
+<li><strong>Authentication</strong> — verify identity (passwords, MFA, certificates, biometrics).</li>
+<li><strong>Authorization</strong> — determine what an authenticated identity may do (RBAC, policies).</li>
+<li><strong>Accounting</strong> — log actions for audit, forensics, and compliance.</li>
+
+<p>All three must work together. Authentication without authorization grants unlimited access. Authorization without accounting leaves no audit trail. Accounting without authentication cannot attribute actions to individuals.</p>
+
+<h2>Applying the Triad: A Decision Framework</h2>
+
+<p>When evaluating any security control, ask:</p>
+
+<li>Which CIA pillar(s) does this control protect?</li>
+<li>What does it cost in terms of the other pillars?</li>
+<li>Is the trade-off acceptable for our risk tolerance?</li>
+<li>Are there compensating controls for the costs incurred?</li>
+
+<p>Document your answers. Explicit trade-off documentation prevents future teams from unknowingly weakening security.</p>
+
+<h2>Summary</h2>
+
+<p>The CIA triad gives you a universal framework for reasoning about security. Every control serves confidentiality, integrity, or availability—often with trade-offs between them. Combine the triad with supporting principles like least privilege and defense in depth to build resilient systems.</p>
+
+<div data-widget="quiz" data-chapterslug="103-cia-triad-principles" data-quizid="quiz-103-cia-triad-principles"></div>
+
+<script type="application/json" id="quiz-103-cia-triad-principles">[{"id":"q1","type":"multiple-choice","prompt":"Which CIA triad pillar does encryption primarily protect?","options":["Integrity","Availability","Confidentiality","Accountability"],"correctIndex":2,"explanation":"Encryption transforms data so only authorized parties with the key can read it, directly protecting confidentiality.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What does a cryptographic hash function primarily verify?","options":["Confidentiality","Integrity","Availability","Authentication"],"correctIndex":1,"explanation":"Hash functions produce a unique fingerprint of data. Any modification changes the hash, making tampering detectable.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What does the principle of least privilege mean?","options":["Give all users admin access for convenience","Grant only the minimum access needed to perform a task","Remove all access controls","Trust internal users implicitly"],"correctIndex":1,"explanation":"Least privilege means granting only the permissions necessary to complete a specific task, reducing the blast radius of compromise.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"In the AAA framework, what does Accounting provide?","options":["Password verification","Permission assignment","Audit logs of user actions","Data encryption"],"correctIndex":2,"explanation":"Accounting records what authenticated users did, enabling audit, forensics, and compliance verification.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"Why is fail-secure design important?","options":["It improves system performance","It ensures systems deny access rather than grant it when they malfunction","It eliminates the need for backups","It reduces encryption overhead"],"correctIndex":1,"explanation":"Fail-secure means systems default to denying access during failures, preventing accidental exposure of protected resources.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/102-threat-landscape.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/104-risk-management.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

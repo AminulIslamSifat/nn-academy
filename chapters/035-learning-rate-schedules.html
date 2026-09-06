@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Rate Schedules — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="035-learning-rate-schedules" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Learning Rate Schedules</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 18 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 12 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Learning Rate Schedules</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">One learning rate doesn&#39;t fit all epochs. Implement step decay, cosine annealing, warmup, and cyclical schedules in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Learning Rate Schedules</h1>
+
+<p>Early training needs large steps to escape bad initializations. Late training needs small steps to settle into a good minimum. ==A fixed learning rate can't do both.== Schedules adapt the learning rate during training.</p>
+
+<h2>Step Decay</h2>
+
+<p>The simplest: multiply the learning rate by a factor every N epochs.</p>
+
+<div data-widget="katex" data-latex="\eta_t = \eta_0 \cdot \gamma^{\lfloor t / s \rfloor}" data-display="true"></div>
+
+<pre><code class="language-python">def step_decay(lr_init, epoch, step_size=10, gamma=0.1):&#10;    return lr_init <em> (gamma </em>* (epoch // step_size))</code></pre>
+
+<div data-widget="pyrunner" data-cellid="035-cell-1" data-defaultcode="import numpy as np&#10;&#10;lr_init = 0.01&#10;epochs = 40&#10;&#10;print(&quot;Step Decay (γ=0.1, step=10):&quot;)&#10;print(f&quot;{&#39;Epoch&#39;:&gt;5} | {&#39;LR&#39;:&gt;10} | {&#39;Visual&#39;}&quot;)&#10;print(&quot;─&quot; * 40)&#10;for e in range(epochs):&#10;    lr = lr_init * (0.1 ** (e // 10))&#10;    bar = &quot;█&quot; * int(lr / lr_init * 30)&#10;    if e % 10 == 0 or e == epochs - 1:&#10;        print(f&quot;{e+1:5d} | {lr:10.6f} | {bar}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Cosine Annealing</h2>
+
+<p>Smoothly decay from max to min following a cosine curve. No abrupt drops:</p>
+
+<div data-widget="katex" data-latex="\eta_t = \eta_{min} + \frac{1}{2}(\eta_{max} - \eta_{min})\left(1 + \cos\left(\frac{t \cdot \pi}{T}\right)\right)" data-display="true"></div>
+
+<pre><code class="language-python">def cosine_annealing(lr_max, lr_min, epoch, total_epochs):&#10;    return lr_min + 0.5 <em> (lr_max - lr_min) </em> (&#10;        1 + np.cos(epoch * np.pi / total_epochs)&#10;    )</code></pre>
+
+<div data-widget="pyrunner" data-cellid="035-cell-2" data-defaultcode="import numpy as np&#10;&#10;lr_max, lr_min = 0.01, 0.0001&#10;T = 50&#10;&#10;print(&quot;Cosine Annealing:&quot;)&#10;print(f&quot;{&#39;Epoch&#39;:&gt;5} | {&#39;LR&#39;:&gt;10} | {&#39;Visual&#39;}&quot;)&#10;print(&quot;─&quot; * 42)&#10;for e in range(0, T+1, 5):&#10;    lr = lr_min + 0.5*(lr_max-lr_min)*(1 + np.cos(e*np.pi/T))&#10;    bar = &quot;█&quot; * int((lr - lr_min)/(lr_max - lr_min) * 30)&#10;    print(f&quot;{e:5d} | {lr:10.6f} | {bar}&quot;)&#10;&#10;print(f&quot;\n✅ Smooth decay — no sudden jumps&quot;)&#10;print(f&quot;   Starts at {lr_max}, ends at {lr_min}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<blockquote>[!NOTE] Why Cosine Works Well</blockquote>
+<blockquote>The gradual decay lets the optimizer explore early and converge smoothly late. Empirically outperforms step decay on most tasks. Used by default in many modern training recipes.</blockquote>
+
+<h2>Warmup</h2>
+
+<p>Start with a tiny learning rate and linearly increase to the target over the first few epochs. Prevents early divergence when gradients are noisy:</p>
+
+<pre><code class="language-python">def warmup_schedule(lr_max, epoch, warmup_epochs, total_epochs):&#10;    if epoch &lt; warmup_epochs:&#10;        return lr_max <em> (epoch + 1) / warmup_epochs&#10;    # Then cosine anneal&#10;    progress = (epoch - warmup_epochs) / (total_epochs - warmup_epochs)&#10;    return lr_max </em> 0.5 <em> (1 + np.cos(progress </em> np.pi))</code></pre>
+
+<div data-widget="pyrunner" data-cellid="035-cell-3" data-defaultcode="import numpy as np&#10;&#10;lr_max = 0.01&#10;warmup = 5&#10;total = 40&#10;&#10;print(&quot;Warmup + Cosine Annealing:&quot;)&#10;print(f&quot;{&#39;Epoch&#39;:&gt;5} | {&#39;LR&#39;:&gt;10} | {&#39;Phase&#39;:&gt;10} | Visual&quot;)&#10;print(&quot;─&quot; * 52)&#10;for e in range(total):&#10;    if e &lt; warmup:&#10;        lr = lr_max * (e + 1) / warmup&#10;        phase = &quot;warmup&quot;&#10;    else:&#10;        progress = (e - warmup) / (total - warmup)&#10;        lr = lr_max * 0.5 * (1 + np.cos(progress * np.pi))&#10;        phase = &quot;cosine&quot;&#10;    &#10;    bar = &quot;█&quot; * int(lr / lr_max * 25)&#10;    if e &lt; warmup or e % 5 == 0:&#10;        print(f&quot;{e+1:5d} | {lr:10.6f} | {phase:&gt;10} | {bar}&quot;)&#10;&#10;print(f&quot;\n💡 Warmup prevents early divergence with large batch sizes&quot;)&#10;print(f&quot;   Standard recipe: 5-10 epoch warmup + cosine decay&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Cyclical Learning Rates</h2>
+
+<p>Instead of monotonically decreasing, oscillate between bounds. Helps escape saddle points:</p>
+
+<div data-widget="katex" data-latex="\eta_t = \eta_{min} + (\eta_{max} - \eta_{min}) \cdot \max\left(0, 1 - \left|\frac{t \bmod (2s)}{s} - 1\right|\right)" data-display="true"></div>
+
+<div data-widget="pyrunner" data-cellid="035-cell-4" data-defaultcode="import numpy as np&#10;&#10;lr_min, lr_max = 0.001, 0.01&#10;step_size = 10&#10;epochs = 50&#10;&#10;print(&quot;Cyclical Learning Rate (triangular):&quot;)&#10;print(f&quot;{&#39;Epoch&#39;:&gt;5} | {&#39;LR&#39;:&gt;10} | Visual&quot;)&#10;print(&quot;─&quot; * 42)&#10;for e in range(epochs):&#10;    cycle_pos = abs((e % (2*step_size)) / step_size - 1)&#10;    lr = lr_min + (lr_max - lr_min) * max(0, 1 - cycle_pos)&#10;    bar = &quot;█&quot; * int((lr - lr_min)/(lr_max - lr_min) * 30)&#10;    if e % 5 == 0:&#10;        print(f&quot;{e+1:5d} | {lr:10.6f} | {bar}&quot;)&#10;&#10;print(f&quot;\n🔄 LR bounces between {lr_min} and {lr_max}&quot;)&#10;print(f&quot;   High LR escapes saddle points, low LR refines&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Choosing a Schedule</h2>
+
+<table><tr><td>Schedule</td><td>Best For</td><td>Complexity</td></tr>
+</table>
+<table><tr><td>Fixed LR</td><td>Quick prototyping</td><td>None</td></tr>
+<tr><td>Step Decay</td><td>Known convergence pattern</td><td>Low</td></tr>
+<tr><td>Cosine Annealing</td><td>==Default for most tasks==</td><td>Low</td></tr>
+<tr><td>Warmup + Cosine</td><td>Large batches, transformers</td><td>Medium</td></tr>
+<tr><td>Cyclical</td><td>Escaping saddle points</td><td>Medium</td></tr>
+</table>
+<blockquote>[!IMPORTANT] Practical Rule</blockquote>
+<blockquote>Start with <strong>warmup (5 epochs) + cosine annealing</strong>. Only try other schedules if you have a specific reason. The schedule matters less than getting the base learning rate right.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="035-learning-rate-schedules" data-quizid="quiz-035-learning-rate-schedules"></div>
+
+<script type="application/json" id="quiz-035-learning-rate-schedules">[{"id":"q1","type":"multiple-choice","prompt":"Why use a learning rate schedule instead of a fixed learning rate?","options":["Early training needs large steps to escape bad init; late training needs small steps to settle into minima","Fixed LR never works","Schedules make training faster computationally","Schedules prevent NaN"],"correctIndex":0,"explanation":"A single LR can't be both aggressive (exploration) and precise (convergence). Schedules adapt over time.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"How does step decay work?","options":["Multiply LR by γ every N epochs: η = η₀ × γ^(epoch//step)","Linearly decrease LR each epoch","Randomly adjust LR","Double LR every N epochs"],"correctIndex":0,"explanation":"Step decay drops LR by a factor (e.g., 0.1) at fixed intervals. Simple but causes abrupt changes.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is cosine annealing?","options":["Smoothly decays LR from max to min following a cosine curve","Steps LR down at fixed intervals","Oscillates LR between bounds","Keeps LR constant"],"correctIndex":0,"explanation":"η = η_min + ½(η_max − η_min)(1 + cos(t·π/T)). Smooth, no abrupt drops. Empirically outperforms step decay.","randomize":true},{"id":"q4","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nlr_max, lr_min = 0.01, 0.001\nt, T = 25, 50\nlr = lr_min + 0.5<em>(lr_max-lr_min)</em>(1 + np.cos(t*np.pi/T))\nprint(f'{lr:.4f}')","options":["0.0055","0.0050","0.0010","0.0100"],"correctIndex":0,"explanation":"At t=T/2, cos(π/2)=0. lr = 0.001 + 0.5×0.009×1 = 0.0055. Midpoint between min and max.","randomize":false},{"id":"q5","type":"multiple-choice","prompt":"What does warmup do?","options":["Starts with tiny LR and linearly increases to target over first few epochs","Starts with large LR and decreases","Keeps LR constant for initial epochs","Randomly initializes LR"],"correctIndex":0,"explanation":"Warmup prevents early divergence when weights are random and gradients are noisy. Gradually builds confidence.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"Why does warmup help with large batch sizes?","options":["Random init + large batch = noisy gradients; full LR early causes catastrophic updates","Large batches don't need warmup","Warmup increases effective batch size","Only useful for SGD"],"correctIndex":0,"explanation":"Large batches amplify gradient noise from random initialization. Warmup starts conservatively, letting the model stabilize before full LR.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"What is the standard modern training recipe for learning rate?","options":["Warmup (5-10 epochs) + cosine annealing","Fixed LR throughout","Step decay only","Cyclical LR only"],"correctIndex":0,"explanation":"Warmup + cosine is the default for transformers and most modern architectures. Simple and effective.","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"What advantage does cosine annealing have over step decay?","options":["Smooth continuous decay — no abrupt LR drops that destabilize optimization","Computationally cheaper","Always converges faster","No hyperparameters needed"],"correctIndex":0,"explanation":"Step decay causes sudden jumps. Cosine provides smooth decay that empirically leads to better final performance.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"What do cyclical learning rates do?","options":["Oscillate LR between min and max bounds, helping escape saddle points","Monotonically decrease LR","Keep LR constant","Randomly change LR"],"correctIndex":0,"explanation":"High LR phases escape saddle points/local minima. Low LR phases refine the solution. Triangular or cosine cycles.","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"At what point in cosine annealing is the LR at its minimum?","options":["At the end of training (t = T)","At the start","At the midpoint","Never reaches minimum"],"correctIndex":0,"explanation":"cos(T·π/T) = cos(π) = −1. So lr = lr_min + ½(lr_max−lr_min)(1−1) = lr_min.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"At what point in cosine annealing is the LR at its maximum?","options":["At the start of training (t = 0)","At the end","At the midpoint","After warmup"],"correctIndex":0,"explanation":"cos(0) = 1. So lr = lr_min + ½(lr_max−lr_min)(1+1) = lr_max.","randomize":true},{"id":"q12","type":"multiple-choice","prompt":"With step decay (γ=0.1, step=10), what is the LR at epoch 25 if lr_init=0.01?","options":["0.0001","0.001","0.01","0.00001"],"correctIndex":0,"explanation":"epoch//step = 25//10 = 2. lr = 0.01 × 0.1² = 0.01 × 0.01 = 0.0001.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"Why might you use cyclical LR instead of monotonic decay?","options":["To periodically escape saddle points and local minima with high-LR phases","Cyclical is always better","To reduce memory usage","To avoid warmup"],"correctIndex":0,"explanation":"Periodic high-LR phases can push the optimizer out of sharp local minima, potentially finding flatter (better generalizing) minima.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"How many warmup epochs are typical?","options":["5-10 epochs","50-100 epochs","1 epoch","0 — warmup isn't used"],"correctIndex":0,"explanation":"5-10 warmup epochs is standard. Enough to stabilize without wasting training time.","randomize":true},{"id":"q15","type":"multiple-choice","prompt":"Does the learning rate schedule matter more than the base learning rate?","options":["No — getting the base LR right matters more than the schedule choice","Yes — schedule is everything","They're equally important always","Schedule matters only for SGD"],"correctIndex":0,"explanation":"A good base LR with no schedule beats a bad LR with a fancy schedule. Fix the LR first, then tune the schedule.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"What happens at the end of cosine annealing (t=T)?","options":["LR reaches lr_min","LR reaches lr_max","LR is at midpoint","LR becomes zero"],"correctIndex":0,"explanation":"cos(π) = −1, so lr = lr_min + ½(lr_max−lr_min)(0) = lr_min. The model fine-tunes with minimal updates.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"Which schedule is recommended as default for most tasks?","options":["Cosine annealing (with optional warmup)","Step decay","Cyclical","Fixed LR"],"correctIndex":0,"explanation":"Cosine annealing is the modern default. Smooth, simple, and empirically strong across architectures.","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"In warmup + cosine, what happens during the warmup phase?","options":["LR linearly increases from near-zero to lr_max","LR stays constant","LR decreases","LR oscillates"],"correctIndex":0,"explanation":"Linear ramp-up: lr = lr_max × (epoch+1)/warmup_epochs. Then transitions to cosine decay.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"What is the cosine annealing LR at exactly the midpoint of training?","options":["The average of lr_max and lr_min","lr_max","lr_min","Zero"],"correctIndex":0,"explanation":"At t=T/2, cos(π/2)=0. lr = lr_min + ½(lr_max−lr_min) = (lr_max+lr_min)/2.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"When should you try a different schedule than cosine annealing?","options":["When you have a specific reason (e.g., cyclical for saddle points, step decay for known convergence pattern)","Always experiment with all schedules","Never — cosine is always best","Only for regression tasks"],"correctIndex":0,"explanation":"Start with cosine. Only switch if diagnostics show a problem (stuck in saddle → cyclical, known milestones → step decay).","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/034-evaluation-metrics.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/036-conv2d-from-scratch.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

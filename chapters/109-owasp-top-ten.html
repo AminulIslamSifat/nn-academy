@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The OWASP Top 10 — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="109-owasp-top-ten" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">The OWASP Top 10</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 6 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">The OWASP Top 10</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">The ten most critical web application risks and how each one gets exploited in practice.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>What Is OWASP?</h2>
+
+<p>The Open Web Application Security Project maintains a consensus list of the most critical web risks, updated every few years based on real-world vulnerability data. It is the de-facto starting point for any web security assessment.</p>
+
+<h2>The Current Top 10</h2>
+
+<li><strong>Broken Access Control</strong> — acting on data you should not reach.</li>
+<li><strong>Cryptographic Failures</strong> — exposing or mishandling sensitive data.</li>
+<li><strong>Injection</strong> — untrusted input executed as code or queries.</li>
+<li><strong>Insecure Design</strong> — flaws in the design, not the implementation.</li>
+<li><strong>Security Misconfiguration</strong> — default creds, open cloud storage, verbose errors.</li>
+<li><strong>Vulnerable & Outdated Components</strong> — shipping known-bad libraries.</li>
+<li><strong>Identification & Auth Failures</strong> — weak sessions and credential handling.</li>
+<li><strong>Software & Data Integrity Failures</strong> — insecure CI/CD and deserialization.</li>
+<li><strong>Logging & Monitoring Failures</strong> — breaches go unnoticed.</li>
+<li><strong>Server-Side Request Forgery</strong> — forcing the server to fetch attacker-chosen URLs.</li>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Broken Access Control is number one" data-content="Access-control failures have topped the list because they are pervasive and often invisible to automated scanners. Always test authorization, not just authentication."></div>
+
+<h2>Deep Dive: Broken Access Control</h2>
+
+<p>Access control enforces that users can only do what they are authorized to do. When it breaks:</p>
+
+<ul><li><strong>Horizontal escalation</strong> — User A accesses User B's data by changing an ID.</li>
+<li><strong>Vertical escalation</strong> — A regular user accesses admin functionality.</li>
+<li><strong>IDOR</strong> — Insecure Direct Object References expose internal IDs.</li>
+</ul>
+<pre><code class="language-python"># Vulnerable: no ownership check&#10;@app.route(&quot;/api/orders/&lt;order_id&gt;&quot;)&#10;def get_order(order_id):&#10;    return db.get_order(order_id)  # Any user can access any order&#10;&#10;# Fixed: verify ownership&#10;@app.route(&quot;/api/orders/&lt;order_id&gt;&quot;)&#10;def get_order(order_id):&#10;    order = db.get_order(order_id)&#10;    if order.user_id != current_user.id:&#10;        abort(403)&#10;    return order</code></pre>
+
+<h2>Deep Dive: Injection</h2>
+
+<p>Injection was number one for years and remains in the top three. The root cause is mixing untrusted data with code. See the dedicated chapter on injection attacks for SQL injection, command injection, and XSS in depth.</p>
+
+<h2>Deep Dive: Security Misconfiguration</h2>
+
+<p>This is the most common finding in assessments:</p>
+
+<ul><li>Default admin accounts still active.</li>
+<li>Cloud storage buckets open to the public.</li>
+<li>Verbose error messages revealing stack traces.</li>
+<li>Unnecessary features enabled (directory listing, debug mode).</li>
+<li>Missing security headers (CSP, HSTS, X-Frame-Options).</li>
+</ul>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Default credentials are still a thing" data-content="Scanners routinely find admin panels with admin/admin. Change every default credential during deployment and disable accounts you do not use."></div>
+
+<h2>Deep Dive: Cryptographic Failures</h2>
+
+<p>Sensitive data exposed through:</p>
+
+<ul><li>Transmitting data over HTTP instead of HTTPS.</li>
+<li>Storing passwords with fast hashes (MD5, SHA-1) or in plaintext.</li>
+<li>Using weak algorithms (DES, RC4, ECB mode).</li>
+<li>Hardcoding encryption keys in source code.</li>
+</ul>
+<h2>How to Use This List</h2>
+
+<p>Treat each item as a checklist during design review and testing:</p>
+
+<li><strong>Design phase</strong> — for each feature, ask which Top 10 items could apply.</li>
+<li><strong>Code review</strong> — check for the specific patterns that cause each item.</li>
+<li><strong>Testing</strong> — actively try to trigger each one in your application.</li>
+<li><strong>Monitoring</strong> — ensure you have detection for the attacks each item represents.</li>
+
+<h2>Interactive: OWASP Configuration Checker</h2>
+
+<div data-widget="pyrunner" data-cellid="109-owasp-top-ten-cell-1" data-defaultcode="# Simulate checking an application config against OWASP Top 10&#10;config = {&#10;    &quot;https_enforced&quot;: True,&#10;    &quot;password_hashing&quot;: &quot;bcrypt&quot;,&#10;    &quot;access_control_checked&quot;: False,&#10;    &quot;error_messages&quot;: &quot;verbose&quot;,&#10;    &quot;security_headers&quot;: {&quot;CSP&quot;: False, &quot;HSTS&quot;: True, &quot;X-Frame-Options&quot;: True},&#10;    &quot;dependency_scan&quot;: False,&#10;    &quot;logging_enabled&quot;: True,&#10;    &quot;debug_mode&quot;: True,&#10;    &quot;default_admin_disabled&quot;: False,&#10;}&#10;&#10;checks = [&#10;    (&quot;A02 Cryptographic Failures&quot;, lambda c: c[&quot;https_enforced&quot;] and c[&quot;password_hashing&quot;] in (&quot;bcrypt&quot;, &quot;argon2&quot;, &quot;scrypt&quot;)),&#10;    (&quot;A01 Broken Access Control&quot;, lambda c: c[&quot;access_control_checked&quot;]),&#10;    (&quot;A05 Security Misconfiguration&quot;, lambda c: c[&quot;error_messages&quot;] != &quot;verbose&quot; and not c[&quot;debug_mode&quot;] and c[&quot;default_admin_disabled&quot;]),&#10;    (&quot;A06 Vulnerable Components&quot;, lambda c: c[&quot;dependency_scan&quot;]),&#10;    (&quot;A09 Logging Failures&quot;, lambda c: c[&quot;logging_enabled&quot;]),&#10;]&#10;&#10;print(&quot;OWASP Top 10 Configuration Assessment&quot;)&#10;print(&quot;=&quot; * 55)&#10;passed = 0&#10;failed = 0&#10;for name, check_fn in checks:&#10;    result = check_fn(config)&#10;    status = &quot;PASS&quot; if result else &quot;FAIL&quot;&#10;    if result:&#10;        passed += 1&#10;    else:&#10;        failed += 1&#10;    print(f&quot;  [{status}] {name}&quot;)&#10;&#10;print(f&quot;\nScore: {passed}/{len(checks)} checks passed&quot;)&#10;if failed &gt; 0:&#10;    print(f&quot;\nAction items:&quot;)&#10;    if not config[&quot;access_control_checked&quot;]:&#10;        print(&quot;  - Implement and test authorization checks on every endpoint&quot;)&#10;    if config[&quot;error_messages&quot;] == &quot;verbose&quot;:&#10;        print(&quot;  - Switch to generic error messages in production&quot;)&#10;    if config[&quot;debug_mode&quot;]:&#10;        print(&quot;  - Disable debug mode in production&quot;)&#10;    if not config[&quot;default_admin_disabled&quot;]:&#10;        print(&quot;  - Remove or disable default admin account&quot;)&#10;    if not config[&quot;dependency_scan&quot;]:&#10;        print(&quot;  - Add dependency scanning to CI pipeline&quot;)" data-timeout="8" data-title="OWASP Configuration Checker"></div>
+
+<h2>Interactive: Attack Surface Mapper</h2>
+
+<div data-widget="pyrunner" data-cellid="109-owasp-top-ten-cell-2" data-defaultcode="# Map application endpoints to OWASP risk categories&#10;endpoints = [&#10;    {&quot;path&quot;: &quot;/api/user/profile&quot;, &quot;auth&quot;: True, &quot;input&quot;: True, &quot;data_sensitivity&quot;: &quot;medium&quot;},&#10;    {&quot;path&quot;: &quot;/api/admin/users&quot;, &quot;auth&quot;: True, &quot;input&quot;: False, &quot;data_sensitivity&quot;: &quot;high&quot;},&#10;    {&quot;path&quot;: &quot;/api/orders/&lt;id&gt;&quot;, &quot;auth&quot;: True, &quot;input&quot;: True, &quot;data_sensitivity&quot;: &quot;medium&quot;},&#10;    {&quot;path&quot;: &quot;/api/upload&quot;, &quot;auth&quot;: True, &quot;input&quot;: True, &quot;data_sensitivity&quot;: &quot;low&quot;},&#10;    {&quot;path&quot;: &quot;/api/search&quot;, &quot;auth&quot;: False, &quot;input&quot;: True, &quot;data_sensitivity&quot;: &quot;low&quot;},&#10;    {&quot;path&quot;: &quot;/api/payment&quot;, &quot;auth&quot;: True, &quot;input&quot;: True, &quot;data_sensitivity&quot;: &quot;high&quot;},&#10;]&#10;&#10;def assess_risk(ep):&#10;    risks = []&#10;    if ep[&quot;data_sensitivity&quot;] == &quot;high&quot; and not ep[&quot;auth&quot;]:&#10;        risks.append(&quot;A01: High-sensitivity data without auth&quot;)&#10;    if ep[&quot;input&quot;]:&#10;        risks.append(&quot;A03: User input (injection risk)&quot;)&#10;    if ep[&quot;data_sensitivity&quot;] == &quot;high&quot;:&#10;        risks.append(&quot;A02: Sensitive data handling&quot;)&#10;    if not ep[&quot;auth&quot;]:&#10;        risks.append(&quot;A07: Unauthenticated endpoint&quot;)&#10;    return risks&#10;&#10;print(&quot;Attack Surface Risk Mapping&quot;)&#10;print(&quot;=&quot; * 60)&#10;for ep in endpoints:&#10;    risks = assess_risk(ep)&#10;    risk_level = &quot;HIGH&quot; if len(risks) &gt;= 2 else &quot;MED&quot; if len(risks) == 1 else &quot;LOW&quot;&#10;    print(f&quot;\n  {ep[&#39;path&#39;]} [{risk_level}]&quot;)&#10;    for r in risks:&#10;        print(f&quot;    - {r}&quot;)&#10;&#10;print(&quot;\n--- Priority Testing Order ---&quot;)&#10;scored = [(ep[&quot;path&quot;], len(assess_risk(ep))) for ep in endpoints]&#10;scored.sort(key=lambda x: -x[1])&#10;for i, (path, score) in enumerate(scored, 1):&#10;    print(f&quot;  {i}. {path} (risk score: {score})&quot;)" data-timeout="8" data-title="Attack Surface Mapper"></div>
+
+<h2>Summary</h2>
+
+<p>The OWASP Top 10 gives you the vocabulary of web risk. Use it as a living checklist throughout the development lifecycle: during design, code review, testing, and monitoring. The next chapters drill into the individual items in depth.</p>
+
+<div data-widget="quiz" data-chapterslug="109-owasp-top-ten" data-quizid="quiz-109-owasp-top-ten"></div>
+
+<script type="application/json" id="quiz-109-owasp-top-ten">[{"id":"q1","type":"multiple-choice","prompt":"What is currently ranked as the number one OWASP Top 10 risk?","options":["Injection","Broken Access Control","Cryptographic Failures","Security Misconfiguration"],"correctIndex":1,"explanation":"Broken Access Control moved to number one because access-control failures are pervasive, often invisible to automated scanners, and can expose entire datasets.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is an Insecure Direct Object Reference (IDOR)?","options":["A type of SQL injection","Exposing internal object IDs that allow users to access resources they should not","A cross-site scripting attack","A misconfigured firewall rule"],"correctIndex":1,"explanation":"IDOR occurs when an application uses user-supplied IDs to access objects directly without verifying authorization. Changing the ID lets a user access another user's data.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"Which OWASP item covers default credentials, open cloud storage, and verbose errors?","options":["Injection","Broken Access Control","Security Misconfiguration","Cryptographic Failures"],"correctIndex":2,"explanation":"Security Misconfiguration (A05) covers deployment and configuration weaknesses: default accounts, unnecessary features, verbose errors, and missing security headers.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why is the OWASP Top 10 described as a consensus list?","options":["It is voted on by the public","It is based on real-world vulnerability data and expert agreement","It is mandated by governments","It is generated by AI"],"correctIndex":1,"explanation":"The OWASP Top 10 is compiled from real-world vulnerability data, industry surveys, and expert consensus. It reflects what the community agrees are the most critical risks.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"When should you check against the OWASP Top 10?","options":["Only during annual audits","Throughout the lifecycle: design, code review, testing, and monitoring","Only after a breach","Only during penetration tests"],"correctIndex":1,"explanation":"The Top 10 is most effective when used continuously: during design (threat modeling), code review (pattern checking), testing (active exploitation attempts), and monitoring (detection rules).","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/108-wireless-security.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/110-injection-attacks.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

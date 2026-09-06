@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Automation with Python — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="127-security-automation-python" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Security Automation with Python</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Security Automation with Python</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Script common security tasks: IOC extraction, log analysis, entropy scoring, and report generation.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Why Automate?</h2>
+
+<p>Security teams drown in repetitive work: parsing logs, extracting indicators, checking configurations, generating reports. Python is the lingua franca of security scripting because it is readable, has a rich standard library, and integrates with everything.</p>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Automate the boring stuff" data-content="If you do a task more than three times, script it. The time investment pays for itself quickly and eliminates human error in repetitive analysis."></div>
+
+<h2>Common Security Scripting Tasks</h2>
+
+<table><tr><td>Task</td><td>Python Approach</td></tr>
+</table>
+<table><tr><td>Extract IOCs from logs</td><td>Regex + string parsing</td></tr>
+<tr><td>Detect suspicious strings</td><td>Shannon entropy calculation</td></tr>
+<tr><td>Parse firewall rules</td><td>Structured text parsing</td></tr>
+<tr><td>Check SSL/TLS configs</td><td>Socket + ssl module</td></tr>
+<tr><td>Generate reports</td><td>String formatting, JSON output</td></tr>
+<tr><td>Correlate events</td><td>Dictionaries, sets, timestamps</td></tr>
+</table>
+<h2>Shannon Entropy for String Analysis</h2>
+
+<p>High-entropy strings in logs or binaries often indicate:</p>
+
+<ul><li>Encoded/encrypted payloads</li>
+<li>Base64-encoded commands</li>
+<li>Randomly generated filenames (malware)</li>
+<li>Compressed data</li>
+</ul>
+<p>$H = -\sum_{i} p_i \log_2 p_i$</p>
+
+<p>Where $p_i$ is the frequency of character $i$ in the string.</p>
+
+<h2>Interactive: IOC Extraction from Logs</h2>
+
+<div data-widget="pyrunner" data-cellid="127-security-automation-python-cell-1" data-defaultcode="import re&#10;from collections import Counter&#10;&#10;# Simulated raw log blob from multiple sources&#10;log_blob = &quot;&quot;&quot;&#10;2024-03-15 08:12:01 WARN Connection from 185.220.101.45 to internal 10.0.0.5:445&#10;2024-03-15 08:12:05 ALERT DNS query for evil-c2.example.com from 10.0.0.5&#10;2024-03-15 08:13:00 WARN HTTP request to http://malware-drop.example.net/payload.exe&#10;2024-03-15 08:14:00 INFO User jdoe logged in from 172.16.0.20&#10;2024-03-15 08:15:00 ALERT Outbound connection 10.0.0.5:49152 -&gt; 91.219.236.174:8443&#10;2024-03-15 08:16:00 WARN Email received from phisher@evil-domain.com with attachment invoice.pdf.exe&#10;2024-03-15 08:17:00 INFO Scheduled task created: C:\temp\.hidden\beacon.exe&#10;2024-03-15 08:18:00 ALERT DNS query for c2-callback.example.org from 10.0.0.5&#10;2024-03-15 08:19:00 WARN Failed SSH login from 185.220.101.45 (attempt 47)&#10;&quot;&quot;&quot;&#10;&#10;# IOC extraction patterns&#10;patterns = {&#10;    &quot;IP Address&quot;: r&#39;\b(?:\d{1,3}\.){3}\d{1,3}\b&#39;,&#10;    &quot;Domain&quot;: r&#39;\b(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}\b&#39;,&#10;    &quot;URL&quot;: r&#39;https?://[^\s&quot;&lt;&gt;]+&#39;,&#10;    &quot;Email&quot;: r&#39;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&#39;,&#10;    &quot;File Path&quot;: r&#39;[A-Za-z]:\[^\s]+&#39;,&#10;}&#10;&#10;print(&quot;IOC Extraction from Log Data&quot;)&#10;print(&quot;=&quot; * 55)&#10;&#10;all_iocs = {}&#10;for ioc_type, pattern in patterns.items():&#10;    matches = set(re.findall(pattern, log_blob))&#10;    # Filter out common false positives&#10;    if ioc_type == &quot;IP Address&quot;:&#10;        matches = {m for m in matches if not m.startswith(&quot;10.&quot;) and not m.startswith(&quot;172.&quot;)}&#10;    if ioc_type == &quot;Domain&quot;:&#10;        matches = {m for m in matches if &quot;example&quot; in m}&#10;    if matches:&#10;        all_iocs[ioc_type] = sorted(matches)&#10;        print(f&quot;\n{ioc_type} ({len(matches)} found):&quot;)&#10;        for m in sorted(matches):&#10;            print(f&quot;  {m}&quot;)&#10;&#10;# Count IOC mentions for prioritization&#10;all_text = log_blob&#10;print(&quot;\n--- IOC Frequency (prioritization) ---&quot;)&#10;for ioc_type, iocs in all_iocs.items():&#10;    for ioc in iocs:&#10;        count = all_text.count(ioc)&#10;        print(f&quot;  {ioc:35s} mentioned {count}x&quot;)" data-timeout="8" data-title="IOC Extraction Script"></div>
+
+<h2>Interactive: Shannon Entropy Analyzer</h2>
+
+<div data-widget="pyrunner" data-cellid="127-security-automation-python-cell-2" data-defaultcode="import math&#10;from collections import Counter&#10;&#10;def shannon_entropy(s):&#10;    if not s:&#10;        return 0.0&#10;    freq = Counter(s)&#10;    length = len(s)&#10;    return -sum((count/length) * math.log2(count/length) for count in freq.values())&#10;&#10;# Test strings - normal vs suspicious&#10;test_strings = [&#10;    (&quot;Normal filename&quot;, &quot;report_2024_q1.pdf&quot;),&#10;    (&quot;Normal path&quot;, &quot;/var/log/syslog&quot;),&#10;    (&quot;Base64 encoded payload&quot;, &quot;aGVsbG8gd29ybGQgdGhpcyBpcyBhIHNlY3JldCBwYXlsb2Fk&quot;),&#10;    (&quot;Random malware name&quot;, &quot;x7kQ9mP2vR4wL8nJ&quot;),&#10;    (&quot;Encrypted-looking blob&quot;, &quot;4f8a2c1e9b3d7f6a5e0c8d2b1a9f4e7d&quot;),&#10;    (&quot;Normal command&quot;, &quot;systemctl restart nginx&quot;),&#10;    (&quot;Suspicious registry key&quot;, &quot;HKCU\Software\Microsoft\Windows\CurrentVersion\Run\x7kQ9m&quot;),&#10;]&#10;&#10;print(&quot;Shannon Entropy String Analyzer&quot;)&#10;print(&quot;=&quot; * 60)&#10;print(f&quot;{&#39;Description&#39;:25s} {&#39;Entropy&#39;:&gt;8s} {&#39;Assessment&#39;}&quot;)&#10;print(f&quot;{&#39;-&#39;*25} {&#39;-&#39;*8} {&#39;-&#39;*20}&quot;)&#10;&#10;for desc, s in test_strings:&#10;    h = shannon_entropy(s)&#10;    if h &gt; 4.0:&#10;        assessment = &quot;SUSPICIOUS (high entropy)&quot;&#10;    elif h &gt; 3.0:&#10;        assessment = &quot;Moderate (review)&quot;&#10;    else:&#10;        assessment = &quot;Normal&quot;&#10;    print(f&quot;  {desc:25s} {h:8.2f}  {assessment}&quot;)&#10;&#10;print(&quot;\nThreshold guide:&quot;)&#10;print(&quot;  &lt; 3.0  : Normal text/paths&quot;)&#10;print(&quot;  3.0-4.0: Mixed content, review&quot;)&#10;print(&quot;  &gt; 4.0  : Likely encoded/encrypted/random&quot;)" data-timeout="8" data-title="Entropy-Based String Analyzer"></div>
+
+<h2>Building a Security Toolkit</h2>
+
+<p>Structure your scripts for reuse:</p>
+
+<pre><code class="language-python"># security_utils.py&#10;import re&#10;import math&#10;from collections import Counter&#10;&#10;def extract_iocs(text, patterns=None):&#10;    &quot;&quot;&quot;Extract IOCs from text using regex patterns.&quot;&quot;&quot;&#10;    # ... implementation&#10;&#10;def entropy(s):&#10;    &quot;&quot;&quot;Calculate Shannon entropy of a string.&quot;&quot;&quot;&#10;    # ... implementation&#10;&#10;def parse_log_line(line):&#10;    &quot;&quot;&quot;Parse a syslog-format line into a dict.&quot;&quot;&quot;&#10;    # ... implementation</code></pre>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Keep scripts modular" data-content="Write small, composable functions. A script that extracts IOCs, one that scores entropy, and one that formats reports can be combined in different ways for different investigations."></div>
+
+<h2>Summary</h2>
+
+<p>Python security automation saves hours of manual work and reduces errors. Start with IOC extraction and entropy analysis, build a reusable toolkit, and integrate with your SIEM and ticketing systems. The goal is to let the machine do the repetitive work so you can focus on analysis.</p>
+
+<div data-widget="quiz" data-chapterslug="127-security-automation-python" data-quizid="quiz-127-security-automation-python"></div>
+
+<script type="application/json" id="quiz-127-security-automation-python">[{"id":"q1","type":"multiple-choice","prompt":"What does a high Shannon entropy score in a string suggest?","options":["The string is a normal file path","The string is likely encoded, encrypted, or randomly generated","The string is too short to analyze","The string contains only numbers"],"correctIndex":1,"explanation":"High entropy means the character distribution is close to uniform, which is characteristic of encoded data, encrypted blobs, or random strings rather than natural language or file paths.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why should you filter internal IPs when extracting IOC candidates from logs?","options":["Internal IPs are always malicious","Internal IPs are expected traffic and would create false positives in the IOC list","Regex cannot match internal IPs","Internal IPs are encrypted"],"correctIndex":1,"explanation":"Internal IPs (10.x, 172.16-31.x, 192.168.x) are normal infrastructure. Including them as IOCs would flood your threat intel with false positives.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the benefit of writing modular security scripts?","options":["They run faster","Small composable functions can be combined for different investigations and are easier to maintain","They require less disk space","They do not need testing"],"correctIndex":1,"explanation":"Modular scripts with small, focused functions can be mixed and matched for different tasks. They are also easier to test, debug, and share with teammates.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Which Python standard library module is most useful for IOC extraction from text?","options":["numpy","re (regular expressions)","math","itertools"],"correctIndex":1,"explanation":"Regular expressions are the primary tool for pattern matching in text. IOC extraction relies on regex patterns to find IPs, domains, URLs, emails, and file paths in unstructured log data.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/126-password-attacks-lab.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/128-compliance-frameworks.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

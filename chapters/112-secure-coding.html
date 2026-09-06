@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Coding Practices — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="112-secure-coding" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Secure Coding Practices</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 7 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Secure Coding Practices</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Building security into code review, dependency management, secrets handling, and the CI/CD pipeline.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Shift Left</h2>
+
+<p>Fixing a vulnerability in design costs orders of magnitude less than fixing it after deployment. Security must be woven into the workflow, not audited at the end.</p>
+
+<pre><code class="language-text">Design -&gt; Code -&gt; Review -&gt; CI -&gt; Deploy -&gt; Runtime&#10;  $1       $10     $50     $100   $1000    $10000+</code></pre>
+
+<h2>Input Validation & Output Encoding</h2>
+
+<p>Validate all input at the boundary. Encode all output for its context (HTML, URL, SQL, shell). These two habits remove the majority of injection bugs.</p>
+
+<pre><code class="language-python"># Input validation: whitelist approach&#10;def validate_email(email):&#10;    pattern = r&#39;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}{{CONTENT}}#39;&#10;    if not re.match(pattern, email):&#10;        raise ValueError(&quot;Invalid email format&quot;)&#10;    return email&#10;&#10;# Output encoding: context-specific&#10;import html&#10;def render_user_input(user_input):&#10;    return html.escape(user_input)  # HTML context</code></pre>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Whitelist over blacklist" data-content="Blocking known-bad patterns (blacklisting) always misses something. Allowing only known-good patterns (whitelisting) is far more robust. Validate format, length, type, and range."></div>
+
+<h2>Dependency Hygiene</h2>
+
+<ul><li>Keep a <strong>software bill of materials</strong>.</li>
+<li>Pin versions and audit for known CVEs.</li>
+<li>Remove unused dependencies — each is added attack surface.</li>
+<li>Review changelogs before updating, especially for major version bumps.</li>
+</ul>
+<pre><code class="language-bash"># Python: check for known vulnerabilities&#10;pip-audit&#10;&#10;# Node.js: check the dependency tree&#10;npm audit&#10;&#10;# Both: automate in CI&#10;pip-audit --fail-on-vuln  # fails CI if vulnerability found</code></pre>
+
+<h2>Secrets Management</h2>
+
+<p>Never commit secrets to version control. Use a secret manager or environment injection at deploy time, and rotate keys.</p>
+
+<h3>Common Mistakes</h3>
+
+<pre><code class="language-python"># NEVER do this&#10;API_KEY = &quot;sk-live-4eC39HqLyjWDarjtT1zdp7dc&quot;&#10;DB_PASSWORD = &quot;hunter2&quot;&#10;&#10;# Do this instead&#10;import os&#10;API_KEY = os.environ[&quot;API_KEY&quot;]  # Injected at deploy time</code></pre>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="The .env trap" data-content="A committed `.env` file lives forever in git history even after deletion. If you ever committed a secret, treat it as compromised and rotate it immediately. Use `git filter-branch` or BFG Repo-Cleaner to remove it from history, and rotate the key."></div>
+
+<h3>Secret Detection in CI</h3>
+
+<p>Add tools like <strong>gitleaks</strong> or <strong>trufflehog</strong> to your CI pipeline to catch secrets before they are merged:</p>
+
+<pre><code class="language-yaml"># GitHub Actions example&#10;- name: Secret scan&#10;  run: gitleaks detect --source . --verbose</code></pre>
+
+<h2>Automate the Checks</h2>
+
+<p>Add these to CI so regressions are caught before merge:</p>
+
+<table><tr><td>Check</td><td>Tool Examples</td><td>Catches</td></tr>
+</table>
+<table><tr><td>SAST</td><td>Semgrep, Bandit, ESLint</td><td>Code-level vulnerabilities</td></tr>
+<tr><td>Dependency scan</td><td>pip-audit, npm audit</td><td>Known CVEs in libraries</td></tr>
+<tr><td>Secret detection</td><td>gitleaks, trufflehog</td><td>Committed credentials</td></tr>
+<tr><td>Container scan</td><td>Trivy, Grype</td><td>Vulnerable base images</td></tr>
+<tr><td>License check</td><td>license-checker</td><td>Legal compliance</td></tr>
+</table>
+<h2>Interactive: Dependency Vulnerability Scanner</h2>
+
+<div data-widget="pyrunner" data-cellid="112-secure-coding-cell-1" data-defaultcode="# Simulate scanning dependencies against known-bad versions&#10;dependencies = [&#10;    {&quot;name&quot;: &quot;django&quot;, &quot;version&quot;: &quot;3.2.14&quot;, &quot;ecosystem&quot;: &quot;pypi&quot;},&#10;    {&quot;name&quot;: &quot;requests&quot;, &quot;version&quot;: &quot;2.28.0&quot;, &quot;ecosystem&quot;: &quot;pypi&quot;},&#10;    {&quot;name&quot;: &quot;express&quot;, &quot;version&quot;: &quot;4.17.1&quot;, &quot;ecosystem&quot;: &quot;npm&quot;},&#10;    {&quot;name&quot;: &quot;lodash&quot;, &quot;version&quot;: &quot;4.17.20&quot;, &quot;ecosystem&quot;: &quot;npm&quot;},&#10;    {&quot;name&quot;: &quot;log4j-core&quot;, &quot;version&quot;: &quot;2.14.1&quot;, &quot;ecosystem&quot;: &quot;maven&quot;},&#10;    {&quot;name&quot;: &quot;flask&quot;, &quot;version&quot;: &quot;2.2.2&quot;, &quot;ecosystem&quot;: &quot;pypi&quot;},&#10;]&#10;&#10;# Simulated CVE database&#10;known_vulns = {&#10;    (&quot;django&quot;, &quot;3.2.14&quot;): &quot;CVE-2022-34265: SQL injection in Trunc/Extract&quot;,&#10;    (&quot;lodash&quot;, &quot;4.17.20&quot;): &quot;CVE-2021-23337: Command injection via template&quot;,&#10;    (&quot;log4j-core&quot;, &quot;2.14.1&quot;): &quot;CVE-2021-44228: Log4Shell RCE (CRITICAL)&quot;,&#10;}&#10;&#10;print(&quot;Dependency Vulnerability Scan&quot;)&#10;print(&quot;=&quot; * 60)&#10;&#10;vulns_found = 0&#10;for dep in dependencies:&#10;    key = (dep[&quot;name&quot;], dep[&quot;version&quot;])&#10;    if key in known_vulns:&#10;        vulns_found += 1&#10;        severity = &quot;CRITICAL&quot; if &quot;CRITICAL&quot; in known_vulns[key] else &quot;HIGH&quot;&#10;        print(f&quot;  [VULN] {dep[&#39;name&#39;]}=={dep[&#39;version&#39;]} ({dep[&#39;ecosystem&#39;]})&quot;)&#10;        print(f&quot;         {known_vulns[key]}&quot;)&#10;        print(f&quot;         Severity: {severity}&quot;)&#10;    else:&#10;        print(f&quot;  [OK]   {dep[&#39;name&#39;]}=={dep[&#39;version&#39;]} ({dep[&#39;ecosystem&#39;]})&quot;)&#10;&#10;print(f&quot;\nScan complete: {vulns_found} vulnerable dependencies out of {len(dependencies)}&quot;)&#10;if vulns_found &gt; 0:&#10;    print(&quot;\nRemediation:&quot;)&#10;    print(&quot;  - Upgrade django to &gt;= 3.2.15&quot;)&#10;    print(&quot;  - Upgrade lodash to &gt;= 4.17.21&quot;)&#10;    print(&quot;  - UPGRADE log4j-core to &gt;= 2.17.1 IMMEDIATELY (Log4Shell)&quot;)" data-timeout="8" data-title="Dependency Vulnerability Scanner"></div>
+
+<h2>Interactive: Secret Detection with Regex</h2>
+
+<div data-widget="pyrunner" data-cellid="112-secure-coding-cell-2" data-defaultcode="import re&#10;&#10;# Simulated code snippets that might appear in a PR&#10;code_samples = [&#10;    &#39;db_url = &quot;postgres://admin:SuperSecret123@prod-db:5432/app&quot;&#39;,&#10;    &#39;API_KEY = &quot;sk-proj-abc123def456ghi789&quot;&#39;,&#10;    &#39;aws_secret = &quot;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&quot;&#39;,&#10;    &#39;connection = os.environ[&quot;DATABASE_URL&quot;]  # Good practice&#39;,&#10;    &#39;token = config.get(&quot;auth_token&quot;)  # From secret manager&#39;,&#10;]&#10;&#10;# Secret detection patterns&#10;patterns = [&#10;    (r&#39;[&quot;\&#39;](?:postgres|mysql|mongodb)://[^:]+:[^@]+@&#39;, &quot;Database connection string with credentials&quot;),&#10;    (r&#39;[&quot;\&#39;]sk-[a-zA-Z0-9\-]{20,}[&quot;\&#39;]&#39;, &quot;API secret key&quot;),&#10;    (r&#39;[&quot;\&#39;](?:AKIA|ASIA)[A-Z0-9]{16}[&quot;\&#39;]&#39;, &quot;AWS access key ID&quot;),&#10;    (r&#39;(?:password|passwd|pwd|secret|token|key)\s*=\s*[&quot;\&#39;][^&quot;\&#39;]{8,}[&quot;\&#39;]&#39;, &quot;Hardcoded secret assignment&quot;),&#10;]&#10;&#10;print(&quot;Secret Detection Scanner&quot;)&#10;print(&quot;=&quot; * 60)&#10;&#10;findings = 0&#10;for i, code in enumerate(code_samples, 1):&#10;    detected = []&#10;    for pattern, label in patterns:&#10;        if re.search(pattern, code, re.IGNORECASE):&#10;            detected.append(label)&#10;&#10;    if detected:&#10;        findings += 1&#10;        print(f&quot;\n  Line {i}: SECRET DETECTED&quot;)&#10;        print(f&quot;    Code: {code[:60]}...&quot;)&#10;        for d in detected:&#10;            print(f&quot;    Type: {d}&quot;)&#10;    else:&#10;        print(f&quot;\n  Line {i}: Clean&quot;)&#10;        print(f&quot;    Code: {code[:60]}&quot;)&#10;&#10;print(f&quot;\n--- Results ---&quot;)&#10;print(f&quot;Scanned: {len(code_samples)} code samples&quot;)&#10;print(f&quot;Secrets found: {findings}&quot;)&#10;print(f&quot;Recommendation: Add gitleaks to CI to catch these before merge&quot;)" data-timeout="8" data-title="Secret Detection Scanner"></div>
+
+<h2>Code Review Security Checklist</h2>
+
+<p>When reviewing code, check for:</p>
+
+<li><strong>Input handling</strong> — Is all user input validated? Is output encoded for context?</li>
+<li><strong>Authentication</strong> — Are auth checks present on every endpoint?</li>
+<li><strong>Authorization</strong> — Does the code verify the user owns the resource they are accessing?</li>
+<li><strong>Secrets</strong> — Are there any hardcoded credentials?</li>
+<li><strong>Dependencies</strong> — Are new dependencies pinned and audited?</li>
+<li><strong>Error handling</strong> — Do errors leak information? Do they fail secure?</li>
+<li><strong>Logging</strong> — Are security-relevant events logged? Are sensitive values excluded from logs?</li>
+
+<h2>Summary</h2>
+
+<p>Secure coding is a set of repeatable habits plus automated guardrails. Validate input, encode output, manage dependencies, protect secrets, and automate the checks in CI. Culture and tooling together keep vulnerabilities from shipping.</p>
+
+<div data-widget="quiz" data-chapterslug="112-secure-coding" data-quizid="quiz-112-secure-coding"></div>
+
+<script type="application/json" id="quiz-112-secure-coding">[{"id":"q1","type":"multiple-choice","prompt":"Why is whitelisting preferred over blacklisting for input validation?","options":["Whitelisting is faster","Blacklisting always misses some attack patterns; whitelisting only allows known-good input","Whitelisting requires less code","Blacklisting is deprecated"],"correctIndex":1,"explanation":"Blacklisting tries to block known-bad patterns, but attackers always find new variations. Whitelisting defines exactly what is acceptable and rejects everything else, which is fundamentally more robust.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What should you do if you accidentally commit a secret to git?","options":["Delete the file and commit again","Treat it as compromised, rotate the key, and remove it from git history","Add it to .gitignore","Rename the variable"],"correctIndex":1,"explanation":"Deleting the file does not remove it from git history. The secret is permanently exposed. You must rotate the key immediately and use tools like BFG Repo-Cleaner to purge it from history.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the purpose of a Software Bill of Materials (SBOM)?","options":["To track developer productivity","To inventory all components so you can quickly assess CVE exposure","To replace dependency scanning","To encrypt the dependency tree"],"correctIndex":1,"explanation":"An SBOM lists every component in your software. When a new CVE is published, you can immediately check whether you ship the affected component and version.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Where should secrets be stored in a production application?","options":["In the source code for easy access","In a .env file committed to the repository","In a secrets manager or environment variables injected at deploy time","In a Kubernetes ConfigMap"],"correctIndex":2,"explanation":"Secrets belong in encrypted, access-controlled stores (HashiCorp Vault, AWS Secrets Manager, environment injection at deploy time). Committing them to code or config files exposes them to anyone with repository access.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"What does 'shift left' mean in the context of security?","options":["Moving servers to a different data center","Integrating security checks early in the development lifecycle","Shifting security responsibility to the operations team","Reducing the number of security tools"],"correctIndex":1,"explanation":"Shift left means moving security activities earlier in the development lifecycle: threat modeling during design, SAST during coding, dependency scanning in CI. The earlier a vulnerability is found, the cheaper it is to fix.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/111-authentication-sessions.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/113-penetration-testing.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers &amp; Next Steps — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="131-careers-and-next-steps" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Careers &amp; Next Steps</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 6 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Careers &amp; Next Steps</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Security roles, key certifications, building a portfolio, and your capstone project to tie it all together.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The Security Job Landscape</h2>
+
+<p>Cybersecurity is not one job — it is a field with many specializations. Understanding the landscape helps you choose a direction.</p>
+
+<h3>The Main Tracks</h3>
+
+<table><tr><td>Role</td><td>Focus</td><td>Entry Path</td></tr>
+</table>
+<table><tr><td><strong>SOC Analyst</strong></td><td>Monitor, triage, escalate alerts</td><td>Most common entry point</td></tr>
+<tr><td><strong>Penetration Tester</strong></td><td>Authorized offensive testing</td><td>OSCP, bug bounties</td></tr>
+<tr><td><strong>Security Engineer</strong></td><td>Build and maintain security tooling</td><td>Software engineering + security</td></tr>
+<tr><td><strong>Incident Responder</strong></td><td>Lead breach containment and forensics</td><td>SOC or forensics background</td></tr>
+<tr><td><strong>Security Architect</strong></td><td>Design secure systems</td><td>Senior engineering + architecture</td></tr>
+<tr><td><strong>GRC Analyst</strong></td><td>Compliance, risk, policy</td><td>Audit, legal, or compliance background</td></tr>
+<tr><td><strong>Malware Analyst</strong></td><td>Reverse engineer malicious code</td><td>Low-level programming, OS internals</td></tr>
+<tr><td><strong>Threat Intelligence Analyst</strong></td><td>Track adversaries, produce intel</td><td>Research, writing, analysis</td></tr>
+</table>
+
+<div data-widget="callout" data-type="info" data-callouttitle="The talent gap is real" data-content="The ISC2 Cybersecurity Workforce Study consistently reports millions of unfilled security positions globally. The barrier to entry is knowledge and demonstrated skill, not necessarily a degree."></div>
+
+<h2>Key Certifications</h2>
+
+<p>Certifications validate knowledge and get past HR filters. Choose based on your target role:</p>
+
+<h3>Entry Level</h3>
+<ul><li><strong>CompTIA Security+</strong> — broad foundational knowledge, widely recognized.</li>
+<li><strong>CompTIA Network+</strong> — networking fundamentals (prerequisite knowledge).</li>
+</ul>
+<h3>Intermediate</h3>
+<ul><li><strong>CySA+</strong> (CompTIA) — security analytics, SOC-oriented.</li>
+<li><strong>BTL1</strong> (Blue Team Level 1) — defensive operations, hands-on exam.</li>
+<li><strong>eJPT</strong> — junior penetration testing, practical exam.</li>
+</ul>
+<h3>Advanced</h3>
+<ul><li><strong>OSCP</strong> (Offensive Security) — the gold standard for pentesting, 24-hour practical exam.</li>
+<li><strong>CISSP</strong> — management/architecture, requires 5 years experience.</li>
+<li><strong>GCIA/GCIH/GCFE</strong> (SANS) — specialized, expensive, highly respected.</li>
+</ul>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Certifications open doors, skills keep them" data-content="A certification gets you the interview. A home lab, a blog, or a bug bounty profile gets you the job. Invest in both."></div>
+
+<h2>Building a Portfolio</h2>
+
+<p>Demonstrable skill matters more than credentials in security. Build evidence:</p>
+
+<h3>Home Lab</h3>
+
+<ul><li>Run a hypervisor (VirtualBox, Proxmox) with vulnerable VMs (Metasploitable, DVWA).</li>
+<li>Set up a SIEM (Wazuh, Elastic) and practice detection rules.</li>
+<li>Build an Active Directory lab and practice Kerberoasting, GPO attacks.</li>
+</ul>
+<h3>CTF and Practice Platforms</h3>
+
+<ul><li><strong>TryHackMe</strong> — guided learning paths, beginner-friendly.</li>
+<li><strong>HackTheBox</strong> — unguided challenge machines, intermediate+.</li>
+<li><strong>OverTheWire</strong> — Linux and security wargames.</li>
+<li><strong>PicoCTF</strong> — free, beginner-oriented.</li>
+</ul>
+<h3>Bug Bounties</h3>
+
+<p>Platforms like <strong>HackerOne</strong> and <strong>Bugcrowd</strong> let you legally test real applications. Even small findings demonstrate real-world skill.</p>
+
+<h3>Writing and Sharing</h3>
+
+<ul><li>Write up your CTF solutions.</li>
+<li>Document your home lab projects.</li>
+<li>Contribute to open-source security tools.</li>
+</ul>
+<h2>Interactive: Career Path Planner</h2>
+
+<div data-widget="pyrunner" data-cellid="131-careers-and-next-steps-cell-1" data-defaultcode="# Simulated career path recommendation engine&#10;interests = {&#10;    &quot;defensive&quot;: [&quot;SOC Analyst&quot;, &quot;Incident Responder&quot;, &quot;Threat Intelligence Analyst&quot;],&#10;    &quot;offensive&quot;: [&quot;Penetration Tester&quot;, &quot;Red Teamer&quot;, &quot;Exploit Developer&quot;],&#10;    &quot;engineering&quot;: [&quot;Security Engineer&quot;, &quot;Security Architect&quot;, &quot;DevSecOps Engineer&quot;],&#10;    &quot;governance&quot;: [&quot;GRC Analyst&quot;, &quot;Security Auditor&quot;, &quot;CISO track&quot;],&#10;}&#10;&#10;recommended_certs = {&#10;    &quot;SOC Analyst&quot;: [&quot;Security+&quot;, &quot;CySA+&quot;, &quot;BTL1&quot;],&#10;    &quot;Incident Responder&quot;: [&quot;Security+&quot;, &quot;GCIH&quot;, &quot;GCFA&quot;],&#10;    &quot;Penetration Tester&quot;: [&quot;Security+&quot;, &quot;eJPT&quot;, &quot;OSCP&quot;],&#10;    &quot;Security Engineer&quot;: [&quot;Security+&quot;, &quot;AWS Security Specialty&quot;, &quot;CISSP (later)&quot;],&#10;    &quot;GRC Analyst&quot;: [&quot;Security+&quot;, &quot;CISA&quot;, &quot;CRISC&quot;],&#10;}&#10;&#10;skills_map = {&#10;    &quot;SOC Analyst&quot;: [&quot;SIEM (Splunk/Elastic)&quot;, &quot;Log analysis&quot;, &quot;Network fundamentals&quot;, &quot;Scripting&quot;],&#10;    &quot;Penetration Tester&quot;: [&quot;Networking&quot;, &quot;Linux&quot;, &quot;Web security&quot;, &quot;Scripting&quot;, &quot;Report writing&quot;],&#10;    &quot;Security Engineer&quot;: [&quot;Cloud platforms&quot;, &quot;CI/CD&quot;, &quot;Infrastructure as Code&quot;, &quot;Programming&quot;],&#10;    &quot;Incident Responder&quot;: [&quot;Forensics&quot;, &quot;Memory analysis&quot;, &quot;Malware triage&quot;, &quot;Communication&quot;],&#10;}&#10;&#10;print(&quot;Career Path Planner&quot;)&#10;print(&quot;=&quot; * 55)&#10;&#10;for path, roles in interests.items():&#10;    print(f&quot;\n--- {path.upper()} Track ---&quot;)&#10;    for role in roles:&#10;        certs = recommended_certs.get(role, [&quot;Security+&quot;])&#10;        skills = skills_map.get(role, [&quot;Security fundamentals&quot;])&#10;        print(f&quot;\n  {role}&quot;)&#10;        print(f&quot;    Certs: {&#39; -&gt; &#39;.join(certs)}&quot;)&#10;        print(f&quot;    Skills: {&#39;, &#39;.join(skills[:3])}...&quot;)&#10;&#10;# Personalized recommendation&#10;print(&quot;\n&quot; + &quot;=&quot; * 55)&#10;print(&quot;Recommended starting path for this course:&quot;)&#10;print(&quot;  1. Complete all Academia modules (you are here!)&quot;)&#10;print(&quot;  2. Build a home lab with Wazuh + vulnerable VMs&quot;)&#10;print(&quot;  3. Do 10 TryHackMe rooms&quot;)&#10;print(&quot;  4. Study for Security+&quot;)&#10;print(&quot;  5. Write up your lab work on a blog&quot;)&#10;print(&quot;  6. Apply for SOC Analyst or junior security roles&quot;)" data-timeout="8" data-title="Career Path Planner"></div>
+
+<h2>The Capstone</h2>
+
+<p>You have covered the full stack: foundations, network security, web security, offensive and defensive operations, cloud, operations, tooling, and governance. Now tie it together.</p>
+
+<h3>Capstone Project: Security Assessment Report</h3>
+
+<p>Choose a target (a vulnerable VM, a CTF machine, or a scope-approved application) and produce a professional security assessment:</p>
+
+<li><strong>Threat model</strong> the target using STRIDE.</li>
+<li><strong>Enumerate</strong> the attack surface (nmap, web crawling).</li>
+<li><strong>Identify</strong> at least 3 vulnerabilities.</li>
+<li><strong>Demonstrate</strong> exploitation in a safe environment.</li>
+<li><strong>Recommend</strong> remediation for each finding.</li>
+<li><strong>Write</strong> a professional report with executive summary, technical findings, and prioritized remediation plan.</li>
+
+<p>This report becomes a portfolio piece that demonstrates you can do the actual job.</p>
+
+<h2>Where to Go From Here</h2>
+
+<p>The field moves fast. Stay current:</p>
+
+<ul><li><strong>Read</strong> — Krebs on Security, The Hacker News, SANS NewsBites.</li>
+<li><strong>Listen</strong> — Darknet Diaries, Risky Business, Security Now.</li>
+<li><strong>Practice</strong> — weekly CTF rooms, bug bounty hunting.</li>
+<li><strong>Community</strong> — local BSides conferences, DEF CON groups, Discord servers.</li>
+</ul>
+
+<div data-widget="callout" data-type="info" data-callouttitle="The learning never stops" data-content="Security is a field where the threat landscape changes monthly. The skills you built in this course are the foundation. The habit of continuous learning is what keeps you relevant."></div>
+
+<h2>Summary</h2>
+
+<p>You have built a comprehensive understanding of cybersecurity from first principles. Choose a specialization, get certified, build a portfolio, and start applying. The field needs people who understand both the theory and the practice — and you now have both.</p>
+
+<div data-widget="quiz" data-chapterslug="131-careers-and-next-steps" data-quizid="quiz-131-careers-and-next-steps"></div>
+
+<script type="application/json" id="quiz-131-careers-and-next-steps">[{"id":"q1","type":"multiple-choice","prompt":"Which certification is considered the gold standard for penetration testing?","options":["CompTIA Security+","CISSP","OSCP","CEH"],"correctIndex":2,"explanation":"The OSCP (Offensive Security Certified Professional) requires passing a 24-hour hands-on penetration test. It is the most respected certification for offensive security roles.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is the most common entry-level role in cybersecurity?","options":["Security Architect","SOC Analyst","CISO","Malware Analyst"],"correctIndex":1,"explanation":"SOC Analyst is the most common entry point. It provides exposure to real security events, log analysis, and incident triage, building the foundation for specialization.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"Why is a portfolio important alongside certifications?","options":["Portfolios are required by law","A portfolio demonstrates practical skills that certifications alone cannot prove","Portfolios replace the need for certifications","Portfolios are only needed for management roles"],"correctIndex":1,"explanation":"Certifications validate knowledge, but a portfolio (home lab writeups, CTF solutions, bug bounty findings) proves you can apply that knowledge in practice. Together they make a strong case to employers.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"What should a capstone security assessment report include?","options":["Only a list of vulnerabilities found","Threat model, enumeration, findings with exploitation proof, remediation recommendations, and executive summary","Just the nmap scan output","A copy of the CISSP exam objectives"],"correctIndex":1,"explanation":"A professional security assessment includes the full methodology: threat modeling, enumeration, vulnerability identification, proof of concept, and prioritized remediation. This mirrors real-world pentest deliverables.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/130-social-engineering-defense.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <div></div>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

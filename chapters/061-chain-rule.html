@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Chain Rule — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="061-chain-rule" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">The Chain Rule</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 22 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 18 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">The Chain Rule</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">The mathematical foundation of backpropagation. Understand how derivatives compose through nested functions and why this enables efficient gradient computation.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>The Chain Rule</h1>
+
+<p>Backpropagation IS the chain rule applied systematically. ==If you understand the chain rule, you understand backprop.==</p>
+
+<h2>Single-Variable Chain Rule</h2>
+
+<p>For composed functions <span data-widget="katex" data-latex="y = f(g(x))" data-display="false"></span>:</p>
+
+<div data-widget="katex" data-latex="\frac{dy}{dx} = \frac{dy}{dg} \cdot \frac{dg}{dx}" data-display="true"></div>
+
+<div data-widget="pyrunner" data-cellid="061-cell-1" data-defaultcode="import numpy as np&#10;&#10;# y = sigmoid(x² + 1)&#10;# dy/dx = sigmoid&#39;(x²+1) · 2x&#10;&#10;def sigmoid(z): return 1/(1+np.exp(-z))&#10;def sigmoid_deriv(out): return out * (1 - out)&#10;&#10;x = 2.0&#10;&#10;# Forward&#10;g = x**2 + 1          # g(x) = x² + 1 = 5&#10;y = sigmoid(g)         # y = σ(5)&#10;&#10;# Backward (chain rule)&#10;dy_dg = sigmoid_deriv(y)   # dσ/dg at g=5&#10;dg_dx = 2 * x              # dg/dx = 2x = 4&#10;dy_dx = dy_dg * dg_dx      # chain rule!&#10;&#10;# Verify numerically&#10;h = 1e-7&#10;numerical = (sigmoid((x+h)**2+1) - sigmoid((x-h)**2+1)) / (2*h)&#10;&#10;print(f&quot;y = sigmoid(x² + 1) at x = {x}&quot;)&#10;print(f&quot;  Forward:  g = {g}, y = {y:.6f}&quot;)&#10;print(f&quot;  Chain rule: dy/dx = {dy_dg:.6f} × {dg_dx:.1f} = {dy_dx:.6f}&quot;)&#10;print(f&quot;  Numerical:  dy/dx = {numerical:.6f}&quot;)&#10;print(f&quot;  Match: {np.isclose(dy_dx, numerical)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Multi-Layer Chain Rule</h2>
+
+<p>For a deep network <span data-widget="katex" data-latex="y = f_n(f_{n-1}(...f_1(x)...))" data-display="false"></span>:</p>
+
+<div data-widget="katex" data-latex="\frac{dy}{dx} = \frac{\partial f_n}{\partial f_{n-1}} \cdot \frac{\partial f_{n-1}}{\partial f_{n-2}} \cdots \frac{\partial f_1}{\partial x}" data-display="true"></div>
+
+<p>This product of matrices is exactly what backpropagation computes — but in reverse order, reusing intermediate results.</p>
+
+<div data-widget="pyrunner" data-cellid="061-cell-2" data-defaultcode="import numpy as np&#10;&#10;# 3-layer network: y = σ(W3 · σ(W2 · σ(W1 · x)))&#10;np.random.seed(42)&#10;x = np.random.randn(3)&#10;W1 = np.random.randn(3, 4) * 0.5&#10;W2 = np.random.randn(4, 4) * 0.5&#10;W3 = np.random.randn(4, 1) * 0.5&#10;&#10;def sigmoid(z): return 1/(1+np.exp(-z))&#10;&#10;# Forward pass (cache everything)&#10;z1 = W1.T @ x;  a1 = sigmoid(z1)&#10;z2 = W2.T @ a1; a2 = sigmoid(z2)&#10;z3 = W3.T @ a2; y = sigmoid(z3)&#10;&#10;# Backward pass (chain rule in reverse)&#10;dy_dz3 = y * (1 - y)&#10;dz3_da2 = W3&#10;da2_dz2 = a2 * (1 - a2)&#10;dz2_da1 = W2&#10;da1_dz1 = a1 * (1 - a1)&#10;dz1_dx = W1&#10;&#10;# Full gradient dy/dx&#10;dy_dx = dz1_dx @ (da1_dz1 * (dz2_da1 @ (da2_dz2 * (dz3_da2 @ dy_dz3))))&#10;&#10;# Verify numerically&#10;h = 1e-5&#10;num_grad = np.zeros(3)&#10;for i in range(3):&#10;    xp = x.copy(); xp[i] += h&#10;    xm = x.copy(); xm[i] -= h&#10;    yp = sigmoid(W3.T @ sigmoid(W2.T @ sigmoid(W1.T @ xp)))&#10;    ym = sigmoid(W3.T @ sigmoid(W2.T @ sigmoid(W1.T @ xm)))&#10;    num_grad[i] = (yp - ym) / (2*h)&#10;&#10;print(f&quot;Chain rule through 3 layers:&quot;)&#10;print(f&quot;  Analytical gradient: {dy_dx.flatten().round(6)}&quot;)&#10;print(f&quot;  Numerical gradient:  {num_grad.round(6)}&quot;)&#10;print(f&quot;  Match: {np.allclose(dy_dx.flatten(), num_grad, atol=1e-4)}&quot;)&#10;print(f&quot;\n✅ This IS backpropagation — just the chain rule applied layer by layer&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Why Reverse Mode?</h2>
+
+<p>Forward mode computes gradients one input at a time. Reverse mode (backprop) computes gradients for ALL parameters in one pass. For a network with millions of parameters and one scalar loss, reverse mode is millions of times more efficient.</p>
+
+<blockquote>[!IMPORTANT] The Fundamental Insight</blockquote>
+<blockquote>Forward pass: compute and cache intermediates. Backward pass: multiply local gradients in reverse, reusing cached values. Total cost: ~2× forward pass. This is why deep learning is computationally feasible.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="061-chain-rule" data-quizid="quiz-061-chain-rule"></div>
+
+<script type="application/json" id="quiz-061-chain-rule">[{"id":"q1","type":"multiple-choice","prompt":"What is the chain rule for y = f(g(x))?","options":["dy/dx = f'(x) + g'(x)","dy/dx = (dy/dg) × (dg/df) — the derivative of the composition is the product of individual derivatives","dy/dx = f(g'(x))","dy/dx = f'(g(x))"],"correctIndex":1,"explanation":"Chain rule: dy/dx = f'(g(x)) · g'(x). Derivatives compose multiplicatively through nested functions. This is the mathematical foundation of backpropagation.","randomize":true},{"id":"q2","type":"code-output","prompt":"For y = sigmoid(x²+1) at x=2, what is dg/dx?","code":"import numpy as np\nx = 2.0\ng = x<em>*2 + 1\ndg_dx = 2 </em> x\nprint(f'g={g}, dg/dx={dg_dx}')","options":["4.0","5.0","2.0","8.0"],"correctIndex":0,"explanation":"g(x) = x²+1, so dg/dx = 2x. At x=2: dg/dx = 4. This is the inner derivative in the chain rule.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"In the chain rule dy/dx = (dy/dg)(dg/dx), what is dy/dg for y = sigmoid(g)?","options":["sigmoid(g)","sigmoid(g) × (1 - sigmoid(g)) — the sigmoid derivative expressed in terms of its output","1/(1+exp(-g))","exp(-g)"],"correctIndex":1,"explanation":"σ'(z) = σ(z)(1-σ(z)). Conveniently expressed using the output value itself, which is already computed during the forward pass.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why is reverse-mode differentiation (backprop) preferred over forward-mode for neural networks?","options":["Easier to implement","Networks have millions of parameters but one scalar loss. Reverse mode computes ALL parameter gradients in one backward pass; forward mode needs one pass per parameter.","Forward mode doesn't work with ReLU","Reverse mode uses less memory"],"correctIndex":1,"explanation":"Forward mode: O(params) passes. Reverse mode: O(1) passes. For 100M parameters, that's 100M× speedup. This efficiency is why deep learning is computationally feasible.","randomize":true},{"id":"q5","type":"fill-blank","prompt":"For a deep network y = fₙ(fₙ₋₁(...f₁(x)...)), the full derivative is the ___ of all layer-wise partial derivatives, computed in ___ order during backprop.","options":["product, reverse","sum, forward","product, forward","sum, reverse"],"correctIndex":0,"explanation":"Chain rule gives a product of Jacobians. Backprop computes this product from output to input (reverse order), reusing intermediate results.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"What does backpropagation cache during the forward pass?","options":["Nothing","Intermediate activations and pre-activation values needed to compute local gradients during the backward pass","Only the final loss","The input data only"],"correctIndex":1,"explanation":"sigmoid'(z) = σ(z)(1-σ(z)) needs σ(z) from forward pass. ReLU'(z) needs z to check sign. Every layer caches its forward outputs for backward use.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"What is the computational cost of backpropagation relative to the forward pass?","options":["10× more expensive","~2× the forward pass cost — one forward + one backward pass computes gradients for ALL parameters","Same as forward","O(n²) times forward"],"correctIndex":1,"explanation":"Backward pass has similar FLOPs to forward pass. Total ≈ 2× forward. Compare to numerical gradient: O(n) forward passes. This 2× vs O(n)× is why backprop enabled deep learning.","randomize":true},{"id":"q8","type":"code-output","prompt":"In the 3-layer example, what operation combines local gradients?","code":"# Simplified chain through 3 layers\ndy_dz3 = 0.1   # output gradient\nda2_dz2 = 0.2  # layer 2 local grad\nda1_dz1 = 0.3  # layer 1 local grad\n# Chain rule: multiply local gradients\nfull_grad = dy_dz3 <em> da2_dz2 </em> da1_dz1\nprint(f'{full_grad:.6f}')","options":["0.006000","0.600000","0.060000","0.000600"],"correctIndex":0,"explanation":"0.1 × 0.2 × 0.3 = 0.006. Chain rule multiplies local derivatives. Note how gradients shrink through layers — this is the vanishing gradient problem.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"Why do we need to verify analytical gradients against numerical gradients?","options":["Numerical is always more accurate","Chain rule derivations for deep networks are error-prone. Numerical gradients serve as ground truth to catch implementation bugs.","Analytical gradients don't exist","It's required by NumPy"],"correctIndex":1,"explanation":"A single sign error or missing term in chain rule derivation silently produces wrong gradients. Gradient checking catches these bugs before they corrupt training.","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"In the backward pass, why are gradients multiplied (not added)?","options":["Convention","The chain rule produces products of derivatives. Each layer's contribution scales the gradient flowing backward through the network.","Addition would cause overflow","Multiplication is faster"],"correctIndex":1,"explanation":"dy/dx = (dy/da)(da/db)(db/dx). Composition → multiplication. This is fundamental calculus, not a design choice.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"What causes the vanishing gradient problem in terms of the chain rule?","options":["Too many parameters","When each local derivative is < 1 (e.g., sigmoid' ≤ 0.25), their product shrinks exponentially with depth: 0.25^L → 0 for large L","Learning rate too high","Batch size too small"],"correctIndex":1,"explanation":"Chain rule multiplies local gradients. If each is < 1, the product decays exponentially. 10 layers of sigmoid: 0.25¹⁰ ≈ 10⁻⁶. Early layers get near-zero gradients.","randomize":true},{"id":"q12","type":"fill-blank","prompt":"Forward pass computes ___ and caches intermediates. Backward pass multiplies ___ gradients in reverse order using cached values.","options":["activations, local","gradients, global","losses, partial","weights, total"],"correctIndex":0,"explanation":"Forward: x → z₁ → a₁ → z₂ → a₂ → ... → y (cache all zᵢ, aᵢ). Backward: ∂L/∂y → ∂L/∂zₙ → ∂L/∂aₙ₋₁ → ... → ∂L/∂x using cached values.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"How does ReLU help with vanishing gradients compared to sigmoid?","options":["ReLU has larger derivatives","ReLU'(z) = 1 for z > 0, so active neurons pass gradients unchanged (no shrinkage). Only inactive neurons (z ≤ 0) block gradients.","ReLU doesn't use chain rule","ReLU has no derivative"],"correctIndex":1,"explanation":"Sigmoid' ≤ 0.25 everywhere → guaranteed shrinkage. ReLU' = 1 for positive inputs → gradients flow without attenuation through active paths. This enables deeper networks.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"In matrix form, what does the chain rule look like for a linear layer y = Wx followed by activation a = σ(y)?","options":["∂L/∂x = ∂L/∂a × σ'(y)","∂L/∂x = Wᵀ × (σ'(y) ⊙ ∂L/∂a) — transpose of weights times element-wise product of activation derivative and upstream gradient","∂L/∂x = W × ∂L/∂a","∂L/∂x = ∂L/∂a × W"],"correctIndex":1,"explanation":"Linear layer Jacobian is W. By chain rule: ∂L/∂x = (∂a/∂y)(∂y/∂x)ᵀ × ∂L/∂a = diag(σ') × W × ∂L/∂a = Wᵀ(σ' ⊙ ∂L/∂a). Transpose appears because we go backward.","randomize":true},{"id":"q15","type":"code-output","prompt":"What does np.isclose compare?","code":"import numpy as np\nanalytical = 0.006001\nnumerical = 0.006000\nprint(np.isclose(analytical, numerical))","options":["True (within default tolerance)","False (not exactly equal)","Error","None"],"correctIndex":0,"explanation":"isclose checks |a-b| ≤ atol + rtol×|b|. Default rtol=1e-5. Difference of 1e-6 is well within tolerance. Use this for gradient checking.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"What is automatic differentiation (autograd)?","options":["Numerical differentiation with smaller h","Systematic application of the chain rule through a computation graph — recording operations during forward pass and applying chain rule automatically during backward","Symbolic differentiation","Finite difference method"],"correctIndex":1,"explanation":"Autograd records every operation (computational graph). During backward, it applies chain rule mechanically. No manual derivation needed. PyTorch/JAX/TensorFlow all use this.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"Why does the backward pass go in REVERSE order?","options":["Convention","Each layer's gradient depends on the gradient from the layer ABOVE it. You must start from the loss and propagate backward to accumulate the full chain.","Forward order doesn't work mathematically","Memory access patterns"],"correctIndex":1,"explanation":"∂L/∂w₁ requires ∂L/∂a₁ which requires ∂L/∂a₂ which requires ∂L/∂y. Dependencies flow output→input. Reverse order satisfies these dependencies naturally.","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"If a network has 10 sigmoid layers, approximately what fraction of the original gradient reaches layer 1?","options":["≈ 0.25","≈ 0.25¹⁰ ≈ 10⁻⁶ — essentially zero, explaining why deep sigmoid networks don't train","≈ 0.5","≈ 1.0"],"correctIndex":1,"explanation":"Max sigmoid' = 0.25. Through 10 layers: 0.25¹⁰ ≈ 9.5×10⁻⁷. Layer 1 receives virtually no gradient signal. This motivated ReLU and residual connections.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"What is the relationship between backpropagation and the chain rule?","options":["They're unrelated","Backpropagation IS the chain rule applied systematically to a computation graph — it's not a separate algorithm, just organized chain rule","Backprop replaces the chain rule","Chain rule only works for single-variable functions"],"correctIndex":1,"explanation":"Every step in backprop is a direct application of the chain rule. The 'innovation' is the systematic organization (computation graph + caching + reverse traversal), not new mathematics.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"Which statement best captures why understanding the chain rule matters for deep learning?","options":["It's only needed for exams","The chain rule explains HOW gradients flow, WHY they vanish/explode, and WHAT backprop actually computes — it's the mathematical engine of all learning","Modern frameworks eliminate the need to understand it","Only researchers need it"],"correctIndex":1,"explanation":"Vanishing gradients, exploding gradients, skip connections, normalization — all make sense through the lens of chain rule multiplication. Understanding it means understanding deep learning.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/060-derivatives-and-gradients.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/062-computational-graphs.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

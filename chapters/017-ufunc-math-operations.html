@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math ufuncs: Arithmetic, Rounding &amp; Logarithms — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="017-ufunc-math-operations" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Math ufuncs: Arithmetic, Rounding &amp; Logarithms</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 20 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 15 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Math ufuncs: Arithmetic, Rounding &amp; Logarithms</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Element-wise arithmetic, five rounding modes, and logarithmic/exponential functions — including numerical stability patterns essential for deep learning.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Math ufuncs: Arithmetic, Rounding & Logarithms</h1>
+
+<p>These are the workhorse ufuncs you'll use in every neural network implementation. Understanding division variants, rounding edge cases, and log-space computation prevents subtle bugs in loss functions and training loops.</p>
+
+<h2>Arithmetic Operations</h2>
+
+<p>Operators on arrays dispatch to ufuncs: <code>a + b</code> calls <code>np.add(a, b)</code>.</p>
+
+<div data-widget="pyrunner" data-cellid="017-cell-1" data-defaultcode="import numpy as np&#10;&#10;a = np.array([10, 20, 30, 40])&#10;b = np.array([1, 2, 3, 4])&#10;&#10;print(f&quot;add:      {np.add(a, b)}&quot;)&#10;print(f&quot;subtract: {np.subtract(a, b)}&quot;)&#10;print(f&quot;multiply: {np.multiply(a, b)}&quot;)&#10;print(f&quot;divide:   {np.divide(a, b)}&quot;)&#10;print(f&quot;power:    {np.power(b, 2)}&quot;)&#10;print(f&quot;mod:      {np.mod(a, 3)}&quot;)&#10;print(f&quot;\na+b == np.add(a,b): {np.array_equal(a+b, np.add(a,b))}&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>Division Variants (Know the Difference!)</h3>
+
+<p>Python's <code>/</code> and NumPy's division have different behaviors with negatives.</p>
+
+<div data-widget="pyrunner" data-cellid="017-cell-2" data-defaultcode="import numpy as np&#10;&#10;a = np.array([7, -7, 8, -8])&#10;b = np.array([3, 3, 3, 3])&#10;&#10;print(&quot;Division variants:&quot;)&#10;print(f&quot;  true_divide:  {np.true_divide(a, b)}&quot;)   # Python /&#10;print(f&quot;  floor_divide: {np.floor_divide(a, b)}&quot;)  # rounds toward -inf&#10;print(f&quot;  remainder:    {np.remainder(a, b)}&quot;)       # a % b&#10;print(f&quot;  divmod:       {np.divmod(a, b)}&quot;)          # (quotient, remainder)&#10;&#10;print(f&quot;\n⚠️  floor_divide(-7, 3) = {np.floor_divide(-7, 3)}&quot;)&#10;print(f&quot;   NOT -2 (which is truncation toward zero)&quot;)&#10;print(f&quot;   It&#39;s -3 (rounds toward NEGATIVE infinity)&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Floor vs Truncation" data-content="`floor_divide` rounds toward −∞. Python&#39;s `int()` truncates toward zero. For negative numbers these give different results. This matters in index calculations and grid operations."></div>
+
+<hr>
+
+<h2>Five Rounding Modes</h2>
+
+<p>Each rounding mode handles negative numbers differently. Know which one your algorithm needs.</p>
+
+<div data-widget="pyrunner" data-cellid="017-cell-3" data-defaultcode="import numpy as np&#10;&#10;vals = np.array([2.7, 2.3, -2.7, -2.3, 2.5, -2.5, 3.5])&#10;&#10;print(f&quot;{&#39;Value&#39;:&gt;6} {&#39;around&#39;:&gt;7} {&#39;floor&#39;:&gt;6} {&#39;ceil&#39;:&gt;6} {&#39;trunc&#39;:&gt;6} {&#39;fix&#39;:&gt;6}&quot;)&#10;print(&quot;─&quot; * 45)&#10;for v in vals:&#10;    print(f&quot;{v:6.1f} {np.around(v):7.0f} {np.floor(v):6.0f} {np.ceil(v):6.0f} {np.trunc(v):6.0f} {np.fix(v):6.0f}&quot;)&#10;&#10;print(f&quot;\nKey differences:&quot;)&#10;print(f&quot;  around: round-half-to-even (banker&#39;s rounding)&quot;)&#10;print(f&quot;  floor:  always toward -∞&quot;)&#10;print(f&quot;  ceil:   always toward +∞&quot;)&#10;print(f&quot;  trunc:  always toward zero&quot;)&#10;print(f&quot;  fix:    same as trunc for scalars&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Banker&#39;s Rounding" data-content="`np.around(2.5) = 2.0`, not 3.0. Round-half-to-even reduces statistical bias when aggregating many rounded values. This is the IEEE 754 standard."></div>
+
+<h3>Rounding with Decimal Places</h3>
+
+<div data-widget="pyrunner" data-cellid="017-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.array([3.14159, 2.71828, 1.41421])&#10;print(f&quot;Original: {a}&quot;)&#10;print(f&quot;dec=2:    {np.around(a, 2)}&quot;)&#10;print(f&quot;dec=1:    {np.around(a, 1)}&quot;)&#10;&#10;# Negative decimals round to tens, hundreds, etc.&#10;big = np.array([15, 25, 35, 45, 55])&#10;print(f&quot;\n{big} → dec=-1: {np.around(big, -1)}&quot;)" data-timeout="5" data-title=""></div>
+
+<hr>
+
+<h2>Logarithmic & Exponential Functions</h2>
+
+<p>These are critical for softmax, cross-entropy loss, and probability computations.</p>
+
+<h3>Basic Logs and Exp</h3>
+
+<div data-widget="pyrunner" data-cellid="017-cell-5" data-defaultcode="import numpy as np&#10;&#10;a = np.array([1, 2, 4, 8, 16, 100], dtype=float)&#10;print(f&quot;ln(a):    {np.log(a).round(4)}&quot;)&#10;print(f&quot;log2(a):  {np.log2(a).round(4)}&quot;)&#10;print(f&quot;log10(a): {np.log10(a).round(4)}&quot;)&#10;print(f&quot;exp(ln(a)) == a: {np.allclose(np.exp(np.log(a)), a)}&quot;)&#10;&#10;print(f&quot;\n⚠️  np.log(0) = {np.log(0)}&quot;)&#10;print(f&quot;   np.log(-1) = {np.log(-1)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>Numerical Stability: log1p and expm1</h3>
+
+<p>When working with tiny values near zero, standard <code>log(1+x)</code> and <code>exp(x)-1</code> lose precision due to floating-point cancellation.</p>
+
+<div data-widget="pyrunner" data-cellid="017-cell-6" data-defaultcode="import numpy as np&#10;&#10;tiny = 1e-15&#10;&#10;print(&quot;Precision loss with small values:&quot;)&#10;print(f&quot;  log(1+tiny):   {np.log(1 + tiny):.20e}&quot;)    # loses precision!&#10;print(f&quot;  log1p(tiny):   {np.log1p(tiny):.20e}&quot;)     # accurate&#10;print(f&quot;  exp(tiny)-1:   {np.exp(tiny) - 1:.20e}&quot;)    # loses precision!&#10;print(f&quot;  expm1(tiny):   {np.expm1(tiny):.20e}&quot;)     # accurate&#10;&#10;print(f&quot;\nWhy? When tiny ≈ 1e-15:&quot;)&#10;print(f&quot;  1 + tiny rounds to 1.0 in float64&quot;)&#10;print(f&quot;  log(1.0) = 0.0 ← wrong!&quot;)&#10;print(f&quot;  log1p computes log(1+x) without forming 1+x first&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>Stable Softmax (Critical Pattern)</h3>
+
+<p>The naive softmax overflows for large logits. The shifted version is mathematically identical but numerically safe.</p>
+
+<div data-widget="pyrunner" data-cellid="017-cell-7" data-defaultcode="import numpy as np&#10;&#10;logits = np.array([1000, 1001, 1002])&#10;&#10;# NAIVE: exp(1000) overflows to inf&#10;naive = np.exp(logits) / np.exp(logits).sum()&#10;print(f&quot;Naive softmax:  {naive}&quot;)  # nan or inf!&#10;&#10;# STABLE: subtract max first&#10;shifted = logits - logits.max()&#10;e = np.exp(shifted)&#10;stable = e / e.sum()&#10;print(f&quot;Stable softmax: {stable}&quot;)&#10;&#10;# Why does this work?&#10;# exp(x - c) / sum(exp(x - c)) = exp(x) / sum(exp(x))&#10;# Same ratios, no overflow&#10;print(f&quot;\nProof: exp(x-max)/sum = exp(x)/sum (same result, no overflow)&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="Cross-Entropy Safety" data-content="`log(0) = -inf` crashes training. Always clip probabilities before taking log: `np.clip(probs, 1e-12, 1.0)`. Or better: use the log-sum-exp trick to compute log-softmax directly without ever forming raw probabilities."></div>
+
+<h3>Log-Sum-Exp Trick</h3>
+
+<div data-widget="pyrunner" data-cellid="017-cell-8" data-defaultcode="import numpy as np&#10;&#10;def stable_log_softmax(logits):&#10;    &quot;&quot;&quot;Compute log(softmax(x)) without overflow or underflow.&quot;&quot;&quot;&#10;    c = logits.max(axis=-1, keepdims=True)&#10;    return logits - c - np.log(np.sum(np.exp(logits - c), axis=-1, keepdims=True))&#10;&#10;logits = np.array([[1000, 1001, 1002], [-1000, -999, -998]])&#10;log_probs = stable_log_softmax(logits)&#10;probs = np.exp(log_probs)&#10;&#10;print(f&quot;Log-probs: {log_probs.round(4)}&quot;)&#10;print(f&quot;Probs:     {probs.round(6)}&quot;)&#10;print(f&quot;Sum to 1:  {probs.sum(axis=1)}&quot;)&#10;print(f&quot;No inf/nan: {np.isfinite(log_probs).all()}&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="017-ufunc-math-operations" data-quizid="quiz-017-ufunc-math-operations"></div>
+
+<script type="application/json" id="quiz-017-ufunc-math-operations">[{"id":"q1","type":"multiple-choice","prompt":"Is a + b equivalent to np.add(a, b) for NumPy arrays?","options":["Yes — arithmetic operators dispatch to ufuncs internally","No — they behave differently","Only for integer arrays","Only for 1D arrays"],"correctIndex":0,"explanation":"Operators like +, -, *, / on ndarrays call the corresponding ufunc (add, subtract, multiply, divide).","randomize":true},{"id":"q2","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.floor_divide(-7, 3))","options":["-3","-2","-1","-4"],"correctIndex":0,"explanation":"floor_divide rounds toward −∞. −7/3 = −2.33… → floor is −3. NOT −2 (that would be truncation toward zero).","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the difference between floor_divide and truncation toward zero?","options":["floor_divide rounds toward −∞; truncation rounds toward 0. They differ for negative numbers","They are identical","floor_divide is slower","truncation only works on integers"],"correctIndex":0,"explanation":"For −7/3: floor_divide gives −3 (toward −∞), truncation gives −2 (toward 0). This matters in index calculations.","randomize":true},{"id":"q4","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.around(2.5))","options":["2.0","3.0","2","Error"],"correctIndex":0,"explanation":"NumPy uses banker's rounding (round-half-to-even). 2.5 rounds to the nearest even number: 2.0.","randomize":true},{"id":"q5","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.around(3.5))","options":["4.0","3.0","4","3"],"correctIndex":0,"explanation":"Banker's rounding: 3.5 rounds to nearest even → 4.0. Both 2.5→2 and 3.5→4 follow round-half-to-even.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"Which rounding mode always rounds toward negative infinity?","options":["np.floor","np.ceil","np.trunc","np.around"],"correctIndex":0,"explanation":"floor always rounds toward −∞. ceil toward +∞. trunc toward 0. around uses round-half-to-even.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"What does np.trunc(-2.7) return?","options":["-2.0","-3.0","-2","2.0"],"correctIndex":0,"explanation":"trunc removes the fractional part, rounding toward zero. −2.7 → −2.0 (not −3.0).","randomize":true},{"id":"q8","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.log(0))","options":["-inf","0","nan","Error"],"correctIndex":0,"explanation":"log(0) = −∞. NumPy returns -inf with a RuntimeWarning. This is why you must clip probabilities before taking log.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"Why use np.log1p(x) instead of np.log(1 + x)?","options":["Maintains precision when x is very small (near zero)","It's faster","They produce identical results always","log1p handles negative inputs better"],"correctIndex":0,"explanation":"When x ≈ 1e-15, 1+x rounds to 1.0 in float64, so log(1+x) = 0 (wrong). log1p computes log(1+x) without forming the sum first.","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"Why use np.expm1(x) instead of np.exp(x) - 1?","options":["Maintains precision when x is very small","It's faster","They're identical","expm1 avoids overflow"],"correctIndex":0,"explanation":"For tiny x, exp(x) ≈ 1.0 due to floating-point, so exp(x)-1 = 0 (wrong). expm1 computes exp(x)-1 accurately.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"Why do we subtract max(logits) before exp in softmax?","options":["Prevents exp overflow while preserving the probability ratios","Makes computation faster","Changes the output distribution","It's optional optimization"],"correctIndex":0,"explanation":"exp(x−c)/Σexp(x−c) = exp(x)/Σexp(x). Mathematically identical, but x−c ≤ 0 so exp never overflows.","randomize":true},{"id":"q12","type":"code-output","prompt":"What happens with naive softmax on large logits?","code":"import numpy as np\nlogits = np.array([1000, 1001, 1002])\nresult = np.exp(logits) / np.exp(logits).sum()\nprint(result)","options":["[nan nan nan] or [inf inf inf]","Correct probabilities","[0.33 0.33 0.33]","Error"],"correctIndex":0,"explanation":"exp(1000) overflows to inf in float64. inf/inf = nan. Always use the stable version with max subtraction.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"What does np.remainder(-7, 3) return?","options":["2","-1","1","-2"],"correctIndex":0,"explanation":"remainder follows floor_divide: −7 = 3×(−3) + 2. The remainder is always non-negative when divisor is positive.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"In cross-entropy loss, why must you clip probabilities before taking log?","options":["Because log(0) = −inf which produces nan loss and crashes training","To speed up computation","To normalize probabilities","It's not necessary"],"correctIndex":0,"explanation":"If any predicted probability is exactly 0, log(0) = −inf, making the loss inf/nan. Clip to a small epsilon like 1e-12.","randomize":true},{"id":"q15","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nbig = np.array([15, 25, 35, 45, 55])\nprint(np.around(big, -1))","options":["[20 20 40 40 60]","[10 20 30 40 50]","[15 25 35 45 55]","Error"],"correctIndex":0,"explanation":"Negative decimals round to tens. Banker's rounding: 15→20, 25→20 (even), 35→40, 45→40 (even), 55→60.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"What is the log-sum-exp trick used for?","options":["Computing log(softmax(x)) without overflow or underflow","Speeding up matrix multiplication","Converting between log bases","Normalizing arrays"],"correctIndex":0,"explanation":"log_softmax = x − max(x) − log(Σexp(x − max(x))). Stays in log-space throughout, avoiding exp overflow and log(0).","randomize":true},{"id":"q17","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([1, 2, 4, 8], dtype=float)\nprint(np.allclose(np.exp(np.log(a)), a))","options":["True","False","Error","nan"],"correctIndex":0,"explanation":"exp and log are inverses. exp(log(a)) recovers the original values (within floating-point tolerance).","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"Which function computes element-wise natural logarithm?","options":["np.log","np.ln","np.natural_log","np.log_e"],"correctIndex":0,"explanation":"np.log is the natural logarithm (base e). np.log2 and np.log10 are base-2 and base-10 respectively.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"np.divmod(a, b) returns:","options":["A tuple of (floor_divide(a,b), remainder(a,b))","The quotient only","The remainder only","A single array with both values interleaved"],"correctIndex":0,"explanation":"divmod returns both the floor quotient and remainder as a tuple, computed in one pass for efficiency.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"In a neural network, where are log/exp ufuncs most critical?","options":["Softmax, cross-entropy loss, and probability computations","Weight initialization","Matrix multiplication","Data loading"],"correctIndex":0,"explanation":"Softmax uses exp, cross-entropy uses log, and both need numerical stability tricks. These are the most common sources of nan/inf bugs in training.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/016-ufunc-intro-and-creation.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/018-ufunc-aggregation-and-calculus.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

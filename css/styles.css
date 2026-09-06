@@ -1,4 +1,4 @@
-/* ─── NN Academy — Modern Minimal Theme ─────────────────────────────────── */
+/* ─── Academia — Modern Minimal Theme ───────────────────────────────────── */
 
 :root {
   --bg-base: #0a0a0f;
@@ -374,6 +374,31 @@ html { scroll-behavior: smooth; }
   background: radial-gradient(ellipse, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
   pointer-events: none;
 }
+
+/* ─── Modules (home) ───────────────────────────────────────────────────── */
+
+.module-section { margin-bottom: 3.5rem; }
+.module-section:last-child { margin-bottom: 0; }
+
+.module-header {
+  background: var(--bg-glass);
+}
+
+/* ─── Sidebar module headings ─────────────────────────────────────────── */
+
+.sidebar-module-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.75rem 0.375rem;
+  margin-top: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.sidebar-module-heading:first-child { margin-top: 0; }
 
 /* Track card specific */
 .track-card {

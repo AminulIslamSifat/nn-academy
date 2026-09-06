@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Identity and Access Management — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="117-identity-and-access-management" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Identity and Access Management</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 6 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Identity and Access Management</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Core IAM concepts including authentication, authorization, SSO, RBAC, ABAC, least privilege, and MFA.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Authentication vs Authorization</h2>
+
+<p>Authentication verifies identity. Authorization verifies permission. Confusing these two concepts is the most common IAM mistake in security engineering.</p>
+
+<ul><li><strong>Authentication (AuthN):</strong> Proves you are who you claim to be. Answers "Who are you?"</li>
+<li><strong>Authorization (AuthZ):</strong> Determines what you can do after identity is proven. Answers "What are you allowed to do?"</li>
+</ul>
+<p>A user authenticates with a password and MFA token. The system then authorizes that user to read <code>/api/reports</code> but denies access to <code>/api/admin</code>. These are separate enforcement points with distinct failure modes.</p>
+
+<h2>Authentication Methods Compared</h2>
+
+<p>Select authentication methods based on threat model, usability requirements, and compliance mandates.</p>
+
+<table><tr><td>Method</td><td>Security Level</td><td>Phishing Resistant</td><td>User Friction</td><td>Best For</td></tr>
+</table>
+<table><tr><td>Password Only</td><td>Low</td><td>No</td><td>Low</td><td>Legacy systems only</td></tr>
+<tr><td>Password + SMS OTP</td><td>Medium</td><td>No</td><td>Medium</td><td>Consumer accounts</td></tr>
+<tr><td>Password + TOTP</td><td>Medium-High</td><td>Partially</td><td>Medium</td><td>Internal tools</td></tr>
+<tr><td>FIDO2/WebAuthn</td><td>High</td><td>Yes</td><td>Low</td><td>High-value targets</td></tr>
+<tr><td>Certificate-Based</td><td>High</td><td>Yes</td><td>Medium</td><td>Machine-to-machine</td></tr>
+<tr><td>Biometric + PIN</td><td>Medium-High</td><td>Partially</td><td>Low</td><td>Mobile/device unlock</td></tr>
+</table>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="Credential Stuffing Risk" data-content="Over 80% of account takeover attacks use credentials leaked from unrelated breaches. Password-only authentication is insufficient for any production system. Always enforce MFA and monitor for credential reuse against known breach databases like Have I Been Pwned."></div>
+
+<h2>Multi-Factor Authentication</h2>
+
+<p>MFA requires two or more independent evidence types from different categories:</p>
+
+<li><strong>Something you know:</strong> Password, PIN, security question answer</li>
+<li><strong>Something you have:</strong> Hardware token, smartphone, YubiKey, certificate</li>
+<li><strong>Something you are:</strong> Fingerprint, face recognition, iris scan</li>
+<li><strong>Somewhere you are:</strong> Geolocation, network origin, device posture</li>
+
+<p>Effective MFA combines factors across categories. Two passwords do not constitute MFA. A password plus an SMS code sent to the same phone used for password recovery provides weaker assurance than password plus hardware key.</p>
+
+<h3>MFA Implementation Priorities</h3>
+
+<ul><li>Prefer FIDO2/WebAuthn over TOTP over SMS OTP</li>
+<li>Enforce MFA for all privileged accounts without exception</li>
+<li>Allow users to register multiple second factors for account recovery</li>
+<li>Log and alert on MFA failures as potential attack indicators</li>
+<li>Support step-up authentication for sensitive operations</li>
+</ul>
+<h2>Single Sign-On and Federation</h2>
+
+<p>SSO lets users authenticate once and access multiple applications without re-entering credentials. Federation extends this trust across organizational boundaries using standard protocols.</p>
+
+<h3>SAML 2.0</h3>
+
+<p>Security Assertion Markup Language uses XML-based assertions exchanged between an Identity Provider (IdP) and Service Provider (SP).</p>
+
+<ul><li><strong>Best for:</strong> Enterprise web applications, legacy integrations</li>
+<li><strong>Flow:</strong> Browser redirects carry signed XML assertions from IdP to SP</li>
+<li><strong>Strengths:</strong> Mature ecosystem, broad vendor support</li>
+<li><strong>Weaknesses:</strong> Complex XML parsing, larger payloads, harder to debug</li>
+</ul>
+<h3>OpenID Connect (OIDC)</h3>
+
+<p>OIDC adds an identity layer on top of OAuth 2.0 using JSON Web Tokens (JWTs).</p>
+
+<ul><li><strong>Best for:</strong> Modern APIs, mobile apps, microservices</li>
+<li><strong>Flow:</strong> Authorization code flow returns ID token (JWT) plus access token</li>
+<li><strong>Strengths:</strong> Lightweight, REST-friendly, built-in discovery</li>
+<li><strong>Weaknesses:</strong> Token lifecycle management, JWT validation pitfalls</li>
+</ul>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Protocol Selection" data-content="Choose OIDC for new projects. Reserve SAML for integrating with enterprise systems that require it. Both protocols solve federation; OIDC does so with less complexity for modern architectures."></div>
+
+<h2>Role-Based Access Control (RBAC)</h2>
+
+<p>RBAC assigns permissions to roles, then assigns roles to users. This decouples permissions from individual identities and simplifies administration.</p>
+
+<h3>Core RBAC Components</h3>
+
+<ul><li><strong>Permissions:</strong> Atomic actions on resources (e.g., <code>reports:read</code>, <code>users:delete</code>)</li>
+<li><strong>Roles:</strong> Named collections of permissions (e.g., <code>analyst</code>, <code>admin</code>)</li>
+<li><strong>Users:</strong> Identities assigned one or more roles</li>
+<li><strong>Sessions:</strong> Active role sets during a login session</li>
+</ul>
+<h3>RBAC Limitations</h3>
+
+<p>RBAC struggles with context-dependent decisions. You cannot express "allow access only during business hours" or "deny if risk score exceeds threshold" without triggering role explosion—the proliferation of narrowly scoped roles to capture context.</p>
+
+<h2>Attribute-Based Access Control (ABAC)</h2>
+
+<p>ABAC evaluates policies against attributes of the subject, resource, action, and environment at decision time.</p>
+
+<h3>ABAC Policy Example</h3>
+
+<pre><code class="language-text">PERMIT&#10;  WHEN subject.department == resource.owner_department&#10;  AND subject.clearance &gt;= resource.classification&#10;  AND environment.time BETWEEN 08:00 AND 18:00&#10;  AND action IN [read, write]</code></pre>
+
+<h3>RBAC vs ABAC Comparison</h3>
+
+<table><tr><td>Dimension</td><td>RBAC</td><td>ABAC</td></tr>
+</table>
+<table><tr><td>Decision basis</td><td>Assigned roles</td><td>Evaluated attributes</td></tr>
+<tr><td>Granularity</td><td>Coarse to medium</td><td>Fine-grained</td></tr>
+<tr><td>Administration</td><td>Simple role assignment</td><td>Policy authoring required</td></tr>
+<tr><td>Scalability</td><td>Degrades with complexity</td><td>Scales with attribute richness</td></tr>
+<tr><td>Audit trail</td><td>Role membership changes</td><td>Policy evaluation logs</td></tr>
+<tr><td>Best fit</td><td>Stable org structures</td><td>Dynamic, context-sensitive access</td></tr>
+</table>
+<p>Many organizations combine both: RBAC for baseline entitlements, ABAC for conditional overrides and sensitive resources.</p>
+
+<h2>Least Privilege Principle</h2>
+
+<p>Grant the minimum permissions necessary to perform a task. Revoke them when the task ends. This limits blast radius from compromised accounts and insider threats.</p>
+
+<h3>Practical Enforcement Steps</h3>
+
+<li>Start with zero permissions and add incrementally based on observed need</li>
+<li>Use just-in-time access elevation instead of standing privileges</li>
+<li>Conduct quarterly access reviews with mandatory justification</li>
+<li>Automate deprovisioning tied to HR system events</li>
+<li>Separate duties so no single identity controls critical workflows end-to-end</li>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Privilege Creep" data-content="Users accumulate permissions over time through role changes and temporary escalations that never get revoked. Automated access certification campaigns catch drift before attackers exploit it."></div>
+
+<h2>RBAC Permission Check Simulator</h2>
+
+<p>Experiment with role-to-permission mappings to understand how RBAC enforcement works at runtime.</p>
+
+<div data-widget="pyrunner" data-cellid="117-identity-and-access-management-cell-1" data-defaultcode="# RBAC Permission Check Simulator&#10;roles = {&#10;    &quot;viewer&quot;: [&quot;reports:read&quot;, &quot;dashboards:read&quot;],&#10;    &quot;analyst&quot;: [&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;dashboards:read&quot;, &quot;data:export&quot;],&#10;    &quot;admin&quot;: [&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;reports:delete&quot;,&#10;              &quot;dashboards:read&quot;, &quot;dashboards:write&quot;, &quot;users:manage&quot;]&#10;}&#10;&#10;def check_permission(user_role, requested_permission):&#10;    if user_role not in roles:&#10;        return f&quot;DENY: Unknown role &#39;{user_role}&#39;&quot;&#10;    if requested_permission in roles[user_role]:&#10;        return f&quot;ALLOW: &#39;{user_role}&#39; has &#39;{requested_permission}&#39;&quot;&#10;    return f&quot;DENY: &#39;{user_role}&#39; lacks &#39;{requested_permission}&#39;&quot;&#10;&#10;# Test cases&#10;print(check_permission(&quot;analyst&quot;, &quot;reports:write&quot;))&#10;print(check_permission(&quot;viewer&quot;, &quot;reports:delete&quot;))&#10;print(check_permission(&quot;admin&quot;, &quot;users:manage&quot;))&#10;print(check_permission(&quot;guest&quot;, &quot;reports:read&quot;))" data-timeout="8" data-title="RBAC Permission Check Simulator"></div>
+
+<p>Modify the <code>roles</code> dictionary and test cases to explore how adding or removing permissions affects authorization decisions. Notice that deny-by-default is the baseline.</p>
+
+<h2>Key Takeaways</h2>
+
+<ul><li>Authentication and authorization are distinct enforcement points requiring separate controls</li>
+<li>MFA must combine truly independent factors; SMS OTP is the weakest acceptable second factor</li>
+<li>SSO reduces credential sprawl but creates high-value targets; protect your IdP accordingly</li>
+<li>RBAC scales well until context matters; supplement with ABAC for dynamic policies</li>
+<li>Least privilege is an ongoing process, not a one-time configuration</li>
+</ul>
+
+<div data-widget="quiz" data-chapterslug="" data-quizid="quiz-bou7cdvxewj"></div>
+
+<script type="application/json" id="quiz-bou7cdvxewj">[{"text":"Which statement correctly distinguishes authentication from authorization?","options":["Authentication verifies identity; authorization verifies permission","Authentication checks permissions; authorization verifies identity","They are interchangeable terms for access control","Authentication applies to users; authorization applies to machines"],"correctIndex":0},{"text":"Why is SMS OTP considered the weakest form of MFA?","options":["SMS can be intercepted via SIM swapping and SS7 vulnerabilities","SMS tokens expire too quickly for practical use","SMS requires expensive hardware tokens","SMS is incompatible with mobile devices"],"correctIndex":0},{"text":"When should you choose ABAC over pure RBAC?","options":["When access decisions depend on contextual attributes like time or location","When your organization has fewer than ten employees","When all users need identical permissions","When compliance requires simpler audit logs"],"correctIndex":0},{"text":"What is the primary risk of privilege creep?","options":["Accumulated unused permissions expand the attack surface over time","Users forget their original job responsibilities","Role definitions become too simple to manage","MFA tokens expire faster for privileged accounts"],"correctIndex":0}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/116-shared-responsibility-model.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/118-container-and-k8s-security.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

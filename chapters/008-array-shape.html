@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Shape &amp; Dimensions — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="008-array-shape" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Array Shape &amp; Dimensions</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 8 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Array Shape &amp; Dimensions</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Deep dive into .shape, .ndim, .size, and how NumPy represents multi-dimensional data in flat memory.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Array Shape & Dimensions</h1>
+
+<p>Shape is the single most important property of a NumPy array. It tells you the size along each axis.</p>
+
+<h2>Shape, ndim, size</h2>
+
+<div data-widget="pyrunner" data-cellid="008-cell-1" data-defaultcode="import numpy as np&#10;&#10;scalar = np.array(42)&#10;vector = np.array([1, 2, 3])&#10;matrix = np.array([[1, 2], [3, 4], [5, 6]])&#10;tensor = np.zeros((2, 3, 4))&#10;&#10;for name, arr in [(&quot;scalar&quot;, scalar), (&quot;vector&quot;, vector), (&quot;matrix&quot;, matrix), (&quot;tensor&quot;, tensor)]:&#10;    print(f&quot;{name:8s} shape={str(arr.shape):12s} ndim={arr.ndim}  size={arr.size}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Row Vectors vs Column Vectors</h2>
+
+<p>In neural networks, the distinction between <code>(n,)</code> and <code>(n, 1)</code> matters:</p>
+
+<div data-widget="pyrunner" data-cellid="008-cell-2" data-defaultcode="import numpy as np&#10;&#10;row = np.array([1, 2, 3])       # shape (3,)&#10;col = np.array([[1], [2], [3]]) # shape (3, 1)&#10;&#10;print(f&quot;Row vector: shape={row.shape}, ndim={row.ndim}&quot;)&#10;print(f&quot;Col vector: shape={col.shape}, ndim={col.ndim}&quot;)&#10;&#10;# They broadcast differently!&#10;bias = np.array([10, 20, 30])&#10;print(f&quot;&#10;row + bias = {row + bias}&quot;)         # (3,) + (3,) → (3,)&#10;print(f&quot;col + bias = {(col + bias).shape}&quot;)    # (3,1) + (3,) → (3,3) via broadcasting!&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Shape Gotcha" data-content="A 1D array of shape `(n,)` is neither a row nor column vector — it&#39;s just a sequence. Matrix multiplication treats it contextually."></div>
+
+<h2>Adding and Removing Dimensions</h2>
+
+<div data-widget="pyrunner" data-cellid="008-cell-3" data-defaultcode="import numpy as np&#10;&#10;a = np.array([1, 2, 3])  # (3,)&#10;&#10;# Add dimension with np.newaxis (alias for None)&#10;row = a[np.newaxis, :]   # (1, 3) — row vector&#10;col = a[:, np.newaxis]   # (3, 1) — column vector&#10;&#10;print(f&quot;Original: {a.shape}&quot;)&#10;print(f&quot;Row:      {row.shape}&quot;)&#10;print(f&quot;Col:      {col.shape}&quot;)&#10;&#10;# expand_dims is more readable&#10;print(f&quot;&#10;expand_dims(a, 0): {np.expand_dims(a, 0).shape}&quot;)&#10;print(f&quot;expand_dims(a, 1): {np.expand_dims(a, 1).shape}&quot;)&#10;&#10;# Squeeze removes size-1 dimensions&#10;padded = np.zeros((1, 3, 1, 5))&#10;print(f&quot;&#10;Padded: {padded.shape}&quot;)&#10;print(f&quot;Squeezed: {padded.squeeze().shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Strides: How Shape Maps to Memory</h2>
+
+<p>Strides tell NumPy how many bytes to step in memory to move along each axis:</p>
+
+<div data-widget="pyrunner" data-cellid="008-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12, dtype=np.int32).reshape(3, 4)&#10;print(f&quot;Shape:   {a.shape}&quot;)&#10;print(f&quot;Strides: {a.strides}&quot;)&#10;print(f&quot;Itemsize: {a.itemsize} bytes&quot;)&#10;print(f&quot;&#10;Memory layout (row-major / C-order):&quot;)&#10;print(a)&#10;print(f&quot;&#10;To go from a[i,j] to a[i,j+1]: step {a.strides[1]} bytes (1 element)&quot;)&#10;print(f&quot;To go from a[i,j] to a[i+1,j]: step {a.strides[0]} bytes (4 elements)&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="008-array-shape" data-quizid="quiz-008-array-shape"></div>
+
+<script type="application/json" id="quiz-008-array-shape">[{"id":"q1","type":"multiple-choice","prompt":"What does the .shape attribute of a NumPy array represent?","options":["Total number of elements","A tuple indicating the size along each axis/dimension","Memory size in bytes","The data type"],"correctIndex":1,"explanation":"shape is a tuple where each element is the length of that axis. (3, 4) means 3 rows and 4 columns. A scalar has shape ().","randomize":true},{"id":"q2","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.zeros((2, 3, 4))\nprint(a.shape, a.ndim, a.size)","options":["(2, 3, 4) 3 24","24 3 (2, 3, 4)","(2, 3, 4) 24 3","(4, 3, 2) 3 24"],"correctIndex":0,"explanation":"shape=(2,3,4), ndim=3 (three axes), size=2<em>3</em>4=24 (total elements). These three properties describe any array completely.","randomize":false},{"id":"q3","type":"multiple-choice","prompt":"What is the difference between shape (5,) and shape (5, 1)?","options":["No practical difference","(5,) is 1D with 5 elements; (5,1) is 2D with 5 rows and 1 column — they broadcast differently with other arrays","One is a view, one is a copy","Different dtypes"],"correctIndex":1,"explanation":"This distinction matters enormously in neural networks. (5,) + (5,) gives element-wise (5,). But (5,1) + (5,) broadcasts to (5,5) outer addition. Getting this wrong causes silent shape bugs.","randomize":true},{"id":"q4","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.array(42)\nprint(a.shape, a.ndim)","options":["() 0","(1,) 1","(42,) 1","Error"],"correctIndex":0,"explanation":"A 0-dimensional array (scalar) has empty shape tuple () and ndim=0. It holds a single value but has no axes.","randomize":false},{"id":"q5","type":"multiple-choice","prompt":"What does np.newaxis do?","options":["Creates a new independent array","Inserts a new axis of size 1 at the specified position, increasing ndim by 1","Adds an element to the array","Removes an axis"],"correctIndex":1,"explanation":"a[np.newaxis, :] converts (N,) to (1,N). a[:, np.newaxis] converts (N,) to (N,1). This is essential for controlling broadcasting behavior.","randomize":true},{"id":"q6","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.array([1, 2, 3])\nprint(a[np.newaxis, :].shape)","options":["(1, 3)","(3, 1)","(3,)","(1, 1, 3)"],"correctIndex":0,"explanation":"np.newaxis at position 0 inserts a leading dimension. (3,) becomes (1, 3) — a row vector.","randomize":false},{"id":"q7","type":"multiple-choice","prompt":"What does squeeze() do?","options":["Flattens the array to 1D","Removes ALL axes of size 1 from the shape","Adds dimensions","Transposes the array"],"correctIndex":1,"explanation":"squeeze converts (1, 3, 1, 5) to (3, 5) by removing both size-1 axes. It does NOT flatten — non-singleton dimensions are preserved.","randomize":true},{"id":"q8","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.zeros((1, 3, 1, 5))\nprint(a.squeeze().shape)","options":["(3, 5)","(1, 3, 1, 5)","(3, 1, 5)","(15,)"],"correctIndex":0,"explanation":"squeeze removes all size-1 axes: (1,3,1,5) -> (3,5). Both leading and middle singleton dims are removed.","randomize":false},{"id":"q9","type":"multiple-choice","prompt":"Why does shape matter so much in neural network code?","options":["It's just for printing","Every operation (matmul, broadcasting, loss computation) depends on correct shapes; shape mismatches are the #1 source of bugs in deep learning","Shape determines dtype","GPUs require specific shapes"],"correctIndex":1,"explanation":"Wrong shapes cause either crashes (ValueError) or worse — silent wrong results. Always print shapes during development. Shape discipline is the most important debugging skill in NumPy-based ML.","randomize":true},{"id":"q10","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(24).reshape(2, 3, 4)\nprint(a.shape[1])","options":["3","2","4","24"],"correctIndex":0,"explanation":"shape is a tuple. shape[1] accesses the second dimension: 3.","randomize":false},{"id":"q11","type":"multiple-choice","prompt":"What does expand_dims(a, axis=1) do?","options":["Same as a[:, np.newaxis] — inserts a size-1 axis at position 1","Removes axis 1","Duplicates axis 1","Flattens axis 1"],"correctIndex":0,"explanation":"expand_dims is the readable alternative to np.newaxis indexing. expand_dims(a, 1) on shape (3,) gives (3,1). More explicit about intent.","randomize":true},{"id":"q12","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.ones((2, 1, 3))\nprint(a.squeeze(axis=1).shape)","options":["(2, 3)","(2, 1, 3)","(1, 3)","(2,)"],"correctIndex":0,"explanation":"squeeze(axis=1) only removes axis 1 if it's size 1. (2,1,3) -> (2,3). Unlike squeeze() with no args, this targets a specific axis.","randomize":false},{"id":"q13","type":"multiple-choice","prompt":"What are strides?","options":["Step sizes for loops","The number of bytes to step in memory to move one position along each axis","Array dimensions","Memory addresses"],"correctIndex":1,"explanation":"Strides define how shape maps to flat memory. For a (3,4) float64 array, strides are (32, 8): skip 32 bytes to next row, 8 bytes to next column.","randomize":true},{"id":"q14","type":"code-output","prompt":"What prints?","code":"import numpy as np\narr = np.arange(6, dtype=np.float64).reshape(2, 3)\nprint(arr.strides)","options":["(24, 8)","(8, 24)","(16, 8)","(8, 16)"],"correctIndex":0,"explanation":"Row-major (C-order): stride[0] = 3 elements <em> 8 bytes = 24 (skip a full row). stride[1] = 1 element </em> 8 bytes = 8 (next column).","randomize":false},{"id":"q15","type":"multiple-choice","prompt":"Why does transpose return a view instead of a copy?","options":["Performance optimization only","Transpose just swaps the stride values without moving any data in memory — zero cost","It actually does copy","Only for square matrices"],"correctIndex":1,"explanation":"Transposing (3,4) to (4,3) just swaps strides from (32,8) to (8,32). The data stays in place. This is why .T is free regardless of array size.","randomize":true},{"id":"q16","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.zeros((4, 1, 3, 1))\nprint(a.ndim, a.size)","options":["4 12","4 4","2 12","3 12"],"correctIndex":0,"explanation":"ndim=4 (four axes). size = 4<em>1</em>3*1 = 12 total elements. Size-1 axes count toward ndim but don't add elements.","randomize":false},{"id":"q17","type":"multiple-choice","prompt":"In batched neural network code, what does shape (B, C, H, W) typically represent?","options":["Random variable names","Batch x Channels x Height x Width — the standard image tensor format in PyTorch","Bytes per element","Buffer configuration"],"correctIndex":1,"explanation":"NCHW is the standard convention in PyTorch and many CNN implementations. B=batch size, C=color/feature channels, H=height, W=width.","randomize":true},{"id":"q18","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(6).reshape(2, 3)\nb = a[:, np.newaxis, :]\nprint(b.shape)","options":["(2, 1, 3)","(2, 3, 1)","(1, 2, 3)","(2, 3)"],"correctIndex":0,"explanation":"np.newaxis at position 1 inserts a new axis between the existing two. (2,3) -> (2,1,3). Useful for adding a channel dimension.","randomize":false},{"id":"q19","type":"multiple-choice","prompt":"What happens when you index a 3D array with a single integer: a[0]?","options":["Returns a scalar","Returns a 2D sub-array — the first 'slice' along axis 0, reducing ndim by 1","Error","Returns a 1D array"],"correctIndex":1,"explanation":"a[0] selects along axis 0, reducing dimensionality by 1. Shape (2,3,4)[0] -> (3,4). Each integer index removes one axis.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"Why can two arrays with the same shape have different strides?","options":["They can't","One might be a transposed view, a slice with step, or Fortran-ordered — all share the same shape but traverse memory differently","Different dtypes","Different sizes"],"correctIndex":1,"explanation":"A (3,4) C-order array has strides (32,8). Its transpose .T also has shape... wait, .T has shape (4,3). But a[::2, ::2] could have shape (2,2) with doubled strides. Same shape, different memory access patterns affect cache performance.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/007-copy-vs-view.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/009-array-reshape.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

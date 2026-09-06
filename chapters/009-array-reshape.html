@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reshape &amp; Transpose — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="009-array-reshape" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Reshape &amp; Transpose</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 10 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Reshape &amp; Transpose</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Change array shapes without copying data. Master reshape, ravel, flatten, transpose, and the -1 trick.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Reshape & Transpose</h1>
+
+<p>Reshaping reinterprets the same memory with a different shape — no data movement, instant operation.</p>
+
+<h2>Basic Reshape</h2>
+
+<div data-widget="pyrunner" data-cellid="009-cell-1" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12)&#10;print(f&quot;Original: shape={a.shape}, values={a}&quot;)&#10;&#10;b = a.reshape(3, 4)&#10;print(f&quot;Reshaped (3,4):&#10;{b}&quot;)&#10;&#10;c = a.reshape(2, 2, 3)&#10;print(f&quot;Reshaped (2,2,3): shape={c.shape}&quot;)&#10;&#10;# Total elements must match!&#10;try:&#10;    a.reshape(5, 3)  # 15 ≠ 12&#10;except ValueError as e:&#10;    print(f&quot;&#10;Error: {e}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>The -1 Trick</h2>
+
+<p>Use <code>-1</code> to let NumPy infer one dimension:</p>
+
+<div data-widget="pyrunner" data-cellid="009-cell-2" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(24)&#10;&#10;# Infer the last dimension&#10;b = a.reshape(4, -1)    # 24 / 4 = 6 → (4, 6)&#10;print(f&quot;reshape(4, -1):  {b.shape}&quot;)&#10;&#10;c = a.reshape(-1, 8)    # 24 / 8 = 3 → (3, 8)&#10;print(f&quot;reshape(-1, 8):  {c.shape}&quot;)&#10;&#10;d = a.reshape(2, 3, -1) # 24 / (2*3) = 4 → (2, 3, 4)&#10;print(f&quot;reshape(2,3,-1): {d.shape}&quot;)&#10;&#10;# Common pattern: flatten batch for processing, then restore&#10;batch = np.random.randn(32, 28, 28)  # 32 images of 28×28&#10;flat = batch.reshape(32, -1)          # (32, 784)&#10;restored = flat.reshape(32, 28, 28)   # back to images&#10;print(f&quot;&#10;Batch: {batch.shape} → Flat: {flat.shape} → Restored: {restored.shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Reshape Returns a View (Usually)</h2>
+
+<div data-widget="pyrunner" data-cellid="009-cell-3" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(12).reshape(3, 4)&#10;b = a.reshape(4, 3)&#10;&#10;print(f&quot;Shares memory: {np.shares_memory(a, b)}&quot;)&#10;print(f&quot;b.base is a: {b.base is a}&quot;)&#10;&#10;# Modify b → a changes&#10;b[0, 0] = 999&#10;print(f&quot;&#10;a[0,0] after b[0,0]=999: {a[0,0]}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Transpose</h2>
+
+<p>Transpose swaps axes — also a view, no data copied:</p>
+
+<div data-widget="pyrunner" data-cellid="009-cell-4" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(6).reshape(2, 3)&#10;print(f&quot;Original:&#10;{a}  shape={a.shape}&quot;)&#10;&#10;print(f&quot;&#10;.T (transpose):&#10;{a.T}  shape={a.T.shape}&quot;)&#10;&#10;# For higher dimensions, specify axis order&#10;t = np.zeros((2, 3, 4))&#10;print(f&quot;&#10;3D tensor: {t.shape}&quot;)&#10;print(f&quot;transpose(1,0,2): {t.transpose(1,0,2).shape}&quot;)&#10;print(f&quot;transpose(2,1,0): {t.transpose(2,1,0).shape}&quot;)&#10;&#10;# swapaxes for swapping two specific axes&#10;print(f&quot;swapaxes(0,2): {t.swapaxes(0,2).shape}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>ravel vs flatten</h2>
+
+<div data-widget="pyrunner" data-cellid="009-cell-5" data-defaultcode="import numpy as np&#10;&#10;a = np.arange(6).reshape(2, 3)&#10;&#10;r = a.ravel()    # view when possible&#10;f = a.flatten()  # always a copy&#10;&#10;print(f&quot;ravel:   {r}, shares_memory={np.shares_memory(a, r)}&quot;)&#10;print(f&quot;flatten: {f}, shares_memory={np.shares_memory(a, f)}&quot;)&#10;&#10;# Order matters: &#39;C&#39; (row-major) vs &#39;F&#39; (column-major)&#10;print(f&quot;&#10;ravel(&#39;C&#39;): {a.ravel(&#39;C&#39;)}&quot;)&#10;print(f&quot;ravel(&#39;F&#39;): {a.ravel(&#39;F&#39;)}&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="009-array-reshape" data-quizid="quiz-009-array-reshape"></div>
+
+<script type="application/json" id="quiz-009-array-reshape">[{"id":"q1","type":"multiple-choice","prompt":"What does reshape do?","options":["Changes data values","Returns an array with different dimensions but the same underlying data","Sorts the array","Changes dtype"],"correctIndex":1,"explanation":"reshape reinterprets the same flat memory under a new shape. No data moves (when possible). Total elements must remain the same.","randomize":true},{"id":"q2","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(12)\nb = a.reshape(3, 4)\nprint(b[1, 2])","options":["6","5","7","10"],"correctIndex":0,"explanation":"Row-major order fills row by row: [0,1,2,3], [4,5,6,7], [8,9,10,11]. Row 1, col 2 = 6.","randomize":false},{"id":"q3","type":"multiple-choice","prompt":"What does -1 mean in reshape?","options":["Reverse the array","Infer this dimension automatically from the total size and other specified dimensions","Remove this dimension","Error value"],"correctIndex":1,"explanation":"reshape(2, -1) on 12 elements -> (2, 6). NumPy calculates -1 = 12/2 = 6. Only one dimension can be -1.","randomize":true},{"id":"q4","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.arange(8).reshape(2, -1)\nprint(a.shape)","options":["(2, 4)","(4, 2)","(2, 2)","(8,)"],"correctIndex":0,"explanation":"8 elements / 2 rows = 4 columns. -1 is inferred as 4. Shape: (2, 4).","randomize":false},{"id":"q5","type":"multiple-choice","prompt":"Does reshape always return a view?","options":["Yes, always","Usually yes, but returns a copy if the data isn't contiguous or the new shape is incompatible with the stride pattern","Never","Only for 2D arrays"],"correctIndex":1,"explanation":"reshape returns a view when the memory layout supports it. After transpose or non-contiguous slicing, the data may need rearranging, forcing a copy.","randomize":true},{"id":"q6","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(6).reshape(2, 3)\nb = a.reshape(6)\nb[0] = 99\nprint(a[0, 0])","options":["99","0","Error","None"],"correctIndex":0,"explanation":"reshape returned a view. b and a share memory. Modifying b[0] modifies a[0,0].","randomize":false},{"id":"q7","type":"multiple-choice","prompt":"What is the difference between reshape and resize?","options":["No difference","reshape returns a new array (view or copy) with same total elements; resize modifies in-place and CAN change total element count","reshape is faster","resize returns a view"],"correctIndex":1,"explanation":"resize can pad with zeros or truncate to change total size. reshape requires prod(new_shape) == size, otherwise ValueError.","randomize":true},{"id":"q8","type":"code-output","prompt":"What is the result?","code":"import numpy as np\na = np.arange(12).reshape(3, 4)\nprint(a.reshape(4, 3)[0])","options":["[0 1 2]","[0 3 6 9]","[0 1 2 3]","Error"],"correctIndex":0,"explanation":"Reshape to (4,3) in row-major order: first row is [0, 1, 2]. The data is read sequentially regardless of original shape.","randomize":false},{"id":"q9","type":"multiple-choice","prompt":"Why does reshape sometimes fail with ValueError?","options":["Array too large","New shape must have the same total number of elements as the original array","Wrong dtype","Array not contiguous"],"correctIndex":1,"explanation":"prod(new_shape) must equal array.size. You can't reshape 12 elements into (3, 5) because 3<em>5=15 != 12.","randomize":true},{"id":"q10","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(24).reshape(2, 3, 4)\nprint(a.reshape(-1).shape)","options":["(24,)","(2, 3, 4)","(12,)","(6, 4)"],"correctIndex":0,"explanation":"reshape(-1) flattens everything to 1D. 2</em>3*4 = 24 elements -> shape (24,).","randomize":false},{"id":"q11","type":"multiple-choice","prompt":"What order does reshape use by default?","options":["Column-major (Fortran)","Row-major (C order): last index changes fastest, elements fill row by row","Random","Diagonal"],"correctIndex":1,"explanation":"C order means elements fill row by row. reshape(2,3) on [0..5] gives [[0,1,2],[3,4,5]]. This matches how most people think about matrices.","randomize":true},{"id":"q12","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.arange(6).reshape(2, 3, order='F')\nprint(a)","options":["[[0 2 4]\n [1 3 5]]","[[0 1 2]\n [3 4 5]]","[[0 3]\n [1 4]\n [2 5]]","Error"],"correctIndex":0,"explanation":"Fortran order fills column by column: col0=[0,1], col1=[2,3], col2=[4,5]. Result: [[0,2,4],[1,3,5]].","randomize":false},{"id":"q13","type":"multiple-choice","prompt":"When would you use order='F' in reshape?","options":["Never","When interfacing with Fortran libraries or when data is stored column-major in memory","For speed","For GPU compatibility"],"correctIndex":1,"explanation":"Some scientific computing libraries (MATLAB, R) use column-major storage. Matching the order avoids unnecessary copies and incorrect data interpretation.","randomize":true},{"id":"q14","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(12).reshape(3, 4)\nb = a.ravel()\nprint(b.shape, np.shares_memory(a, b))","options":["(12,) True","(12,) False","(3, 4) True","(4, 3) False"],"correctIndex":0,"explanation":"ravel() returns a flattened view when possible. Shape becomes (12,), and memory is shared with the original.","randomize":false},{"id":"q15","type":"multiple-choice","prompt":"What's the difference between flatten() and ravel()?","options":["No difference","flatten() always returns a copy; ravel() returns a view when possible","flatten is faster","ravel always copies"],"correctIndex":1,"explanation":"Use ravel() for efficiency (avoids copy). Use flatten() when you need guaranteed independence from the original array.","randomize":true},{"id":"q16","type":"code-output","prompt":"What is the result?","code":"import numpy as np\na = np.arange(8).reshape(2, 2, 2)\nprint(a[1, 0, 1])","options":["5","4","6","3"],"correctIndex":0,"explanation":"Flat: [0,1,2,3,4,5,6,7]. Reshape (2,2,2): a[1]=[[4,5],[6,7]]. a[1,0]=[4,5]. a[1,0,1]=5.","randomize":false},{"id":"q17","type":"multiple-choice","prompt":"Why is understanding reshape order important for CNNs?","options":["It isn't","Image data may be stored in different memory layouts (NCHW vs NHWC); wrong reshape order corrupts spatial structure and scrambles pixel positions","GPUs require specific order","Reshape order affects dtype"],"correctIndex":1,"explanation":"Reshaping feature maps with wrong order scrambles which pixels go where. A (C,H,W) tensor reshaped assuming (H,W,C) produces meaningless garbage.","randomize":true},{"id":"q18","type":"code-output","prompt":"What prints?","code":"import numpy as np\na = np.arange(6).reshape(2, 3)\nprint(a.T.shape)","options":["(3, 2)","(2, 3)","(6,)","(1, 6)"],"correctIndex":0,"explanation":"Transpose swaps all axes: (2,3).T -> (3,2). Rows become columns, columns become rows. Returns a view.","randomize":false},{"id":"q19","type":"multiple-choice","prompt":"Can you reshape a non-contiguous array?","options":["Never","Yes, but NumPy may need to make a copy first to create a contiguous layout for the new shape","Only with transpose","Only 1D arrays"],"correctIndex":1,"explanation":"Non-contiguous arrays (e.g., after transpose or strided slicing) can be reshaped, but the result will be a copy since the data can't be reinterpreted as a simple strided view.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"In neural networks, why is flatten() used before the classifier head in a CNN?","options":["To sort data","CNN feature maps are multi-dimensional (N,C,H,W); flatten converts them to 2D (N, features) that dense layers expect","To reduce memory","To normalize values"],"correctIndex":1,"explanation":"Conv layers output spatial feature maps. Dense layers expect flat feature vectors. Flatten bridges the gap: (N,64,7,7) -> (N,3136).","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/008-array-shape.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/010-array-iterating.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

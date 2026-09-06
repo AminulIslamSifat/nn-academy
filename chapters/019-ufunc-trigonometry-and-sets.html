@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trigonometric, Hyperbolic &amp; Set Operations — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="019-ufunc-trigonometry-and-sets" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Trigonometric, Hyperbolic &amp; Set Operations</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 18 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 12 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Trigonometric, Hyperbolic &amp; Set Operations</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Sin/cos/tan and their inverses, hyperbolic functions as activations, degree conversion, and set operations for data preprocessing — all with NN-relevant context.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Trigonometric, Hyperbolic & Set Operations</h1>
+
+<p>Trig functions appear in positional encodings, signal processing, and rotation matrices. Hyperbolic functions (especially <code>tanh</code>) are classic activation functions. Set operations handle label filtering, vocabulary management, and data deduplication.</p>
+
+<h2>Trigonometric Functions</h2>
+
+<p>==All NumPy trig functions expect radians.== Use <code>deg2rad</code> / <code>rad2deg</code> for conversion.</p>
+
+<h3>Basic Trig</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-1" data-defaultcode="import numpy as np&#10;&#10;angles_rad = np.array([0, np.pi/6, np.pi/4, np.pi/3, np.pi/2, np.pi])&#10;angles_deg = np.rad2deg(angles_rad)&#10;&#10;print(f&quot;Degrees: {angles_deg.round(1)}&quot;)&#10;print(f&quot;sin:     {np.sin(angles_rad).round(4)}&quot;)&#10;print(f&quot;cos:     {np.cos(angles_rad).round(4)}&quot;)&#10;print(f&quot;tan:     {np.tan(angles_rad[:5]).round(4)}&quot;)  # skip pi/2 (undefined)&#10;&#10;# Pythagorean identity&#10;print(f&quot;\nsin²+cos²=1: {np.allclose(np.sin(angles_rad)**2 + np.cos(angles_rad)**2, 1)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>Inverse Trig & arctan2</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-2" data-defaultcode="import numpy as np&#10;&#10;vals = np.array([0, 0.5, 0.7071, 1.0])&#10;print(f&quot;arcsin → degrees: {np.rad2deg(np.arcsin(vals)).round(1)}°&quot;)&#10;print(f&quot;arccos → degrees: {np.rad2deg(np.arccos(vals)).round(1)}°&quot;)&#10;&#10;# arctan2(y, x) gives correct quadrant — essential for angle computation&#10;x = np.array([1, 0, -1, 0, 1, -1])&#10;y = np.array([0, 1, 0, -1, 1, -1])&#10;angles = np.rad2deg(np.arctan2(y, x))&#10;print(f&quot;\narctan2 angles: {angles}°&quot;)&#10;print(f&quot;(Note: arctan2 handles all 4 quadrants correctly)&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="info" data-callouttitle="Why arctan2 Instead of arctan?" data-content="`arctan(y/x)` can&#39;t distinguish between quadrants I/III or II/IV. `arctan2(y, x)` takes separate arguments and returns the correct angle in [-π, π]. Always use `arctan2` for direction/angle calculations."></div>
+
+<h3>Floating-Point Gotcha</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-3" data-defaultcode="import numpy as np&#10;&#10;# sin(pi) should be 0, but...&#10;print(f&quot;np.sin(np.pi) = {np.sin(np.pi)}&quot;)       # ~1.22e-16, NOT 0!&#10;print(f&quot;Is zero? {np.sin(np.pi) == 0}&quot;)           # False&#10;print(f&quot;Close to zero? {np.isclose(np.sin(np.pi), 0)}&quot;)  # True&#10;&#10;# Always use np.isclose for float comparisons&#10;# Never use == for floating point results" data-timeout="5" data-title=""></div>
+
+<h3>Degree Conversion Utilities</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-4" data-defaultcode="import numpy as np&#10;&#10;deg = np.array([0, 30, 45, 60, 90, 180, 360])&#10;rad = np.deg2rad(deg)&#10;back = np.rad2deg(rad)&#10;&#10;print(f&quot;Degrees: {deg}&quot;)&#10;print(f&quot;Radians: {rad.round(4)}&quot;)&#10;print(f&quot;Round-trip OK: {np.allclose(deg, back)}&quot;)" data-timeout="5" data-title=""></div>
+
+<hr>
+
+<h2>Hyperbolic Functions</h2>
+
+<h3>sinh, cosh, tanh</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-5" data-defaultcode="import numpy as np&#10;&#10;x = np.linspace(-3, 3, 7)&#10;print(f&quot;x:    {x.round(2)}&quot;)&#10;print(f&quot;sinh: {np.sinh(x).round(4)}&quot;)&#10;print(f&quot;cosh: {np.cosh(x).round(4)}&quot;)&#10;print(f&quot;tanh: {np.tanh(x).round(4)}&quot;)&#10;&#10;# Fundamental identity&#10;print(f&quot;\ncosh²-sinh²=1: {np.allclose(np.cosh(x)**2 - np.sinh(x)**2, 1)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>tanh as Activation Function</h3>
+
+<code>tanh</code> was the default activation before ReLU. Still used in LSTM gates and output layers for bounded outputs.
+
+<div data-widget="pyrunner" data-cellid="019-cell-6" data-defaultcode="import numpy as np&#10;&#10;x = np.linspace(-5, 5, 11)&#10;print(&quot;tanh activation curve:&quot;)&#10;for xi in x:&#10;    val = np.tanh(xi)&#10;    bar_len = int((val + 1) * 15)  # map [-1,1] → [0,30]&#10;    bar = &quot;█&quot; * bar_len&#10;    print(f&quot;  {xi:+5.1f} → {val:+.4f} {bar}&quot;)&#10;&#10;print(f&quot;\nKey properties:&quot;)&#10;print(f&quot;  Range: (-1, 1)&quot;)&#10;print(f&quot;  Zero-centered: tanh(0) = {np.tanh(0)}&quot;)&#10;print(f&quot;  Saturates at ±1 for |x| &gt; 3&quot;)&#10;print(f&quot;  Derivative: 1 - tanh(x)² (easy to compute from output!)&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="tanh Derivative Shortcut" data-content="If you already computed `h = tanh(z)`, then `dh/dz = 1 - h²`. No need to recompute tanh during backprop. This is why tanh was popular before ReLU."></div>
+
+<h3>Inverse Hyperbolic</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-7" data-defaultcode="import numpy as np&#10;&#10;v = np.array([0, 0.5, 0.9, -0.5])&#10;print(f&quot;arcsinh: {np.arcsinh(v).round(4)}&quot;)&#10;print(f&quot;arctanh: {np.arctanh(v).round(4)}&quot;)&#10;&#10;# Domain warning&#10;print(f&quot;\narctanh(1.0) = {np.arctanh(1.0)}&quot;)   # inf&#10;print(f&quot;arctanh(1.5) = {np.arctanh(1.5)}&quot;)   # nan (outside domain)" data-timeout="5" data-title=""></div>
+
+<hr>
+
+<h2>Set Operations</h2>
+
+<p>Essential for label management, vocabulary building, and data preprocessing.</p>
+
+<h3>unique</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-8" data-defaultcode="import numpy as np&#10;&#10;a = np.array([3, 1, 2, 3, 1, 4, 2, 5, 3])&#10;&#10;print(f&quot;unique:      {np.unique(a)}&quot;)&#10;&#10;# With counts — histogram in one call&#10;vals, counts = np.unique(a, return_counts=True)&#10;print(f&quot;values:      {vals}&quot;)&#10;print(f&quot;counts:      {counts}&quot;)&#10;&#10;# With inverse indices — reconstruct original from unique values&#10;vals, inv = np.unique(a, return_inverse=True)&#10;print(f&quot;inverse idx: {inv}&quot;)&#10;print(f&quot;reconstruct: {vals[inv]}&quot;)&#10;print(f&quot;matches original: {np.array_equal(vals[inv], a)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>Set Algebra</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-9" data-defaultcode="import numpy as np&#10;&#10;train_labels = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])&#10;test_labels = np.array([0, 2, 4, 6, 8, 10, 12])&#10;&#10;print(f&quot;Intersection (shared): {np.intersect1d(train_labels, test_labels)}&quot;)&#10;print(f&quot;Union (all):           {np.union1d(train_labels, test_labels)}&quot;)&#10;print(f&quot;In train only:         {np.setdiff1d(train_labels, test_labels)}&quot;)&#10;print(f&quot;In test only:          {np.setdiff1d(test_labels, train_labels)}&quot;)&#10;print(f&quot;Symmetric diff:        {np.setxor1d(train_labels, test_labels)}&quot;)" data-timeout="5" data-title=""></div>
+
+<h3>Membership Testing with isin</h3>
+
+<div data-widget="pyrunner" data-cellid="019-cell-10" data-defaultcode="import numpy as np&#10;&#10;# Filter dataset by valid labels&#10;all_data = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])&#10;valid_labels = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])&#10;&#10;mask = np.isin(all_data, valid_labels)&#10;print(f&quot;Data:    {all_data}&quot;)&#10;print(f&quot;Mask:    {mask}&quot;)&#10;print(f&quot;Valid:   {all_data[mask]}&quot;)&#10;print(f&quot;Invalid: {all_data[~mask]}&quot;)&#10;&#10;# Practical: remove NaN rows&#10;data = np.array([[1, 2], [np.nan, 4], [5, 6], [7, np.nan]])&#10;clean_mask = ~np.any(np.isnan(data), axis=1)&#10;print(f&quot;\nClean rows:\n{data[clean_mask]}&quot;)" data-timeout="5" data-title=""></div>
+
+<div data-widget="quiz" data-chapterslug="019-ufunc-trigonometry-and-sets" data-quizid="quiz-019-ufunc-trigonometry-and-sets"></div>
+
+<script type="application/json" id="quiz-019-ufunc-trigonometry-and-sets">[{"id":"q1","type":"multiple-choice","prompt":"NumPy trig functions (sin, cos, tan) expect angles in:","options":["Radians","Degrees","Gradians","Auto-detected units"],"correctIndex":0,"explanation":"All NumPy trig ufuncs use radians. Use np.deg2rad() and np.rad2deg() for conversion.","randomize":true},{"id":"q2","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.sin(np.pi))","options":["~1.2e-16 (not exactly 0)","0.0 exactly","1.0","Error"],"correctIndex":0,"explanation":"π isn't exactly representable in float64, so sin(π) ≈ 1.22e-16. Always use np.isclose() for float comparisons.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"How should you compare floating-point results like sin(π) to zero?","options":["Use np.isclose(value, 0) instead of ==","Use == directly","Round to integers first","Cast to int"],"correctIndex":0,"explanation":"Float arithmetic introduces tiny errors. np.isclose uses a tolerance to check approximate equality.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why prefer np.arctan2(y, x) over np.arctan(y/x)?","options":["arctan2 correctly determines the quadrant from separate x,y signs","arctan2 is faster","arctan handles complex numbers","arctan returns degrees"],"correctIndex":0,"explanation":"arctan(y/x) loses sign info — can't distinguish Q1/Q3 or Q2/Q4. arctan2(y,x) returns the correct angle in [−π, π].","randomize":true},{"id":"q5","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.allclose(np.sin(np.array([0, np.pi/6, np.pi/2]))<strong>2 + np.cos(np.array([0, np.pi/6, np.pi/2]))</strong>2, 1))","options":["True","False","Error","nan"],"correctIndex":0,"explanation":"Pythagorean identity: sin²θ + cos²θ = 1 for all θ. allclose confirms within floating-point tolerance.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"What is the range of np.tanh(x)?","options":["(−1, 1)","(0, 1)","(−∞, ∞)","[0, 1]"],"correctIndex":0,"explanation":"tanh maps all reals to (−1, 1). It's zero-centered, which made it preferred over sigmoid before ReLU.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"What is tanh(0)?","options":["0","1","-1","0.5"],"correctIndex":0,"explanation":"tanh is zero-centered: tanh(0) = 0. This is one reason it was preferred over sigmoid (which has sigmoid(0) = 0.5).","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"If h = tanh(z), what is dh/dz?","options":["1 − h²","h × (1 − h)","cosh(z)","1 / cosh²(z) only"],"correctIndex":0,"explanation":"The derivative of tanh is 1 − tanh²(z). Since you already have h = tanh(z), compute 1 − h² without recomputing tanh.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"At what |x| value does tanh effectively saturate (≈ ±1)?","options":["|x| > 3","|x| > 1","|x| > 10","Never saturates"],"correctIndex":0,"explanation":"tanh(3) ≈ 0.995. Beyond |x| > 3, the output is essentially ±1 and gradients vanish (vanishing gradient problem).","randomize":true},{"id":"q10","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.intersect1d([1,2,3], [2,3,4]))","options":["[2 3]","[1 2 3 4]","[1 4]","[2]"],"correctIndex":0,"explanation":"intersect1d returns sorted elements present in BOTH arrays: 2 and 3.","randomize":true},{"id":"q11","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.union1d([1,2,3], [2,3,4]))","options":["[1 2 3 4]","[2 3]","[1 4]","[1 2 3 2 3 4]"],"correctIndex":0,"explanation":"union1d returns sorted unique elements from either array: {1, 2, 3, 4}.","randomize":true},{"id":"q12","type":"code-output","prompt":"What is the output?","code":"import numpy as np\nprint(np.setdiff1d([1,2,3,4,5], [2,4]))","options":["[1 3 5]","[2 4]","[1 2 3 4 5]","[1 3]"],"correctIndex":0,"explanation":"setdiff1d returns elements in the first array that are NOT in the second: 1, 3, 5.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"What does np.unique(a, return_counts=True) return?","options":["A tuple of (unique_values, count_of_each)","Just the unique values","Just the counts","A dictionary"],"correctIndex":0,"explanation":"return_counts=True gives both the sorted unique values and how many times each appears. Useful for histograms.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"What does np.unique(a, return_inverse=True) provide?","options":["Indices such that unique_vals[inverse] reconstructs the original array","Count of each unique value","First occurrence index of each unique value","Sorted version of the array"],"correctIndex":0,"explanation":"Inverse indices map back: unique_vals[inverse_indices] == original_array. Essential for label encoding.","randomize":true},{"id":"q15","type":"multiple-choice","prompt":"What does np.isin(a, b) return?","options":["A boolean mask: True where elements of a are found in b","The intersection of a and b","Indices of matching elements","A count of matches"],"correctIndex":0,"explanation":"isin produces a boolean array the same shape as a. Use it as a mask: a[np.isin(a, valid_labels)].","randomize":true},{"id":"q16","type":"code-output","prompt":"What is the output?","code":"import numpy as np\na = np.array([3, 1, 2, 3, 1])\nvals, inv = np.unique(a, return_inverse=True)\nprint(vals[inv])","options":["[3 1 2 3 1]","[1 2 3]","[1 1 2 3 3]","Error"],"correctIndex":0,"explanation":"vals = [1,2,3], inv = [2,0,1,2,0]. vals[inv] reconstructs the original: [3,1,2,3,1].","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"Where do trig functions appear in neural networks?","options":["Positional encodings in Transformers, signal processing, rotation matrices","Weight initialization","Loss functions","Batch normalization"],"correctIndex":0,"explanation":"Transformer positional encodings use sin/cos at different frequencies. Also used in signal processing layers and geometric deep learning.","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"np.arctanh(1.0) returns:","options":["inf","1.0","0.0","nan"],"correctIndex":0,"explanation":"arctanh is defined on (−1, 1). At the boundary x=1, it approaches +∞. Beyond |x|>1, it returns nan.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"In data preprocessing, how would you filter a dataset to only include valid labels?","options":["mask = np.isin(labels, valid_labels); data = data[mask]","data = np.intersect1d(data, valid_labels)","data = data[labels in valid_labels]","np.where(labels == valid_labels)"],"correctIndex":0,"explanation":"isin creates a boolean mask for membership testing. Index with it to filter rows efficiently.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"What does np.setxor1d(a, b) return?","options":["Elements in either a or b but NOT in both (symmetric difference)","Elements in both a and b","All elements from both","Elements only in a"],"correctIndex":0,"explanation":"Symmetric difference: (a ∪ b) − (a ∩ b). Useful for finding mismatched labels between train/test sets.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/018-ufunc-aggregation-and-calculus.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/005-linear-layer.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

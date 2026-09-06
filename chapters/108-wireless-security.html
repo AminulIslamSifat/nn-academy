@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{TITLE}} — Academia</title>
+  <title>Wireless Security — Academia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
     }
   </script>
 </head>
-<body class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+<body data-slug="108-wireless-security" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
 
   <!-- Mobile overlay -->
   <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
@@ -63,29 +63,59 @@
           <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
             <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
             <span style="color: var(--text-muted);">/</span>
-            <span style="color: var(--text-secondary);">{{TITLE}}</span>
+            <span style="color: var(--text-secondary);">Wireless Security</span>
           </nav>
         </div>
         <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
-          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> {{READ_TIME}} min</span>
-          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> {{CODE_TIME}} min</span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 8 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 4 min</span>
         </div>
       </div>
     </header>
 
     <!-- Chapter content -->
     <article class="mx-auto max-w-3xl px-6 py-12">
-      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">{{TITLE}}</h1>
-      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">{{DESCRIPTION}}</p>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Wireless Security</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Why radio is a broadcast medium, and how Wi-Fi protections have evolved.</p>
 
       <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
-        {{CONTENT}}
+        
+<h2>The Broadcast Problem</h2>
+
+<p>Radio waves travel through walls. Every wireless transmission can be received by anyone in range, so wireless <strong>requires</strong> encryption by default.</p>
+
+<h2>The Evolution of Wi-Fi Security</h2>
+
+<table><tr><td>Protocol</td><td>Status</td><td>Weakness</td></tr>
+</table>
+<table><tr><td>WEP</td><td>Broken</td><td>Weak IVs, trivially cracked</td></tr>
+<tr><td>WPA / TKIP</td><td>Deprecated</td><td>Reuse vulnerabilities</td></tr>
+<tr><td>WPA2 / CCMP</td><td>Still used</td><td>KRACK, offline PSK guessing</td></tr>
+<tr><td>WPA3</td><td>Current</td><td>SAE handshake, stronger protection</td></tr>
+</table>
+<h2>Pre-Shared Key Risk</h2>
+
+<p>On a PSK network, anyone who captures the 4-way handshake can guess the password offline. Use a long, random passphrase or move to enterprise (WPA-Enterprise with a RADIUS server).</p>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Evil twin attacks" data-content="An attacker sets up a fake access point with a familiar name. Clients connect to the stronger signal and hand over credentials. Always verify network identity."></div>
+
+<h2>Hardening Checklist</h2>
+
+<ul><li>Use WPA3 where possible, else WPA2 with a strong passphrase.</li>
+<li>Disable WPS.</li>
+<li>Isolate guest traffic from the internal network.</li>
+<li>Monitor for rogue access points.</li>
+</ul>
+<h2>Summary</h2>
+
+<p>Wireless is inherently exposed, so it demands strong encryption, enterprise authentication, and continuous monitoring for rogue devices.</p>
+
       </div>
 
       <!-- Prev / Next -->
       <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
-        {{PREV_LINK}}
-        {{NEXT_LINK}}
+        <a href="/chapters/107-cryptography-basics.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/109-owasp-top-ten.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
       </nav>
     </article>
   </main>

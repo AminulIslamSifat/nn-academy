@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Penetration Testing — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="113-penetration-testing" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Penetration Testing</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 7 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Penetration Testing</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">The methodology of ethical hacking: scoped, authorized attacks that find weaknesses before adversaries do.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>What a Pentest Is (and Is Not)</h2>
+
+<p>A penetration test is an <strong>authorized</strong>, <strong>scoped</strong> simulation of an attack. It differs from real hacking in one crucial way: you have written permission and clear rules of engagement.</p>
+
+<p>A vulnerability scan is automated and broad. A pentest is manual, deep, and goal-oriented: "Can I reach the payment database from the internet?"</p>
+
+<h2>The Methodology</h2>
+
+<h3>1. Reconnaissance</h3>
+
+<p>Gather public information without touching the target:</p>
+
+<ul><li><strong>OSINT</strong> — WHOIS, DNS records, employee LinkedIn profiles, GitHub repos.</li>
+<li><strong>Passive scanning</strong> — Shodan, Censys for exposed services.</li>
+<li><strong>Social engineering recon</strong> — organizational structure, email formats.</li>
+</ul>
+<h3>2. Scanning & Enumeration</h3>
+
+<p>Active probing of the target:</p>
+
+<ul><li>Port scanning (nmap) to find open services.</li>
+<li>Service version detection.</li>
+<li>Web crawling to map endpoints and parameters.</li>
+<li>Vulnerability scanning for known CVEs.</li>
+</ul>
+<h3>3. Exploitation</h3>
+
+<p>Attempt to gain access:</p>
+
+<ul><li>Exploit known vulnerabilities in identified services.</li>
+<li>Test web application for injection, broken access control.</li>
+<li>Attempt credential attacks (within scope).</li>
+<li>Chain vulnerabilities for greater impact.</li>
+</ul>
+<h3>4. Post-Exploitation</h3>
+
+<p>Demonstrate impact:</p>
+
+<ul><li>Escalate privileges.</li>
+<li>Move laterally to other systems.</li>
+<li>Access sensitive data (and document proof without exfiltrating).</li>
+<li>Establish persistence (if in scope).</li>
+</ul>
+<h3>5. Reporting</h3>
+
+<p>The deliverable that drives remediation:</p>
+
+<ul><li>Executive summary (business impact, no jargon).</li>
+<li>Technical findings with reproduction steps.</li>
+<li>Risk ratings (Critical/High/Medium/Low).</li>
+<li>Prioritized remediation recommendations.</li>
+</ul>
+
+<div data-widget="callout" data-type="info" data-callouttitle="The report is the product" data-content="A pentest that finds holes but cannot communicate them clearly wastes everyone&#39;s effort. Evidence, reproduction steps, and prioritized fixes are the deliverable."></div>
+
+<h2>Boxes and Access Levels</h2>
+
+<table><tr><td>Type</td><td>Knowledge Given</td><td>Simulates</td></tr>
+</table>
+<table><tr><td><strong>Black box</strong></td><td>None</td><td>External attacker with no insider info</td></tr>
+<tr><td><strong>Grey box</strong></td><td>Partial (user credentials, network diagrams)</td><td>Insider or compromised user</td></tr>
+<tr><td><strong>White box</strong></td><td>Full (source code, architecture, credentials)</td><td>Thorough code-level review</td></tr>
+</table>
+<p>Grey box is the most common and cost-effective: it simulates a realistic attacker who has gained initial foothold.</p>
+
+<h2>Ethics & Law</h2>
+
+<p>Always have:</p>
+
+<ul><li><strong>Signed scope</strong> — exactly which systems, IPs, and applications are in scope.</li>
+<li><strong>Time window</strong> — when testing may occur.</li>
+<li><strong>Authorization letter</strong> — legal protection for the tester.</li>
+<li><strong>Emergency contact</strong> — who to call if something breaks.</li>
+<li><strong>Rules of engagement</strong> — what is off-limits (DoS, social engineering, physical).</li>
+</ul>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="Testing outside scope is illegal" data-content="Even with good intentions, scanning or attacking systems not in your signed authorization violates computer fraud laws. Scope is not a suggestion — it is a legal boundary."></div>
+
+<h2>Interactive: Pentest Findings Parser</h2>
+
+<div data-widget="pyrunner" data-cellid="113-penetration-testing-cell-1" data-defaultcode="import re&#10;&#10;# Simulated pentest findings&#10;findings_raw = &quot;&quot;&quot;&#10;[CRITICAL] SQL Injection in /api/search&#10;  CVSS: 9.8 | CWE-89&#10;  Endpoint: /api/search?q=&#10;  Impact: Full database access, data exfiltration&#10;  Evidence: Input &#39; OR 1=1-- returned all records&#10;&#10;[HIGH] Broken Access Control in /api/admin/users&#10;  CVSS: 8.1 | CWE-284&#10;  Endpoint: /api/admin/users&#10;  Impact: Regular users can access admin functions&#10;  Evidence: Authenticated as user, accessed admin endpoint, got 200&#10;&#10;[HIGH] Outdated Apache Tomcat 9.0.73&#10;  CVSS: 7.5 | CVE-2023-XXXX&#10;  Service: Apache Tomcat on port 8080&#10;  Impact: Known RCE vulnerability&#10;  Evidence: Version detected via nmap -sV&#10;&#10;[MEDIUM] Missing Content-Security-Policy header&#10;  CVSS: 5.3 | CWE-693&#10;  Endpoint: All responses&#10;  Impact: Increases XSS exploitation impact&#10;  Evidence: Response headers inspected, no CSP present&#10;&#10;[LOW] Server version disclosure&#10;  CVSS: 3.1 | CWE-200&#10;  Endpoint: All responses&#10;  Impact: Information disclosure aids attacker reconnaissance&#10;  Evidence: Server: Apache/2.4.54 (Ubuntu) in response headers&#10;&quot;&quot;&quot;&#10;&#10;# Parse findings&#10;findings = []&#10;for block in findings_raw.strip().split(&quot;\n\n&quot;):&#10;    lines = block.strip().split(&quot;\n&quot;)&#10;    if not lines:&#10;        continue&#10;    severity_title = lines[0].strip()&#10;    match = re.match(r&#39;\[(\w+)\] (.+)&#39;, severity_title)&#10;    if match:&#10;        finding = {&quot;severity&quot;: match.group(1), &quot;title&quot;: match.group(2)}&#10;        for line in lines[1:]:&#10;            if &quot;:&quot; in line:&#10;                key, val = line.strip().split(&quot;:&quot;, 1)&#10;                finding[key.strip().lower()] = val.strip()&#10;        findings.append(finding)&#10;&#10;# Display report&#10;severity_order = {&quot;CRITICAL&quot;: 0, &quot;HIGH&quot;: 1, &quot;MEDIUM&quot;: 2, &quot;LOW&quot;: 3}&#10;findings.sort(key=lambda f: severity_order.get(f[&quot;severity&quot;], 99))&#10;&#10;print(&quot;Penetration Test Findings Report&quot;)&#10;print(&quot;=&quot; * 60)&#10;print(f&quot;Total findings: {len(findings)}\n&quot;)&#10;&#10;for i, f in enumerate(findings, 1):&#10;    print(f&quot;  {i}. [{f[&#39;severity&#39;]}] {f[&#39;title&#39;]}&quot;)&#10;    if &#39;cvss&#39; in f:&#10;        print(f&quot;     CVSS: {f[&#39;cvss&#39;]}&quot;)&#10;    if &#39;impact&#39; in f:&#10;        print(f&quot;     Impact: {f[&#39;impact&#39;]}&quot;)&#10;    print()&#10;&#10;# Summary stats&#10;from collections import Counter&#10;sev_counts = Counter(f[&quot;severity&quot;] for f in findings)&#10;print(&quot;--- Summary ---&quot;)&#10;for sev in [&quot;CRITICAL&quot;, &quot;HIGH&quot;, &quot;MEDIUM&quot;, &quot;LOW&quot;]:&#10;    print(f&quot;  {sev}: {sev_counts.get(sev, 0)}&quot;)&#10;&#10;print(&quot;\n--- Priority Remediation Order ---&quot;)&#10;for i, f in enumerate(findings, 1):&#10;    print(f&quot;  {i}. Fix {f[&#39;title&#39;]} ({f[&#39;severity&#39;]})&quot;)" data-timeout="8" data-title="Pentest Findings Parser"></div>
+
+<h2>Tools of the Trade</h2>
+
+<table><tr><td>Phase</td><td>Tools</td></tr>
+</table>
+<table><tr><td>Recon</td><td>Maltego, theHarvester, Shodan</td></tr>
+<tr><td>Scanning</td><td>Nmap, Nikto, Burp Suite, OWASP ZAP</td></tr>
+<tr><td>Exploitation</td><td>Metasploit, Burp Repeater, custom scripts</td></tr>
+<tr><td>Post-exploitation</td><td>Mimikatz, BloodHound, Netcat</td></tr>
+<tr><td>Reporting</td><td>Pwndoc, Serpico, custom templates</td></tr>
+</table>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Tools assist, skills decide" data-content="A tool finds the low-hanging fruit. Your understanding of how systems work finds the chained, creative, and business-impacting vulnerabilities that tools miss."></div>
+
+<h2>Summary</h2>
+
+<p>Pentesting applies attacker technique under legal constraints to find and fix weaknesses before adversaries do. Master the methodology, respect the scope, and remember that the report is the product.</p>
+
+<div data-widget="quiz" data-chapterslug="113-penetration-testing" data-quizid="quiz-113-penetration-testing"></div>
+
+<script type="application/json" id="quiz-113-penetration-testing">[{"id":"q1","type":"multiple-choice","prompt":"What is the key difference between a pentest and malicious hacking?","options":["Pentests use better tools","A pentest has written authorization and a defined scope","Pentests are always automated","Malicious hackers do not write reports"],"correctIndex":1,"explanation":"The defining difference is authorization. A pentest operates under a signed scope with clear rules of engagement. Without written authorization, the same activities are illegal.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What type of pentest gives the tester partial knowledge like user credentials?","options":["Black box","Grey box","White box","Red team"],"correctIndex":1,"explanation":"Grey box testing provides partial knowledge (like user credentials or network diagrams), simulating an attacker who has gained initial foothold or an insider with limited access.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What is the primary deliverable of a penetration test?","options":["A list of exploited vulnerabilities","A report with findings, evidence, risk ratings, and remediation recommendations","A patched system","A tool configuration file"],"correctIndex":1,"explanation":"The report is the product. It must communicate findings clearly to both executives (business impact) and developers (reproduction steps and fixes). Without a good report, the pentest's value is lost.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Why is the reconnaissance phase important?","options":["It is required by law","It maps the attack surface and identifies entry points before active testing","It replaces the need for exploitation","It generates the final report"],"correctIndex":1,"explanation":"Reconnaissance gathers information about the target: open ports, services, technologies, and potential entry points. This intelligence guides the testing effort toward the most promising attack paths.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"What should you do if you discover a vulnerability outside the agreed scope?","options":["Exploit it anyway to show thoroughness","Stop and contact the client to discuss expanding the scope","Ignore it completely","Publish it publicly"],"correctIndex":1,"explanation":"Testing outside the signed scope is illegal. If you discover something outside scope, stop, document what you found passively, and contact the client to discuss whether to expand the authorization.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/112-secure-coding.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/114-malware-analysis.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

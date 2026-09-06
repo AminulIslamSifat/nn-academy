@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container &amp; Kubernetes Security — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="118-container-and-k8s-security" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Container &amp; Kubernetes Security</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 13 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 7 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Container &amp; Kubernetes Security</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">How containers work, where they break, and how to harden Kubernetes clusters.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>Why Containers Change the Threat Model</h2>
+
+<p>A container is a process with its own filesystem view, network namespace, and cgroup limits — all enforced by the Linux kernel. Unlike a VM, containers <strong>share the host kernel</strong>. A kernel exploit inside one container can potentially reach every other container on that host.</p>
+
+<p>This means container security is about <strong>isolation boundaries</strong>: image, runtime, orchestration, and network.</p>
+
+<h2>The Container Image Supply Chain</h2>
+
+<p>An image is a stack of read-only layers. If any layer contains malware, every container started from that image is compromised.</p>
+
+<h3>Common Image Vulnerabilities</h3>
+
+<ul><li><strong>Base image bloat</strong> — pulling <code>ubuntu:latest</code> ships 70+ packages you never use, each with its own CVE history.</li>
+<li><strong>Outdated packages</strong> — images are built once and never patched unless you rebuild.</li>
+<li><strong>Embedded secrets</strong> — a <code>COPY .env /app/.env</code> in the Dockerfile bakes credentials into the image forever.</li>
+<li><strong>Unpinned tags</strong> — <code>FROM node:latest</code> can silently change under you.</li>
+</ul>
+<pre><code class="language-dockerfile"># Bad: unpinned, bloated, secrets baked in&#10;FROM node:latest&#10;COPY . /app&#10;RUN npm install&#10;&#10;# Better: pinned slim image, no secrets&#10;FROM node:20.11-alpine@sha256:abc123&#10;COPY --from=builder /app/dist /app</code></pre>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="Pin by digest, not tag" data-content="A tag like `node:20` can be republished with different content. Pinning by sha256 digest guarantees you get exactly the image you audited."></div>
+
+<h2>Image Scanning</h2>
+
+<p>Tools like <strong>Trivy</strong>, <strong>Grype</strong>, and <strong>Snyk Container</strong> compare each package in your image against CVE databases. Run them in CI before the image is pushed.</p>
+
+<pre><code class="language-bash"># Example Trivy scan&#10;trivy image --severity HIGH,CRITICAL myapp:1.2.3</code></pre>
+
+<h2>Runtime Security</h2>
+
+<p>Once a container is running, the attack surface is the process itself:</p>
+
+<ul><li><strong>Run as non-root</strong> — <code>USER 1000</code> in the Dockerfile. A root container that gets exploited gives the attacker root on the host.</li>
+<li><strong>Read-only filesystem</strong> — <code>--read-only</code> flag forces attackers to find writable paths.</li>
+<li><strong>Drop capabilities</strong> — containers get a reduced set of Linux capabilities by default, but you can drop more: <code>--cap-drop=ALL --cap-add=NET_BIND_SERVICE</code>.</li>
+<li><strong>No privileged mode</strong> — <code>--privileged</code> disables almost all isolation. Never use it in production.</li>
+<li><strong>Seccomp & AppArmor</strong> — restrict which syscalls the container process can make.</li>
+</ul>
+<h2>Secrets Management</h2>
+
+<p>Never store secrets in images, environment variables committed to git, or Kubernetes ConfigMaps.</p>
+
+<table><tr><td>Method</td><td>Security Level</td></tr>
+</table>
+<table><tr><td>Hardcoded in Dockerfile</td><td>❌ Worst</td></tr>
+<tr><td>Kubernetes ConfigMap</td><td>❌ Plain text in etcd</td></tr>
+<tr><td>Kubernetes Secret (base64)</td><td>⚠️ Encoding, not encryption</td></tr>
+<tr><td>Sealed Secrets / SOPS</td><td>✅ Encrypted at rest</td></tr>
+<tr><td>External Vault (HashiCorp Vault)</td><td>✅ Best — dynamic, audited</td></tr>
+</table>
+<h2>Kubernetes-Specific Hardening</h2>
+
+<h3>RBAC</h3>
+
+<p>Kubernetes RBAC controls who can do what via <code>Role</code> and <code>ClusterRole</code> objects. Apply least privilege: a CI service account that only needs to create Deployments should not have <code>cluster-admin</code>.</p>
+
+<h3>Network Policies</h3>
+
+<p>By default, every pod can talk to every other pod. A <code>NetworkPolicy</code> restricts this:</p>
+
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1&#10;kind: NetworkPolicy&#10;metadata:&#10;  name: deny-ingress&#10;spec:&#10;  podSelector: {}&#10;  policyTypes:&#10;  - Ingress&#10;  # no ingress rules = deny all inbound traffic</code></pre>
+
+<h3>Pod Security Standards</h3>
+
+<p>Kubernetes 1.25+ replaced PodSecurityPolicy with <strong>Pod Security Admission</strong> labels on namespaces: <code>restricted</code>, <code>baseline</code>, or <code>privileged</code>. Use <code>restricted</code> for workloads that do not need special privileges.</p>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="Defense in depth in K8s" data-content="Combine image scanning, non-root runtime, network policies, and RBAC. No single control is sufficient; together they make a compromised pod much less useful to an attacker."></div>
+
+<h2>Interactive: Simulate an RBAC Permission Check</h2>
+
+<div data-widget="pyrunner" data-cellid="118-container-k8s-security-cell-1" data-defaultcode="# Simulate Kubernetes RBAC permission evaluation&#10;rules = [&#10;  {&quot;verbs&quot;: [&quot;get&quot;, &quot;list&quot;], &quot;resources&quot;: [&quot;pods&quot;], &quot;namespace&quot;: &quot;default&quot;},&#10;  {&quot;verbs&quot;: [&quot;create&quot;], &quot;resources&quot;: [&quot;deployments&quot;], &quot;namespace&quot;: &quot;default&quot;},&#10;  {&quot;verbs&quot;: [&quot;get&quot;], &quot;resources&quot;: [&quot;secrets&quot;], &quot;namespace&quot;: &quot;kube-system&quot;},&#10;]&#10;&#10;def can_i(rules, verb, resource, namespace):&#10;    for r in rules:&#10;        if verb in r[&quot;verbs&quot;] and resource in r[&quot;resources&quot;] and namespace == r[&quot;namespace&quot;]:&#10;            return True&#10;    return False&#10;&#10;tests = [&#10;    (&quot;get&quot;, &quot;pods&quot;, &quot;default&quot;),&#10;    (&quot;delete&quot;, &quot;pods&quot;, &quot;default&quot;),&#10;    (&quot;get&quot;, &quot;secrets&quot;, &quot;default&quot;),&#10;    (&quot;create&quot;, &quot;deployments&quot;, &quot;default&quot;),&#10;    (&quot;list&quot;, &quot;secrets&quot;, &quot;kube-system&quot;),&#10;]&#10;&#10;print(&quot;RBAC Permission Check Simulator&quot;)&#10;print(&quot;=&quot; * 55)&#10;for verb, resource, ns in tests:&#10;    result = &quot;ALLOWED&quot; if can_i(rules, verb, resource, ns) else &quot;DENIED&quot;&#10;    print(f&quot;  {verb:8s} {resource:12s} in {ns:12s} -&gt; {result}" data-timeout="8" data-title="K8s RBAC Permission Simulator"></div>
+
+<h2>Summary</h2>
+
+<p>Container security spans the entire lifecycle: build a minimal, scanned image; run it unprivileged with a locked-down runtime; and enforce network policies, RBAC, and pod security standards at the orchestration layer. Each layer reduces what an attacker can do after compromising one component.</p>
+
+<div data-widget="quiz" data-chapterslug="118-container-and-k8s-security" data-quizid="quiz-118-container-and-k8s-security"></div>
+
+<script type="application/json" id="quiz-118-container-and-k8s-security">[{"id":"q1","type":"multiple-choice","prompt":"Why is sharing the host kernel a security concern for containers?","options":["Containers use more memory than VMs","A kernel exploit in one container can affect all containers on the host","Containers cannot run on different operating systems","The kernel cannot enforce cgroup limits"],"correctIndex":1,"explanation":"Unlike VMs which have their own kernel, containers share the host kernel. A vulnerability in the kernel can be exploited from any container to compromise the host and all sibling containers.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is the most secure way to handle secrets in a container image?","options":["Copy .env into the image at build time","Use Kubernetes ConfigMaps","Use an external secret manager like HashiCorp Vault","Store them in environment variables in the pod spec"],"correctIndex":2,"explanation":"An external secret manager provides encryption at rest, dynamic rotation, and audit logging. ConfigMaps and baked-in files are plaintext or easily decoded.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What does a NetworkPolicy with an empty ingress rule and policyTypes [Ingress] do?","options":["Allows all inbound traffic","Denies all inbound traffic to matching pods","Redirects traffic to a firewall pod","Logs all inbound connections"],"correctIndex":1,"explanation":"A NetworkPolicy that selects pods but defines no ingress rules acts as a default-deny for inbound traffic to those pods.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"Which flag should you avoid in production containers?","options":["--cap-drop=ALL","--read-only","--privileged","USER 1000"],"correctIndex":2,"explanation":"--privileged disables most kernel-level isolation, giving the container near-full access to the host. It should never be used in production.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/117-identity-and-access-management.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/119-devsecops-cicd-security.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

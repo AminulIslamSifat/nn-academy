@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevSecOps &amp; CI/CD Security — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="119-devsecops-cicd-security" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">DevSecOps &amp; CI/CD Security</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 12 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 7 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">DevSecOps &amp; CI/CD Security</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Shifting security left, securing the pipeline, and protecting the software supply chain.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The Shift-Left Philosophy</h2>
+
+<p>Traditional security reviewed code at the end of development — after architecture decisions were locked in. <strong>DevSecOps</strong> embeds security checks at every stage: design, commit, build, test, deploy, and runtime.</p>
+
+<p>The cost curve is brutal: fixing a vulnerability found in production costs <strong>30-100x</strong> more than catching it during design.</p>
+
+<h2>The CI/CD Pipeline as Attack Surface</h2>
+
+<p>A modern pipeline touches many systems:</p>
+
+<li><strong>Source control</strong> (GitHub, GitLab)</li>
+<li><strong>CI server</strong> (Jenkins, GitHub Actions, GitLab CI)</li>
+<li><strong>Container registry</strong> (Docker Hub, ECR, GCR)</li>
+<li><strong>Artifact store</strong> (Nexus, Artifactory)</li>
+<li><strong>Deployment target</strong> (Kubernetes, AWS, GCP)</li>
+
+<p>Each of these is a target. The SolarWinds attack (2020) compromised the <strong>build system</strong> to inject malware into signed updates, reaching 18,000 organizations.</p>
+
+<div data-widget="callout" data-type="danger" data-callouttitle="The pipeline is a privileged target" data-content="A compromised CI system can push malicious code to every environment. Treat pipeline credentials with the same care as production secrets."></div>
+
+<h2>Static Analysis (SAST)</h2>
+
+<p>SAST tools scan source code for known vulnerability patterns without executing it.</p>
+
+<table><tr><td>Tool</td><td>Language Focus</td></tr>
+</table>
+<table><tr><td>Semgrep</td><td>Multi-language, rule-based</td></tr>
+<tr><td>Bandit</td><td>Python</td></tr>
+<tr><td>ESLint security plugin</td><td>JavaScript</td></tr>
+<tr><td>SpotBugs + FindSecBugs</td><td>Java</td></tr>
+</table>
+<pre><code class="language-yaml"># GitHub Actions example: run Semgrep on every PR&#10;- name: Semgrep scan&#10;  run: semgrep ci --config=p/owasp-top-ten</code></pre>
+
+<h2>Dynamic Analysis (DAST)</h2>
+
+<p>DAST tools attack a <strong>running</strong> application from the outside, like a real attacker. OWASP ZAP is the most common open-source DAST tool. It finds issues SAST cannot: authentication bypasses, runtime injection, misconfigured headers.</p>
+
+<h2>Software Composition Analysis (SCA)</h2>
+
+<p>Your project depends on libraries, which depend on other libraries. SCA tools map this <strong>dependency tree</strong> and flag known CVEs.</p>
+
+<pre><code class="language-bash"># npm audit checks the Node.js dependency tree&#10;npm audit&#10;&#10;# pip-audit for Python&#10;pip-audit</code></pre>
+
+<p>The <strong>dependency confusion</strong> attack exploits package managers: an attacker publishes a private-sounding package name to a public registry with a higher version number, and the build system pulls the malicious public version instead of the internal one.</p>
+
+<h2>Securing the Pipeline Itself</h2>
+
+<h3>Secrets in CI</h3>
+
+<ul><li>Use the CI platform's secret store (GitHub Secrets, Vault integration), never plain-text in YAML.</li>
+<li>Scope secrets to the minimum environments and branches.</li>
+<li>Rotate on any suspicion of leak.</li>
+</ul>
+<h3>Pinned Actions</h3>
+
+<pre><code class="language-yaml"># Bad: mutable tag&#10;- uses: actions/checkout@v4&#10;&#10;# Good: pinned to commit SHA&#10;- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11</code></pre>
+
+<p>A mutable tag like <code>@v4</code> can be republished. Pinning to the commit SHA guarantees you run the code you reviewed.</p>
+
+<h3>Branch Protection</h3>
+
+<p>Require pull request reviews, status checks, and signed commits before merging to main. This prevents a single compromised account from pushing malicious code directly.</p>
+
+<h2>Interactive: Simulate a Supply Chain Check</h2>
+
+<div data-widget="pyrunner" data-cellid="119-devsecops-cicd-security-cell-1" data-defaultcode="import re&#10;&#10;# Simulated dependency lockfile entries&#10;deps = [&#10;  {&quot;name&quot;: &quot;express&quot;, &quot;version&quot;: &quot;4.18.2&quot;, &quot;source&quot;: &quot;npm&quot;},&#10;  {&quot;name&quot;: &quot;lodash&quot;, &quot;version&quot;: &quot;4.17.20&quot;, &quot;source&quot;: &quot;npm&quot;},&#10;  {&quot;name&quot;: &quot;requests&quot;, &quot;version&quot;: &quot;2.31.0&quot;, &quot;source&quot;: &quot;pypi&quot;},&#10;  {&quot;name&quot;: &quot;urllib3&quot;, &quot;version&quot;: &quot;1.26.5&quot;, &quot;source&quot;: &quot;pypi&quot;},&#10;  {&quot;name&quot;: &quot;left-pad&quot;, &quot;version&quot;: &quot;1.3.0&quot;, &quot;source&quot;: &quot;npm&quot;},&#10;]&#10;&#10;# Known-bad versions (simulated CVE database)&#10;known_bad = {&#10;  (&quot;lodash&quot;, &quot;4.17.20&quot;): &quot;CVE-2021-23337: Command injection&quot;,&#10;  (&quot;urllib3&quot;, &quot;1.26.5&quot;): &quot;CVE-2023-43804: Cookie header leak&quot;,&#10;}&#10;&#10;def check_dependency(dep):&#10;    key = (dep[&quot;name&quot;], dep[&quot;version&quot;])&#10;    if key in known_bad:&#10;      return &quot;VULNERABLE&quot;, known_bad[key]&#10;    return &quot;OK&quot;, None&#10;&#10;print(&quot;Supply Chain Dependency Audit&quot;)&#10;print(&quot;=&quot; * 55)&#10;vuln_count = 0&#10;for dep in deps:&#10;    status, detail = check_dependency(dep)&#10;    marker = &quot;X&quot; if status == &quot;VULNERABLE&quot; else &quot; &quot;&#10;    print(f&quot;  [{marker}] {dep[&#39;name&#39;]:12s} v{dep[&#39;version&#39;]:10s} ({dep[&#39;source&#39;]:5s}) -&gt; {status}&quot;)&#10;    if detail:&#10;        print(f&quot;      {detail}&quot;)&#10;        vuln_count += 1&#10;&#10;print(f&quot;\nResult: {vuln_count} vulnerable dependencies found out of {len(deps)}&quot;)&#10;print(&quot;Action: Update lodash to &gt;=4.17.21, urllib3 to &gt;=1.26.17&quot;)" data-timeout="8" data-title="Dependency Vulnerability Scanner"></div>
+
+<h2>Interactive: Detect Secrets in Code</h2>
+
+<div data-widget="pyrunner" data-cellid="119-devsecops-cicd-security-cell-2" data-defaultcode="import re&#10;&#10;# Simulated code snippet that might appear in a PR&#10;code = &quot;&quot;&quot;&#10;import os&#10;API_KEY = &quot;sk-live-4eC39HqLyjWDarjtT1zdp7dc&quot;&#10;DB_PASSWORD = &quot;hunter2&quot;&#10;connection = f&quot;postgres://admin:{DB_PASSWORD}@db:5432/prod&quot;&#10;webhook_url = &quot;https://hooks.slack.com/services/T00/B00/xxxyyyzzz&quot;&#10;&quot;&quot;&quot;&#10;&#10;# Regex patterns for common secret formats&#10;patterns = [&#10;  (r&#39;[Aa][Pp][Ii][_\-]?[Kk][Ee][Yy]\s*=\s*[&quot;\&#39;]([^&quot;\&#39;]+)[&quot;\&#39;]&#39;, &quot;API Key&quot;),&#10;  (r&#39;[Pp][Aa][Ss][Ss][Ww][Oo][Rr][Dd]\s*=\s*[&quot;\&#39;]([^&quot;\&#39;]+)[&quot;\&#39;]&#39;, &quot;Password&quot;),&#10;  (r&#39;[Pp][Oo][Ss][Tt][Gg][Rr][Ee][Ss]://[^\s]+:[^\s]+@&#39;, &quot;Connection string with creds&quot;),&#10;  (r&#39;https://hooks\.slack\.com/services/[^\s&quot;\&#39;]+&#39;, &quot;Slack webhook URL&quot;),&#10;]&#10;&#10;print(&quot;Secret Scanner Results&quot;)&#10;print(&quot;=&quot; * 50)&#10;found = 0&#10;for pattern, label in patterns:&#10;    matches = re.findall(pattern, code)&#10;    for m in matches:&#10;        # Mask the secret for display&#10;        masked = m[:4] + &quot;*&quot; * (len(m) - 8) + m[-4:] if len(m) &gt; 8 else &quot;****&quot;&#10;        print(f&quot;  FOUND [{label}]: {masked}&quot;)&#10;        found += 1&#10;&#10;if found == 0:&#10;    print(&quot;  No secrets detected.&quot;)&#10;else:&#10;    print(f&quot;\n  {found} potential secret(s) found. Block this commit!&quot;)" data-timeout="8" data-title="Secret Detection Scanner"></div>
+
+<h2>The SBOM</h2>
+
+<p>A <strong>Software Bill of Materials</strong> lists every component in your artifact, like a nutrition label. Formats include <strong>SPDX</strong> and <strong>CycloneDX</strong>. Generate one at build time so that when a new CVE drops, you can answer "are we affected?" in minutes instead of days.</p>
+
+<div data-widget="callout" data-type="info" data-callouttitle="SBOMs are becoming mandatory" data-content="The US Executive Order on Cybersecurity (2021) and the EU Cyber Resilience Act both push for SBOMs in software sold to governments. Even if you are not selling software, an SBOM accelerates your own incident response."></div>
+
+<h2>Summary</h2>
+
+<p>DevSecOps is not a tool you buy — it is a set of automated gates in the pipeline: SAST at commit, SCA at build, DAST before deploy, secret scanning everywhere, pinned dependencies, and an SBOM for rapid CVE triage. The pipeline itself must be hardened like any production system.</p>
+
+<div data-widget="quiz" data-chapterslug="119-devsecops-cicd-security" data-quizid="quiz-119-devsecops-cicd-security"></div>
+
+<script type="application/json" id="quiz-119-devsecops-cicd-security">[{"id":"q1","type":"multiple-choice","prompt":"What was the key technique in the SolarWinds supply chain attack?","options":["Phishing employees for credentials","Compromising the build system to inject malware into signed updates","Exploiting a zero-day in the SolarWinds web interface","DNS hijacking of the update server"],"correctIndex":1,"explanation":"The attackers compromised SolarWinds build infrastructure and injected a backdoor (SUNBURST) into digitally signed software updates, which were then distributed to all customers.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why should you pin GitHub Actions to a commit SHA instead of a version tag?","options":["Tags are slower to resolve","A mutable tag can be republished with different code","SHA pinning is required by GitHub","Tags do not support caching"],"correctIndex":1,"explanation":"A tag like @v4 can be moved to point at different code. Pinning to the full commit SHA ensures you always run the exact code you audited.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"What does a dependency confusion attack exploit?","options":["Weak encryption in package registries","The package manager preferring a higher version from a public registry over a private one","Buffer overflows in the dependency resolver","Unauthenticated access to private registries"],"correctIndex":1,"explanation":"If a private package name is published publicly with a higher version number, some package managers will pull the public (attacker-controlled) version instead of the internal one.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"What is the primary purpose of a Software Bill of Materials (SBOM)?","options":["To speed up the build process","To list all components so you can quickly determine CVE exposure","To encrypt the dependency tree","To replace the need for SCA tools"],"correctIndex":1,"explanation":"An SBOM is an inventory of every component in your software. When a new CVE is published, you can immediately check if you ship the affected component.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"Where should CI/CD secrets be stored?","options":["In the pipeline YAML file for visibility","In a .env file committed to the repo","In the CI platform secret store or an external vault","In a Kubernetes ConfigMap"],"correctIndex":2,"explanation":"Secrets belong in encrypted, access-controlled stores (GitHub Secrets, HashiCorp Vault). Committing them to code or config files exposes them to anyone with repo access.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/118-container-and-k8s-security.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/120-soc-and-siem-monitoring.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

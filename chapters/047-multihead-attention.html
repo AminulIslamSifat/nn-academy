@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Head Attention &amp; Transformer Blocks — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="047-multihead-attention" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Multi-Head Attention &amp; Transformer Blocks</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 30 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 25 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Multi-Head Attention &amp; Transformer Blocks</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Why one attention head is not enough. Implement multi-head attention, residual connections, layer normalization, and the full transformer block in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Multi-Head Attention & Transformer Blocks</h1>
+
+<p>Single-head attention learns one kind of relationship. ==Multi-head attention runs several attention heads in parallel==, each learning a different pattern: syntax, coreference, position, semantics.</p>
+
+<h2>Multi-Head Attention</h2>
+
+<p>Split Q, K, V into H heads, run attention independently, concatenate:</p>
+
+<div data-widget="katex" data-latex="\text{MultiHead}(Q,K,V) = \text{Concat}(\text{head}_1, ..., \text{head}_H) W^O" data-display="true"></div>
+
+<p>where each head uses <span data-widget="katex" data-latex="d_k = d_{model}/H" data-display="false"></span> dimensions.</p>
+
+<pre><code class="language-python">import numpy as np&#10;&#10;def softmax(x, axis=-1):&#10;    x = x - np.max(x, axis=axis, keepdims=True)&#10;    e = np.exp(x)&#10;    return e / np.sum(e, axis=axis, keepdims=True)&#10;&#10;def multi_head_attention(X, Wq, Wk, Wv, Wo, num_heads, mask=None):&#10;    &quot;&quot;&quot;X: (N, T, D), W*: (D, D)&quot;&quot;&quot;&#10;    N, T, D = X.shape&#10;    d_k = D // num_heads&#10;    &#10;    Q = X @ Wq  # (N, T, D)&#10;    K = X @ Wk&#10;    V = X @ Wv&#10;    &#10;    # Reshape to (N, H, T, d_k)&#10;    Q = Q.reshape(N, T, num_heads, d_k).transpose(0, 2, 1, 3)&#10;    K = K.reshape(N, T, num_heads, d_k).transpose(0, 2, 1, 3)&#10;    V = V.reshape(N, T, num_heads, d_k).transpose(0, 2, 1, 3)&#10;    &#10;    # Scaled dot-product per head&#10;    scores = Q @ K.transpose(0, 1, 3, 2) / np.sqrt(d_k)&#10;    if mask is not None:&#10;        scores = np.where(mask, scores, -1e9)&#10;    weights = softmax(scores, axis=-1)&#10;    attn_out = weights @ V  # (N, H, T, d_k)&#10;    &#10;    # Concatenate heads&#10;    attn_out = attn_out.transpose(0, 2, 1, 3).reshape(N, T, D)&#10;    return attn_out @ Wo, weights</code></pre>
+
+<div data-widget="pyrunner" data-cellid="047-cell-1" data-defaultcode="import numpy as np&#10;np.random.seed(42)&#10;&#10;def softmax(x, axis=-1):&#10;    x = x - np.max(x, axis=axis, keepdims=True)&#10;    e = np.exp(x)&#10;    return e / e.sum(axis=axis, keepdims=True)&#10;&#10;N, T, D, H = 2, 6, 16, 4&#10;d_k = D // H&#10;X = np.random.randn(N, T, D)&#10;Wq = np.random.randn(D, D) * 0.3&#10;Wk = np.random.randn(D, D) * 0.3&#10;Wv = np.random.randn(D, D) * 0.3&#10;Wo = np.random.randn(D, D) * 0.3&#10;&#10;Q = (X @ Wq).reshape(N, T, H, d_k).transpose(0,2,1,3)&#10;K = (X @ Wk).reshape(N, T, H, d_k).transpose(0,2,1,3)&#10;scores = Q @ K.transpose(0,1,3,2) / np.sqrt(d_k)&#10;weights = softmax(scores, axis=-1)&#10;&#10;print(f&quot;Multi-Head Attention shapes:&quot;)&#10;print(f&quot;  Input:     {X.shape}&quot;)&#10;print(f&quot;  Per head:  ({N}, {H}, {T}, {d_k})&quot;)&#10;print(f&quot;  Scores:    {scores.shape} = (batch, heads, query_pos, key_pos)&quot;)&#10;print(f&quot;  Weights:   {weights.shape}&quot;)&#10;&#10;for h in range(H):&#10;    entropy = -np.mean(np.sum(weights[0,h]*np.log(weights[0,h]+1e-8), axis=1))&#10;    print(f&quot;  Head {h} avg entropy: {entropy:.3f}&quot;)&#10;&#10;print(&quot;\n💡 Different heads learn different attention patterns&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Why Multiple Heads?</h2>
+
+<p>One head averages all relationships. Multiple heads specialize:</p>
+
+<table><tr><td>Head Type</td><td>Learns</td></tr>
+</table>
+<table><tr><td>Positional</td><td>Adjacent tokens, distance patterns</td></tr>
+<tr><td>Syntactic</td><td>Subject-verb, modifier-head</td></tr>
+<tr><td>Coreference</td><td>Pronoun → antecedent</td></tr>
+<tr><td>Semantic</td><td>Related concepts</td></tr>
+</table>
+<blockquote>[!NOTE] Empirical Finding</blockquote>
+<blockquote>In trained transformers, some heads become interpretable (attending to previous token, matching brackets, etc.), while others remain distributed. More heads ≠ always better; diminishing returns past ~12-16 heads.</blockquote>
+
+<h2>The Transformer Block</h2>
+
+<p>Attention alone isn't enough. Each block adds:</p>
+
+<li><strong>Residual connection</strong>: <span data-widget="katex" data-latex="x + \text{sublayer}(x)" data-display="false"></span></li>
+<li><strong>Layer normalization</strong>: stabilize training</li>
+<li><strong>Feed-forward network</strong>: per-position processing</li>
+
+<pre><code class="language-python">def layer_norm(X, gamma, beta, eps=1e-5):&#10;    &quot;&quot;&quot;X: (N, T, D)&quot;&quot;&quot;&#10;    mu = np.mean(X, axis=-1, keepdims=True)&#10;    var = np.var(X, axis=-1, keepdims=True)&#10;    X_norm = (X - mu) / np.sqrt(var + eps)&#10;    return gamma * X_norm + beta&#10;&#10;def feed_forward(X, W1, b1, W2, b2):&#10;    &quot;&quot;&quot;Two linear layers with ReLU.&quot;&quot;&quot;&#10;    return np.maximum(0, X @ W1 + b1) @ W2 + b2&#10;&#10;def transformer_block(X, params, mask=None):&#10;    # Self-attention sub-block&#10;    attn_out, _ = multi_head_attention(&#10;        X, params[&quot;Wq&quot;], params[&quot;Wk&quot;], params[&quot;Wv&quot;], params[&quot;Wo&quot;],&#10;        params[&quot;num_heads&quot;], mask&#10;    )&#10;    X = layer_norm(X + attn_out, params[&quot;ln1_g&quot;], params[&quot;ln1_b&quot;])&#10;    &#10;    # Feed-forward sub-block&#10;    ff_out = feed_forward(X, params[&quot;W1&quot;], params[&quot;b1&quot;], params[&quot;W2&quot;], params[&quot;b2&quot;])&#10;    X = layer_norm(X + ff_out, params[&quot;ln2_g&quot;], params[&quot;ln2_b&quot;])&#10;    &#10;    return X</code></pre>
+
+<div data-widget="pyrunner" data-cellid="047-cell-2" data-defaultcode="import numpy as np&#10;np.random.seed(42)&#10;&#10;N, T, D = 2, 8, 32&#10;X = np.random.randn(N, T, D) * 2.0&#10;&#10;# Layer norm demo&#10;gamma = np.ones(D)&#10;beta = np.zeros(D)&#10;mu = X.mean(axis=-1, keepdims=True)&#10;var = X.var(axis=-1, keepdims=True)&#10;X_norm = (X - mu) / np.sqrt(var + 1e-5)&#10;out = gamma * X_norm + beta&#10;&#10;print(&quot;Layer Normalization:&quot;)&#10;print(f&quot;  Before: mean={X[0,0].mean():+.3f}, std={X[0,0].std():.3f}&quot;)&#10;print(f&quot;  After:  mean={out[0,0].mean():+.6f}, std={out[0,0].std():.3f}&quot;)&#10;&#10;# Residual connection demo&#10;residual = X + out&#10;print(f&quot;\nResidual Connection:&quot;)&#10;print(f&quot;  Original signal preserved via addition&quot;)&#10;print(f&quot;  Gradient can flow through identity path even if sublayer fails&quot;)&#10;print(f&quot;  This is why deep transformers train at all!&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Pre-Norm vs Post-Norm</h2>
+
+<ul><li><strong>Post-Norm</strong> (original paper): <code>LN(x + sublayer(x))</code></li>
+<li><strong>Pre-Norm</strong> (modern default): <code>x + sublayer(LN(x))</code></li>
+</ul>
+<p>Pre-Norm is more stable for deep networks. Most modern implementations use it.</p>
+
+<blockquote>[!IMPORTANT] Architecture Summary</blockquote>
+<blockquote>A Transformer = stack of identical blocks. Each block = multi-head self-attention + feed-forward, both wrapped in residual + layer norm. That's it. Everything else (BERT, GPT, T5) is just variations on this template.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="047-multihead-attention" data-quizid="quiz-047-multihead-attention"></div>
+
+<script type="application/json" id="quiz-047-multihead-attention">[{"id":"q1","type":"multiple-choice","prompt":"Why do transformers use multiple attention heads instead of one large head?","options":["Faster computation","Multiple heads can attend to different types of relationships simultaneously (syntax, coreference, position); one head would average everything into a single blurred distribution","To reduce memory usage","Because softmax requires multiple passes"],"correctIndex":1,"explanation":"Each head has its own Q/K/V projections and learns a distinct attention pattern. One head collapses all relationship types into a single averaged distribution, losing the ability to represent diverse linguistic phenomena.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What role does the residual connection play in transformer blocks?","options":["It reduces parameter count","It provides a direct gradient path via identity addition, enabling training of very deep networks by ensuring gradients always flow even if sublayers degrade","It normalizes activations","It implements dropout"],"correctIndex":1,"explanation":"x + sublayer(x) creates an identity shortcut. Gradients flow through the addition unchanged, bypassing potentially problematic sublayers. This is why Transformers can be stacked 12-96 layers deep.","randomize":false},{"id":"q3","type":"shape-prediction","prompt":"With D=512 and num_heads=8, what is d_k (dimension per head)?","options":["64","512","8","256"],"correctIndex":0,"explanation":"d_k = D / num_heads = 512 / 8 = 64. Each head operates in a 64-dim subspace. Total computation is similar to single-head with D=512, but distributed across specialized subspaces.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"In multi-head attention, why reshape Q from (N, T, D) to (N, H, T, d_k)?","options":["To reduce memory","To separate the D-dimensional representation into H independent d_k-dimensional subspaces, allowing each head to compute attention independently in its own subspace","NumPy requires this shape for matmul","To enable batch processing"],"correctIndex":1,"explanation":"The reshape splits the full representation into H chunks of d_k dimensions each. Transposing to (N, H, T, d_k) puts heads as a batch dimension, enabling parallel attention computation across all heads simultaneously.","randomize":true},{"id":"q5","type":"code-output","prompt":"After concatenating H heads of shape (N, H, T, d_k), what shape results from transpose+reshape?","code":"N, H, T, d_k = 2, 8, 10, 64\nout = np.zeros((N, H, T, d_k))\nconcat = out.transpose(0, 2, 1, 3).reshape(N, T, H * d_k)\nprint(concat.shape)","options":["(2, 10, 512)","(2, 8, 640)","(10, 2, 512)","(2, 10, 64)"],"correctIndex":0,"explanation":"Transpose to (N, T, H, d_k), then reshape to (N, T, H×d_k) = (2, 10, 512). This merges all heads back into a single D-dimensional representation, ready for the output projection Wo.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"What does layer normalization normalize over?","options":["Across the batch dimension","Across the feature dimension (last axis) — each position's D-dimensional vector is independently normalized to zero mean and unit variance","Across the time dimension","Across all dimensions simultaneously"],"correctIndex":1,"explanation":"LayerNorm computes mean and variance per-position across features: μ = mean(x_d), σ² = var(x_d). Unlike BatchNorm (normalizes across samples), LayerNorm is sample-independent, making it suitable for variable-length sequences.","randomize":true},{"id":"q7","type":"fill-blank","prompt":"A transformer block consists of two sublayers: multi-head self-attention and ___, each wrapped in residual connection + ___.","options":["feed-forward network, layer normalization","convolution, batch normalization","pooling, dropout","embedding, softmax"],"correctIndex":0,"explanation":"Attention captures inter-token relationships. The FFN (two linear layers + ReLU) processes each position independently, adding non-linearity and capacity. Both are stabilized by residual + LayerNorm.","randomize":false},{"id":"q8","type":"multiple-choice","prompt":"What is the difference between pre-norm and post-norm in transformer blocks?","options":["Pre-norm uses BatchNorm, post-norm uses LayerNorm","Post-norm: LN(x + sublayer(x)). Pre-norm: x + sublayer(LN(x)). Pre-norm normalizes BEFORE the sublayer, providing more stable gradients for deep networks.","They're mathematically identical","Pre-norm is slower but more accurate"],"correctIndex":1,"explanation":"Pre-norm places LayerNorm before each sublayer, ensuring the sublayer receives normalized inputs. This prevents activation explosion in deep stacks and has become the modern default. Post-norm was used in the original paper.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"Why does the feed-forward network use TWO linear layers with ReLU instead of one?","options":["Two layers are faster","One linear layer is just another linear transformation — no additional expressiveness. Two layers with ReLU create a universal function approximator that can learn non-linear per-position transformations.","It's required by the attention mechanism","Single linear layers cause gradient explosion"],"correctIndex":1,"explanation":"A single linear layer composed with attention's linear operations is still linear overall. The ReLU nonlinearity between two linear layers enables the FFN to learn arbitrary non-linear functions of each position's representation.","randomize":true},{"id":"q10","type":"ordering","prompt":"Order the operations in one transformer block (pre-norm variant):","items":["Layer norm the input","Multi-head self-attention","Add residual (x + attn_out)","Layer norm again","Feed-forward network","Add residual again"],"correctOrder":[0,1,2,3,4,5],"explanation":"Pre-norm: LN → Attention → Residual → LN → FFN → Residual. Each sublayer receives normalized input and its output is added back to preserve the original signal.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"What does the output projection Wo do after concatenating attention heads?","options":["It's optional and can be removed","It linearly combines information from all heads into a coherent D-dimensional output, learning how to integrate diverse attention patterns","It applies softmax","It normalizes the concatenated output"],"correctIndex":1,"explanation":"Concatenation simply stacks head outputs. Wo (D×D matrix) learns a weighted combination across heads, enabling the model to selectively emphasize or suppress information from different attention patterns.","randomize":true},{"id":"q12","type":"code-output","prompt":"What does layer_norm produce for this input?","code":"import numpy as np\nx = np.array([2.0, 4.0, 6.0])\nmu = x.mean()\nvar = x.var()\nx_norm = (x - mu) / np.sqrt(var + 1e-5)\nprint(x_norm.round(3))","options":["[-1.225  0.     1.225]","[0. 0. 0.]","[2. 4. 6.]","[-1. 0. 1.]"],"correctIndex":0,"explanation":"mean=4, var=8/3≈2.667, std≈1.633. (2-4)/1.633=-1.225, (4-4)/1.633=0, (6-4)/1.633=1.225. LayerNorm centers and scales each feature vector to zero mean, unit variance.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"How many parameters does multi-head attention have (excluding biases) with D=512?","options":["512²","4 × 512² (Wq + Wk + Wv + Wo, each D×D)","8 × 512²","512"],"correctIndex":1,"explanation":"Four D×D projection matrices: Wq, Wk, Wv (input projections) and Wo (output projection). Total: 4 × D² = 4 × 262,144 = ~1M params. Number of heads doesn't change total params — it redistributes them.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"Why does increasing num_heads beyond ~12-16 show diminishing returns?","options":["Hardware limitations","Each head gets fewer dimensions (d_k = D/H). Too many heads means each operates in too small a subspace to capture meaningful patterns. There's an optimal trade-off between specialization and capacity per head.","Softmax becomes unstable","More heads always improve performance"],"correctIndex":1,"explanation":"With D=512 and H=32, each head has only d_k=16 dimensions — too few to represent complex relationships. With H=8, d_k=64 provides ample capacity. The sweet spot balances diversity of patterns with sufficient per-head expressiveness.","randomize":true},{"id":"q15","type":"fill-blank","prompt":"The feed-forward network expands the representation to ___ × D (typically 4×), applies ReLU, then projects back to D.","options":["4","2","1","8"],"correctIndex":0,"explanation":"FFN: D → 4D → D. The expansion provides a higher-dimensional space for non-linear processing before compressing back. The 4× factor is a standard hyperparameter balancing capacity and efficiency.","randomize":false},{"id":"q16","type":"multiple-choice","prompt":"What happens if you remove residual connections from a 12-layer Transformer?","options":["Nothing significant","Training fails or degrades severely — gradients must pass through 12 sequential sublayers without shortcuts, causing vanishing/exploding gradients and making optimization nearly impossible","The model trains faster","Performance improves due to simpler architecture"],"correctIndex":1,"explanation":"Residual connections are essential for deep networks. Without them, each layer's gradient must flow through all subsequent layers multiplicatively. The identity path ensures stable gradient flow regardless of depth.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"In trained Transformers, some attention heads become interpretable. What patterns have researchers observed?","options":["All heads learn identical patterns","Specific heads specialize: attending to previous token, matching brackets, subject-verb agreement, positional distance. Others remain distributed with no clear interpretation.","Heads only learn random patterns","Interpretability is impossible for attention"],"correctIndex":1,"explanation":"Research (Vig 2019, Clark 2019) found heads specializing in syntactic relations, coreference, positional patterns, and more. However, many heads remain diffuse. Interpretability varies across models and layers.","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"Why does LayerNorm work better than BatchNorm for Transformers?","options":["LayerNorm is faster","BatchNorm normalizes across the batch dimension, which is problematic for variable-length sequences and small batches. LayerNorm normalizes per-sample across features, independent of batch composition.","BatchNorm doesn't support GPUs","There's no difference"],"correctIndex":1,"explanation":"Transformers process variable-length sequences with padding. BatchNorm statistics vary with batch composition and padding masks. LayerNorm's per-sample normalization is consistent regardless of batch contents or sequence lengths.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"What is the total parameter count of one transformer block with D=512 and FFN hidden dim=2048?","options":["~1M","~7M: attention (4×512² ≈ 1M) + FFN (512×2048 + 2048×512 ≈ 2M) + LayerNorm (2×512×2 ≈ 2K) + biases","~100K","~50M"],"correctIndex":1,"explanation":"Attention: 4×D² = ~1M. FFN: D×4D + 4D×D = 2×D×4D = ~2M. LayerNorm: 2×2D = ~2K. Plus biases. Total ≈ 3M weights per block. A 12-layer model: ~36M params from blocks alone.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"BERT, GPT, and T5 are all based on the Transformer block. How do they differ?","options":["They use completely different architectures","Same building block, different configurations: BERT = encoder-only (bidirectional), GPT = decoder-only (causal), T5 = encoder-decoder. All stack the same attention+FFN+residual+LN template.","Only GPT uses attention","BERT uses RNNs internally"],"correctIndex":1,"explanation":"The Transformer block is universal. BERT stacks encoder blocks (no causal mask). GPT stacks decoder blocks (causal mask). T5 uses both. The 'everything is a Transformer' insight means understanding one block unlocks all modern NLP.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/046-attention-mechanism.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/048-transformer-architecture.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

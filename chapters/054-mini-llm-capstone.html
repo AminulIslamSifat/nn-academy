@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capstone: Training a Mini-LLM — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="054-mini-llm-capstone" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Capstone: Training a Mini-LLM</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 35 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 30 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Capstone: Training a Mini-LLM</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Put everything together: tokenize data, build a decoder-only transformer, pretrain on text, and generate. A complete LLM pipeline in NumPy.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Capstone: Training a Mini-LLM</h1>
+
+<p>==This is the final project.== You'll train a tiny language model from scratch using everything from chapters 046-053. It won't write essays, but it will generate coherent text and demonstrate every concept you've learned.</p>
+
+<h2>Project Structure</h2>
+
+<pre><code class="language-text">mini_llm/&#10;├── tokenizer.py      # BPE tokenizer&#10;├── model.py          # Decoder-only transformer&#10;├── train.py          # Training loop&#10;├── generate.py       # Autoregressive generation&#10;└── data/&#10;    └── corpus.txt    # Training text</code></pre>
+
+<h2>Step 1: Prepare Data</h2>
+
+<pre><code class="language-python">import numpy as np&#10;from collections import Counter&#10;&#10;# Load and tokenize&#10;corpus = open(&quot;data/corpus.txt&quot;).read()&#10;&#10;# Train BPE (from chapter 049)&#10;def train_bpe(text, num_merges=500):&#10;    tokens = list(text)&#10;    merges = []&#10;    for _ in range(num_merges):&#10;        pairs = Counter(zip(tokens, tokens[1:]))&#10;        if not pairs: break&#10;        best = pairs.most_common(1)[0][0]&#10;        merges.append(best)&#10;        merged = &quot;&quot;.join(best)&#10;        new_tokens = []&#10;        i = 0&#10;        while i &lt; len(tokens):&#10;            if i &lt; len(tokens)-1 and (tokens[i], tokens[i+1]) == best:&#10;                new_tokens.append(merged); i += 2&#10;            else:&#10;                new_tokens.append(tokens[i]); i += 1&#10;        tokens = new_tokens&#10;    vocab = sorted(set(tokens))&#10;    tok2id = {t: i for i, t in enumerate(vocab)}&#10;    return tok2id, merges</code></pre>
+
+<h2>Step 2: Build the Model</h2>
+
+<p>Use the MiniGPT class from chapter 050 with these recommended sizes:</p>
+
+<table><tr><td>Hyperparameter</td><td>Value</td><td>Reason</td></tr>
+</table>
+<table><tr><td>d_model</td><td>64</td><td>Trainable on CPU</td></tr>
+<tr><td>num_heads</td><td>4</td><td>d_k = 16</td></tr>
+<tr><td>num_layers</td><td>2</td><td>Fast iteration</td></tr>
+<tr><td>ff_dim</td><td>256</td><td>4× d_model</td></tr>
+<tr><td>max_len</td><td>128</td><td>Short contexts</td></tr>
+<tr><td>vocab_size</td><td>~2000</td><td>From BPE</td></tr>
+</table>
+<h2>Step 3: Training Loop</h2>
+
+<pre><code class="language-python">def train(model, token_ids, epochs=20, batch_size=32, lr=0.001):&#10;    N = len(token_ids)&#10;    seq_len = 128&#10;    &#10;    for epoch in range(epochs):&#10;        # Create random subsequences&#10;        indices = np.random.randint(0, N - seq_len, batch_size)&#10;        batch = np.array([token_ids[i:i+seq_len] for i in indices])&#10;        &#10;        # Forward&#10;        logits = model.forward(batch[:, :-1])&#10;        targets = batch[:, 1:]&#10;        &#10;        # Loss&#10;        log_probs = logits - np.logaddexp.reduce(logits, axis=-1, keepdims=True)&#10;        loss = -np.mean(log_probs[:, np.arange(seq_len-1), targets])&#10;        &#10;        # Backward + update (simplified)&#10;        # In practice, implement full backprop or use autograd&#10;        &#10;        if epoch % 5 == 0:&#10;            print(f&quot;Epoch {epoch}: loss={loss:.3f}&quot;)</code></pre>
+
+<div data-widget="pyrunner" data-cellid="054-cell-1" data-defaultcode="import numpy as np&#10;np.random.seed(42)&#10;&#10;# Simulate training progress&#10;text = &quot;the cat sat on the mat. the dog ran in the park. &quot; * 200&#10;vocab = sorted(set(text))&#10;vocab_size = len(vocab)&#10;&#10;print(f&quot;Mini-LLM Training Setup:&quot;)&#10;print(f&quot;  Corpus length: {len(text)} chars&quot;)&#10;print(f&quot;  Vocabulary: {vocab_size} unique characters&quot;)&#10;print(f&quot;  Model: 2-layer transformer, d=64, h=4&quot;)&#10;print(f&quot;  Context: 128 tokens&quot;)&#10;print(f&quot;  Parameters: ~{64*64*8*2 + vocab_size*64 + 64*vocab_size:,}&quot;)&#10;&#10;# Simulated training curve&#10;losses = 3.5 * np.exp(-np.arange(20) * 0.12) + 1.2&#10;print(f&quot;\nSimulated Training:&quot;)&#10;for e in range(0, 20, 5):&#10;    print(f&quot;  Epoch {e:2d}: loss={losses[e]:.3f}&quot;)&#10;&#10;print(f&quot;\n💡 With real backprop, this model would learn basic English patterns&quot;)&#10;print(f&quot;   Expected output: grammatical but nonsensical short sentences&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Step 4: Generation</h2>
+
+<pre><code class="language-python">def generate(model, prompt, max_tokens=50, temperature=0.8):&#10;    ids = [tok2id.get(c, 0) for c in prompt]&#10;    for _ in range(max_tokens):&#10;        x = np.array([ids[-128:]])&#10;        logits = model.forward(x)[0, -1] / temperature&#10;        probs = np.exp(logits - np.max(logits))&#10;        probs /= probs.sum()&#10;        next_id = np.random.choice(len(probs), p=probs)&#10;        ids.append(next_id)&#10;    return &quot;&quot;.join(id2tok[i] for i in ids)</code></pre>
+
+<h2>What to Expect</h2>
+
+<p>A mini-LLM trained on a few KB of text for 20 epochs will:</p>
+<ul><li>✅ Generate grammatically plausible text</li>
+<li>✅ Repeat common phrases from training data</li>
+<li>✅ Show basic word-level coherence</li>
+<li>❌ NOT produce factual content</li>
+<li>❌ NOT follow instructions</li>
+<li>❌ NOT reason</li>
+</ul>
+<p>==That's expected.== Scale is what unlocks those abilities. Your mini-LLM demonstrates the ARCHITECTURE; real LLMs demonstrate the SCALE.</p>
+
+<blockquote>[!IMPORTANT] Learning Outcomes</blockquote>
+<blockquote>After completing this capstone, you understand:</blockquote>
+<blockquote>- Tokenization (BPE)</blockquote>
+<blockquote>- Transformer architecture (attention, FFN, residuals, norms)</blockquote>
+<blockquote>- Positional encoding</blockquote>
+<blockquote>- Autoregressive generation</blockquote>
+<blockquote>- Next-token prediction training</blockquote>
+<blockquote>- Temperature sampling</blockquote>
+<blockquote>- Why scale matters</blockquote>
+<p>></p>
+<blockquote>You've built an LLM from scratch in NumPy. That puts you ahead of 99% of ML practitioners.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="054-mini-llm-capstone" data-quizid="quiz-054-mini-llm-capstone"></div>
+
+<script type="application/json" id="quiz-054-mini-llm-capstone">[{"id":"q1","type":"multiple-choice","prompt":"What is the overall goal of the mini-LLM capstone project?","options":["Build a production chatbot","Demonstrate every concept from chapters 046-053 by training a tiny language model from scratch in NumPy","Beat GPT-4 on benchmarks","Learn PyTorch"],"correctIndex":1,"explanation":"The capstone integrates tokenization, transformer architecture, training, and generation into one complete pipeline to solidify understanding of how LLMs work end-to-end.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"Why does a mini-LLM generate grammatically plausible but factually nonsensical text?","options":["The architecture is wrong","It learned local patterns (grammar, common phrases) from limited data but lacks the scale for global coherence, facts, and reasoning","Temperature is too high","Needs more attention heads"],"correctIndex":1,"explanation":"Grammar is a local statistical pattern learnable from small data. Factual knowledge and long-range reasoning require seeing billions of tokens across diverse domains.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"In the training loop, why do we slice batch[:, :-1] for inputs and batch[:, 1:] for targets?","options":["To remove padding","Next-token prediction: input is tokens 0..T-1, target is tokens 1..T. Each position predicts the next token.","To reduce memory usage","To separate prompt from response"],"correctIndex":1,"explanation":"Causal LM training shifts the sequence by one position. Position t receives tokens 0..t-1 as input and must predict token t. This is the core pretraining objective.","randomize":true},{"id":"q4","type":"code-output","prompt":"What shape are the logits after model.forward(batch[:, :-1]) if batch is (32, 128)?","code":"import numpy as np\nbatch = np.random.randint(0, 100, (32, 128))\ninputs = batch[:, :-1]\nprint('Input shape:', inputs.shape)\n# Assuming vocab_size=2000\nlogits_shape = (inputs.shape[0], inputs.shape[1], 2000)\nprint('Logits shape:', logits_shape)","options":["(32, 127, 2000)","(32, 128, 2000)","(32, 127)","(127, 2000)"],"correctIndex":0,"explanation":"batch[:, :-1] removes the last token → shape (32, 127). The model outputs logits of shape (batch, seq_len, vocab_size) = (32, 127, 2000).","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"Why is d_model=64 recommended for the mini-LLM instead of 512 or 1024?","options":["Larger models can't learn language","d_model=64 keeps the model trainable on CPU within reasonable time while still demonstrating all architectural concepts","64 is the only valid dimension","Attention doesn't work with larger dimensions"],"correctIndex":1,"explanation":"The goal is educational, not competitive. d=64 allows full forward+backward passes on CPU in seconds. Larger dimensions would make iteration painfully slow without adding conceptual value.","randomize":true},{"id":"q6","type":"fill-blank","prompt":"With d_model=64 and num_heads=4, each head operates on vectors of dimension d_k = ___.","options":["16","64","4","256"],"correctIndex":0,"explanation":"d_k = d_model / num_heads = 64 / 4 = 16. Multi-head attention splits the representation into smaller subspaces per head.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"Why is ff_dim typically set to 4× d_model?","options":["It's a hardware requirement","Empirical convention: provides enough capacity for non-linear transformations while keeping parameter count manageable","Mathematical proof requires it","Attention needs it"],"correctIndex":1,"explanation":"The feed-forward network expands to 4× d_model then projects back. This bottleneck design gives the model room for non-linear feature processing. 4× is standard from the original Transformer paper.","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"During generation, why do we use ids[-128:] when max_len=128?","options":["To speed up computation","The model was trained with max context length 128. Feeding more tokens would exceed positional encoding bounds.","To save memory","128 is always optimal"],"correctIndex":1,"explanation":"Positional encodings are defined for positions 0..max_len-1. Feeding more tokens than max_len causes out-of-bounds errors or undefined behavior. We keep only the most recent 128 tokens.","randomize":true},{"id":"q9","type":"multiple-choice","prompt":"What role does temperature play in the generate function?","code":"logits = model.forward(x)[0, -1] / temperature","options":["It changes the model weights","Dividing logits by temperature > 1 makes the distribution softer (more random); < 1 makes it sharper (more deterministic)","It controls batch size","It adjusts learning rate"],"correctIndex":1,"explanation":"Temperature scales logits before softmax. T>1 flattens the distribution (more exploration), T<1 sharpens it (more greedy), T=1 leaves it unchanged.","randomize":true},{"id":"q10","type":"code-output","prompt":"What happens to probabilities when temperature approaches 0?","code":"import numpy as np\nlogits = np.array([1.0, 2.0, 3.0])\nfor temp in [1.0, 0.1, 0.01]:\n    scaled = logits / temp\n    probs = np.exp(scaled - np.max(scaled))\n    probs /= probs.sum()\n    print(f'T={temp:.2f}: {probs.round(3)}')","options":["Distribution becomes uniform","Distribution concentrates on the highest-logit token (argmax-like)","All probabilities become 0","Error: division by zero"],"correctIndex":1,"explanation":"As T→0, the largest logit dominates exponentially. T=0.01 gives ~[0, 0, 1]. This is equivalent to greedy decoding. Note: T=0 exactly would cause division by zero.","randomize":true},{"id":"q11","type":"ordering","prompt":"Order the steps of autoregressive generation:","items":["Tokenize the prompt into IDs","Take the last max_len tokens as input","Run forward pass through the model","Get logits for the last position","Apply temperature scaling and softmax","Sample next token from probability distribution","Append sampled token to the sequence"],"correctOrder":[0,1,2,3,4,5,6],"explanation":"Generation is a loop: tokenize → truncate context → forward → extract last position logits → scale & normalize → sample → append → repeat from step 2.","randomize":true},{"id":"q12","type":"multiple-choice","prompt":"Why use np.logaddexp.reduce instead of naive log(sum(exp(logits))) for computing log_probs?","options":["It's faster","Numerical stability: exp of large logits overflows. logaddexp uses the log-sum-exp trick internally to prevent overflow/underflow","It gives different results","NumPy doesn't support sum(exp())"],"correctIndex":1,"explanation":"log_probs = logits - log(sum(exp(logits))). If any logit is large (e.g., 1000), exp(1000) = inf. logaddexp.reduce subtracts the max first, keeping values in safe range.","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"How are training subsequences created from the corpus?","code":"indices = np.random.randint(0, N - seq_len, batch_size)\nbatch = np.array([token_ids[i:i+seq_len] for i in indices])","options":["Sequential chunks from start to end","Random starting positions are sampled, creating overlapping subsequences of length seq_len from anywhere in the corpus","Only non-overlapping windows","Every possible subsequence is used"],"correctIndex":1,"explanation":"Random sampling creates stochastic batches. Overlapping subsequences provide more training signal than sequential chunking. This is standard practice for language model training.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"What is the most important takeaway from building a mini-LLM from scratch?","options":["NumPy is production-ready for LLMs","The same architecture that generates nonsense at small scale produces remarkable capabilities at large scale — architecture + scale together create emergent abilities","Transformers are too complex to understand","You need PyTorch to build LLMs"],"correctIndex":1,"explanation":"Understanding the architecture demystifies LLMs. The mini-LLM proves you understand every component. Scale (data + parameters + compute) is what transforms this architecture into something powerful.","randomize":true},{"id":"q15","type":"multiple-choice","prompt":"A mini-LLM trained on 10KB of text for 20 epochs will NOT be able to:","options":["Generate grammatically plausible text","Repeat common phrases from training data","Follow instructions or reason about novel problems","Show basic word-level coherence"],"correctIndex":2,"explanation":"Instruction following and reasoning are emergent properties requiring massive scale (billions of tokens, billions of parameters) plus fine-tuning. A tiny model on tiny data learns statistics, not reasoning.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"Why is BPE preferred over character-level tokenization for the mini-LLM?","options":["BPE is simpler to implement","BPE merges frequent character sequences into single tokens, reducing sequence length and allowing the model to capture word-level patterns more efficiently","Character-level doesn't work with transformers","BPE requires less memory"],"correctIndex":1,"explanation":"Character-level means 'understanding' takes many more tokens. BPE compresses common words/patterns into single tokens, making the 128-token context window much more expressive.","randomize":true},{"id":"q17","type":"fill-blank","prompt":"With d_model=64, num_layers=2, num_heads=4, ff_dim=256, the approximate parameter count per transformer layer is ___ × d_model² + d_model × ff_dim × 2 ≈ ___.","options":["roughly 100K-200K total for the whole model","exactly 64","over 1 billion","zero"],"correctIndex":0,"explanation":"Each layer has attention (~4×d²) + FFN (~2×d×ff_dim) + norms. With these hyperparameters, total model params are roughly 100K-200K including embeddings. Tiny compared to real LLMs.","randomize":true},{"id":"q18","type":"multiple-choice","prompt":"In the loss computation, what does log_probs[:, np.arange(seq_len-1), targets] achieve?","options":["Selects random positions","Advanced indexing: for each batch element and each position t, selects the log probability assigned to the actual target token at that position","Computes the mean of all logits","Filters out padding tokens"],"correctIndex":1,"explanation":"targets has shape (N, seq_len-1). For each (batch_idx, position), we index into the vocab dimension to get the log prob of the correct next token. This is the cross-entropy numerator.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"Which concept from earlier chapters is NOT directly used in the mini-LLM pipeline?","options":["Multi-head attention (ch 047)","Batch normalization (ch 037)","Positional encoding (ch 048)","Autoregressive generation (ch 050)"],"correctIndex":1,"explanation":"Transformers use Layer Normalization, not Batch Normalization. BN was covered in the CNN chapters (037) but isn't part of the standard transformer architecture used in the mini-LLM.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"If your mini-LLM's loss plateaus at a high value and generated text is gibberish, what should you check FIRST?","options":["Add more layers immediately","Verify the tokenizer maps tokens consistently between training and generation, check that targets are correctly shifted by 1, and ensure the loss computation indexes the right positions","Increase temperature","Switch to character-level tokenization"],"correctIndex":1,"explanation":"Common bugs: off-by-one in target shifting, inconsistent tokenization between train/generate, wrong indexing in loss computation. Always verify correctness of the pipeline before scaling up.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/053-scaling-laws.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/055-whats-next.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

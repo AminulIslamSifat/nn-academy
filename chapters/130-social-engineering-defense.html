@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Engineering Defense — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="130-social-engineering-defense" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Social Engineering Defense</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 11 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 5 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Social Engineering Defense</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Phishing, pretexting, vishing, and baiting — how attackers exploit human psychology and how to build resilience.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h2>The Human Layer</h2>
+
+<p>You can have perfect firewalls, patched systems, and encrypted data — and still be breached because someone clicked a link. Social engineering attacks the <strong>human decision-making process</strong>, not the technology.</p>
+
+<p>The FBI's IC3 report consistently shows that phishing and business email compromise cause more financial damage than any other cybercrime category.</p>
+
+<h2>Attack Types</h2>
+
+<h3>Phishing</h3>
+
+<p>Mass emails that appear to come from trusted sources. Goals: steal credentials, deliver malware, or trick the victim into transferring money.</p>
+
+<strong>Anatomy of a phishing email:</strong>
+<ul><li>Spoofed or lookalike sender domain (<code>rnicrosoft.com</code>)</li>
+<li>Urgency or fear ("Your account will be locked!")</li>
+<li>Generic greeting ("Dear Customer")</li>
+<li>Malicious link or attachment</li>
+<li>Poor grammar (sometimes, but not always)</li>
+</ul>
+<h3>Spear Phishing</h3>
+
+<p>Targeted phishing aimed at a specific person or role. The attacker researches the target (LinkedIn, company website, social media) to craft a believable message.</p>
+
+<h3>Whaling</h3>
+
+<p>Spear phishing aimed at executives. The goal is usually a large wire transfer or access to sensitive strategic data.</p>
+
+<h3>Pretexting</h3>
+
+<p>Creating a fabricated scenario to build trust. Example: calling IT support pretending to be a locked-out employee and requesting a password reset.</p>
+
+<h3>Vishing (Voice Phishing)</h3>
+
+<p>Phone calls that use urgency and authority to extract information. AI voice cloning is making this significantly more dangerous.</p>
+
+<h3>Baiting</h3>
+
+<p>Leaving a physical device (USB drive labeled "Payroll 2024") in a place where a curious employee will plug it in.</p>
+
+<h3>Tailgating</h3>
+
+<p>Following an authorized person through a secure door without badge access.</p>
+
+<div data-widget="callout" data-type="warning" data-callouttitle="AI supercharges social engineering" data-content="Large language models can generate perfect grammar, personalized phishing at scale, and realistic voice clones. The old advice of &#39;look for typos&#39; is no longer sufficient."></div>
+
+<h2>Psychological Levers</h2>
+
+<p>Attackers exploit consistent cognitive biases:</p>
+
+<table><tr><td>Lever</td><td>Example</td></tr>
+</table>
+<table><tr><td><strong>Urgency</strong></td><td>"Act within 24 hours or lose access"</td></tr>
+<tr><td><strong>Authority</strong></td><td>"This is from the CEO's office"</td></tr>
+<tr><td><strong>Fear</strong></td><td>"Your account has been compromised"</td></tr>
+<tr><td><strong>Curiosity</strong></td><td>"See who viewed your profile"</td></tr>
+<tr><td><strong>Helpfulness</strong></td><td>"Can you help me with this invoice?"</td></tr>
+<tr><td><strong>Social proof</strong></td><td>"All your colleagues have already submitted"</td></tr>
+</table>
+<h2>Interactive: Phishing Indicator Scorer</h2>
+
+<div data-widget="pyrunner" data-cellid="130-social-engineering-defense-cell-1" data-defaultcode="import re&#10;&#10;# Simulated email headers and body for analysis&#10;emails = [&#10;    {&#10;        &quot;from&quot;: &quot;security@rnicrosoft.com&quot;,&#10;        &quot;subject&quot;: &quot;URGENT: Your account will be locked in 24 hours&quot;,&#10;        &quot;body&quot;: &quot;Dear Customer, we detected suspicious activity. Click here immediately to verify your account or it will be permanently locked.&quot;,&#10;        &quot;has_link&quot;: True,&#10;        &quot;greeting&quot;: &quot;generic&quot;,&#10;    },&#10;    {&#10;        &quot;from&quot;: &quot;hr@company.com&quot;,&#10;        &quot;subject&quot;: &quot;Q2 Benefits Enrollment Open&quot;,&#10;        &quot;body&quot;: &quot;Hi team, the Q2 benefits enrollment window is now open. Please log into the HR portal to review your options.&quot;,&#10;        &quot;has_link&quot;: True,&#10;        &quot;greeting&quot;: &quot;specific&quot;,&#10;    },&#10;    {&#10;        &quot;from&quot;: &quot;ceo@company.com&quot;,&#10;        &quot;subject&quot;: &quot;Quick favor&quot;,&#10;        &quot;body&quot;: &quot;I am in a meeting and cannot talk. Can you process a wire transfer of $47,500 to a new vendor? I will explain later. This is urgent.&quot;,&#10;        &quot;has_link&quot;: False,&#10;        &quot;greeting&quot;: &quot;generic&quot;,&#10;    },&#10;]&#10;&#10;def score_phishing(email):&#10;    score = 0&#10;    reasons = []&#10;&#10;    # Check sender domain&#10;    if re.search(r&#39;(rnicrosoft|g00gle|arnazon|paypa1)&#39;, email[&quot;from&quot;]):&#10;        score += 30&#10;        reasons.append(&quot;Lookalike domain detected&quot;)&#10;&#10;    # Check urgency language&#10;    urgency_words = [&quot;urgent&quot;, &quot;immediately&quot;, &quot;24 hours&quot;, &quot;locked&quot;, &quot;suspended&quot;]&#10;    for word in urgency_words:&#10;        if word in email[&quot;subject&quot;].lower() or word in email[&quot;body&quot;].lower():&#10;            score += 15&#10;            reasons.append(f&quot;Urgency language: &#39;{word}&#39;&quot;)&#10;            break&#10;&#10;    # Check greeting&#10;    if email[&quot;greeting&quot;] == &quot;generic&quot;:&#10;        score += 10&#10;        reasons.append(&quot;Generic greeting (Dear Customer)&quot;)&#10;&#10;    # Check for unusual requests&#10;    if &quot;wire transfer&quot; in email[&quot;body&quot;].lower():&#10;        score += 25&#10;        reasons.append(&quot;Unusual financial request&quot;)&#10;&#10;    # Check link + urgency combo&#10;    if email[&quot;has_link&quot;] and score &gt;= 30:&#10;        score += 10&#10;        reasons.append(&quot;Link combined with urgency indicators&quot;)&#10;&#10;    return score, reasons&#10;&#10;print(&quot;Phishing Email Indicator Scorer&quot;)&#10;print(&quot;=&quot; * 55)&#10;&#10;for email in emails:&#10;    score, reasons = score_phishing(email)&#10;    verdict = &quot;LIKELY PHISHING&quot; if score &gt;= 40 else &quot;SUSPICIOUS&quot; if score &gt;= 20 else &quot;LIKELY LEGITIMATE&quot;&#10;    print(f&quot;\nFrom: {email[&#39;from&#39;]}&quot;)&#10;    print(f&quot;Subject: {email[&#39;subject&#39;]}&quot;)&#10;    print(f&quot;Score: {score}/100 -&gt; {verdict}&quot;)&#10;    for r in reasons:&#10;        print(f&quot;  - {r}&quot;)" data-timeout="8" data-title="Phishing Indicator Scorer"></div>
+
+<h2>Defense: The Human Firewall</h2>
+
+<h3>Technical Controls</h3>
+
+<ul><li><strong>Email authentication</strong> — SPF, DKIM, DMARC prevent domain spoofing.</li>
+<li><strong>URL rewriting</strong> — tools that scan links at click time.</li>
+<li><strong>Attachment sandboxing</strong> — detonate files in a sandbox before delivery.</li>
+<li><strong>External sender banners</strong> — visually flag emails from outside the organization.</li>
+</ul>
+<h3>Human Controls</h3>
+
+<ul><li><strong>Security awareness training</strong> — regular, engaging, and scenario-based (not annual click-through slides).</li>
+<li><strong>Phishing simulations</strong> — test employees with fake phishing and provide coaching to those who click.</li>
+<li><strong>Reporting culture</strong> — make it easy and blameless to report suspicious emails.</li>
+<li><strong>Verification procedures</strong> — require out-of-band confirmation for financial requests (call the person, do not reply to the email).</li>
+</ul>
+
+<div data-widget="callout" data-type="tip" data-callouttitle="The 3-second rule" data-content="Before clicking any link or attachment, pause for 3 seconds. Check the sender, hover over the link, and ask: was I expecting this? This simple habit catches most phishing."></div>
+
+<h2>Summary</h2>
+
+<p>Social engineering exploits human psychology, not software bugs. Defense requires both technical controls (email authentication, sandboxing) and human resilience (training, simulations, verification procedures). In the age of AI-generated phishing, building a reporting culture matters more than ever.</p>
+
+<div data-widget="quiz" data-chapterslug="130-social-engineering-defense" data-quizid="quiz-130-social-engineering-defense"></div>
+
+<script type="application/json" id="quiz-130-social-engineering-defense">[{"id":"q1","type":"multiple-choice","prompt":"What makes spear phishing more dangerous than mass phishing?","options":["It uses more sophisticated malware","It is targeted and personalized using researched information about the victim","It bypasses email filters","It uses encrypted attachments"],"correctIndex":1,"explanation":"Spear phishing targets specific individuals with personalized messages based on research (LinkedIn, company info), making the email more believable and harder to detect.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is pretexting?","options":["Sending mass phishing emails","Creating a fabricated scenario to build trust and extract information","Installing malware via USB drives","Intercepting network traffic"],"correctIndex":1,"explanation":"Pretexting involves creating a believable false scenario (like pretending to be IT support) to build trust with the victim and manipulate them into revealing information or performing actions.","randomize":true},{"id":"q3","type":"multiple-choice","prompt":"How does AI change the social engineering threat landscape?","options":["AI makes phishing easier to detect","AI enables perfect grammar, personalized messages at scale, and realistic voice clones","AI eliminates the need for human attackers","AI only affects malware, not social engineering"],"correctIndex":1,"explanation":"AI can generate grammatically perfect, personalized phishing emails at scale and clone voices for vishing attacks. Traditional indicators like typos are no longer reliable detection signals.","randomize":true},{"id":"q4","type":"multiple-choice","prompt":"What is the most effective defense against business email compromise (CEO fraud)?","options":["Stronger email passwords","Out-of-band verification for financial requests (call the person)","Antivirus software","Blocking all external emails"],"correctIndex":1,"explanation":"BEC attacks trick employees into making financial transfers. Requiring out-of-band verification (calling the requester via a known number) breaks the attack chain regardless of how convincing the email is.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/129-security-architecture-design.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/131-careers-and-next-steps.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>

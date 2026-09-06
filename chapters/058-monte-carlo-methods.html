@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monte Carlo Methods — Academia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body data-slug="058-monte-carlo-methods" class="font-sans antialiased min-h-screen flex" style="background: var(--bg-base); color: var(--text-primary);">
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden hidden" aria-hidden="true"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed left-0 top-0 z-40 h-screen w-72 max-w-[85vw] overflow-y-auto hidden lg:block" style="background: var(--bg-base); border-right: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+    <div class="sticky top-0 z-10 px-4 py-4" style="background: var(--bg-base); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <a href="/" class="flex items-center gap-2 text-sm font-semibold" style="color: var(--text-primary); text-decoration: none;">
+          <i data-lucide="book-open" style="width:16px;height:16px;color:var(--accent);"></i>
+          <span>Academia</span>
+        </a>
+        <button id="sidebar-close" class="rounded p-1 lg:hidden" style="color: var(--text-muted);" aria-label="Close sidebar">✕</button>
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-xs mb-1.5" style="color: var(--text-muted);">
+          <span>Progress</span>
+          <span id="progress-text">0/88</span>
+        </div>
+        <div class="h-1 rounded-full" style="background: rgba(255,255,255,0.06);">
+          <div id="progress-bar" class="h-1 rounded-full transition-all duration-500" style="width:0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+        </div>
+      </div>
+    </div>
+    <nav id="sidebar-nav" class="px-3 py-4 space-y-1"></nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-1 lg:ml-72">
+    <!-- Chapter header -->
+    <header class="sticky top-0 z-30 px-6 py-3" style="background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle);">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button id="mobile-menu-btn" class="rounded p-2 lg:hidden transition" style="color: var(--text-muted);" aria-label="Open sidebar"><i data-lucide="menu" style="width:20px;height:20px;"></i></button>
+          <nav class="flex items-center gap-2 text-sm" style="color: var(--text-muted);" aria-label="Breadcrumb">
+            <a href="/" class="transition hover:opacity-80" style="text-decoration: none; color: inherit;">Academy</a>
+            <span style="color: var(--text-muted);">/</span>
+            <span style="color: var(--text-secondary);">Monte Carlo Methods</span>
+          </nav>
+        </div>
+        <div class="flex items-center gap-4 text-xs" style="color: var(--text-muted);">
+          <span class="flex items-center gap-1"><i data-lucide="clock" style="width:12px;height:12px;"></i> 20 min</span>
+          <span class="hidden sm:flex items-center gap-1"><i data-lucide="code" style="width:12px;height:12px;"></i> 15 min</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Chapter content -->
+    <article class="mx-auto max-w-3xl px-6 py-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight mb-3" style="color: var(--text-primary);">Monte Carlo Methods</h1>
+      <p class="text-sm mb-10 leading-relaxed" style="color: var(--text-muted);">Estimate integrals, expectations, and probabilities by random sampling. The foundation of variational inference, reinforcement learning, and Bayesian deep learning.</p>
+
+      <div class="prose prose-invert prose-zinc max-w-none prose-headings:text-zinc-100 prose-a:text-emerald-400 prose-strong:text-zinc-200 chapter-content" id="chapter-content">
+        
+<h1>Monte Carlo Methods</h1>
+
+<p>Can't compute an integral analytically? ==Sample randomly and average.== Monte Carlo turns impossible math into trivial computation — at the cost of noise that decreases with more samples.</p>
+
+<h2>Estimating Pi</h2>
+
+<p>The classic example. Throw darts at a square with an inscribed circle:</p>
+
+<div data-widget="katex" data-latex="\pi \approx 4 \cdot \frac{\text{points inside circle}}{\text{total points}}" data-display="true"></div>
+
+<div data-widget="pyrunner" data-cellid="058-cell-1" data-defaultcode="import numpy as np&#10;&#10;rng = np.random.default_rng(42)&#10;&#10;for n in [100, 1000, 10000, 100000, 1000000]:&#10;    x = rng.uniform(-1, 1, n)&#10;    y = rng.uniform(-1, 1, n)&#10;    inside = np.sum(x**2 + y**2 &lt;= 1)&#10;    pi_est = 4 * inside / n&#10;    error = abs(pi_est - np.pi)&#10;    print(f&quot;  n={n:&gt;8,}: π ≈ {pi_est:.6f} (error: {error:.6f})&quot;)&#10;&#10;print(f&quot;\n✅ Error decreases as 1/sqrt(n) — the Monte Carlo convergence rate&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Estimating Expectations</h2>
+
+<p>The core idea: <span data-widget="katex" data-latex="E[f(X)] \approx \frac{1}{N}\sum_{i=1}^{N} f(x_i)" data-display="false"></span> where <span data-widget="katex" data-latex="x_i \sim p(x)" data-display="false"></span>.</p>
+
+<div data-widget="pyrunner" data-cellid="058-cell-2" data-defaultcode="import numpy as np&#10;&#10;rng = np.random.default_rng(42)&#10;&#10;# Estimate E[x²] where x ~ N(0,1). Analytical answer: Var(X) + E[X]² = 1&#10;samples = rng.standard_normal(100000)&#10;estimate = np.mean(samples**2)&#10;&#10;print(f&quot;E[x²] for x ~ N(0,1):&quot;)&#10;print(f&quot;  Monte Carlo: {estimate:.4f}&quot;)&#10;print(f&quot;  Analytical:  1.0000&quot;)&#10;print(f&quot;  Error:       {abs(estimate - 1.0):.4f}&quot;)&#10;&#10;# Estimate E[sigmoid(x)] where x ~ N(0,1)&#10;sigmoid = 1 / (1 + np.exp(-samples))&#10;print(f&quot;\nE[sigmoid(x)] for x ~ N(0,1):&quot;)&#10;print(f&quot;  Monte Carlo: {sigmoid.mean():.4f}&quot;)&#10;print(f&quot;  (No closed form — MC is the ONLY way!)&quot;)&#10;" data-timeout="5" data-title=""></div>
+
+<h2>Monte Carlo in Deep Learning</h2>
+
+<table><tr><td>Application</td><td>What's Estimated</td></tr>
+</table>
+<table><tr><td>Variational Autoencoders</td><td>Evidence lower bound (ELBO)</td></tr>
+<tr><td>Reinforcement Learning</td><td>Expected return of policies</td></tr>
+<tr><td>Bayesian Neural Networks</td><td>Posterior predictive distribution</td></tr>
+<tr><td>Dropout as Approximation</td><td>Bayesian inference (Gal & Ghahramani)</td></tr>
+<tr><td>Diffusion Models</td><td>Denoising score matching</td></tr>
+</table>
+<blockquote>[!NOTE] Why Monte Carlo Matters for LLMs</blockquote>
+<blockquote>Temperature sampling IS Monte Carlo. Each generated token is a sample from the model's predicted distribution. Beam search approximates the mode; sampling approximates the full distribution.</blockquote>
+
+<div data-widget="quiz" data-chapterslug="058-monte-carlo-methods" data-quizid="quiz-058-monte-carlo-methods"></div>
+
+<script type="application/json" id="quiz-058-monte-carlo-methods">[{"id":"q1","type":"multiple-choice","prompt":"What is the core idea of Monte Carlo estimation?","options":["Solve equations analytically","Estimate integrals and expectations by drawing random samples and averaging — turning impossible math into trivial computation","Use gradient descent","Memorize lookup tables"],"correctIndex":1,"explanation":"E[f(X)] ≈ (1/N)Σf(xᵢ) where xᵢ ~ p(x). No closed-form needed. Just sample, evaluate, average. Works in any dimension.","randomize":true},{"id":"q2","type":"multiple-choice","prompt":"What is the convergence rate of Monte Carlo estimation?","options":["O(1/n)","O(1/√n) — error halves when you quadruple the number of samples","O(1/n²)","O(log n)"],"correctIndex":1,"explanation":"Standard error = σ/√n by CLT. Dimension-independent convergence is MC's superpower — unlike numerical integration which suffers from curse of dimensionality.","randomize":true},{"id":"q3","type":"code-output","prompt":"In the pi estimation, what does np.sum(x<strong>2 + y</strong>2 <= 1) count?","code":"import numpy as np\nrng = np.random.default_rng(42)\nn = 100000\nx = rng.uniform(-1, 1, n)\ny = rng.uniform(-1, 1, n)\ninside = np.sum(x<strong>2 + y</strong>2 <= 1)\npi_est = 4 * inside / n\nprint(f'Inside: {inside}, π ≈ {pi_est:.4f}')","options":["Points inside the unit circle (distance from origin ≤ 1)","Total points generated","Points outside the circle","Points on the boundary"],"correctIndex":0,"explanation":"x²+y² ≤ 1 defines the unit circle. Points satisfying this are inside. Ratio inside/total ≈ area_circle/area_square = π/4, so π ≈ 4 × ratio.","randomize":true},{"id":"q4","type":"fill-blank","prompt":"To estimate E[f(X)] via Monte Carlo, draw N samples xᵢ ~ p(x) and compute ___. The estimate improves as N ___.","options":["(1/N)Σf(xᵢ), increases","Σf(xᵢ), decreases","max(f(xᵢ)), increases","f(mean(x)), increases"],"correctIndex":0,"explanation":"MC estimator = sample mean of f evaluated at random draws. By law of large numbers, converges to true expectation as N → ∞.","randomize":true},{"id":"q5","type":"multiple-choice","prompt":"Why can't we compute E[sigmoid(x)] for x ~ N(0,1) analytically?","options":["sigmoid is too simple","The integral ∫ sigmoid(x)·normal_pdf(x) dx has no closed-form solution — Monte Carlo is the practical way to estimate it","NumPy doesn't support it","It equals zero"],"correctIndex":1,"explanation":"Many real-world expectations lack analytical solutions. MC bypasses this by replacing integration with sampling. This is why MC is indispensable in ML.","randomize":true},{"id":"q6","type":"multiple-choice","prompt":"How is temperature sampling in LLMs related to Monte Carlo?","options":["Unrelated","Each generated token is a sample from the softmax distribution — the entire generation process is Monte Carlo sampling from the model's learned distribution","Only beam search uses MC","MC is only for training"],"correctIndex":1,"explanation":"Autoregressive generation draws each token from P(xₜ|x<t) via categorical sampling. The generated sequence is one MC sample path from the joint distribution.","randomize":true},{"id":"q7","type":"multiple-choice","prompt":"Which deep learning application uses Monte Carlo to estimate the evidence lower bound (ELBO)?","options":["GANs","Variational Autoencoders (VAEs) — the reparameterization trick enables gradient-based optimization of an MC-estimated ELBO","CNNs","Decision trees"],"correctIndex":1,"explanation":"VAEs optimize ELBO = E_q[log p(x|z)] - KL(q||p). The expectation is estimated via MC sampling from q(z|x). Reparameterization makes this differentiable.","randomize":true},{"id":"q8","type":"multiple-choice","prompt":"In reinforcement learning, what does Monte Carlo estimate?","options":["Model weights","Expected return (cumulative reward) of a policy by averaging returns from sampled episodes","State transitions","Action probabilities"],"correctIndex":1,"explanation":"MC methods in RL estimate V(s) or Q(s,a) by averaging actual returns from complete episodes. No model of environment dynamics needed — pure sample-based learning.","randomize":true},{"id":"q9","type":"code-output","prompt":"If you increase samples from 1,000 to 100,000, by roughly what factor does the MC error decrease?","code":"import numpy as np\nprint(f'Error ratio: sqrt(1000/100000) = {np.sqrt(1000/100000):.4f}')","options":["10× smaller","√100 ≈ 10× smaller","100× smaller","Same error"],"correctIndex":1,"explanation":"Error ∝ 1/√n. Increasing n by 100× reduces error by √100 = 10×. This slow convergence is MC's main limitation.","randomize":true},{"id":"q10","type":"multiple-choice","prompt":"What is the connection between dropout and Bayesian inference?","options":["No connection","Gal & Ghahramani showed dropout at test time approximates Monte Carlo sampling from a Bayesian posterior — enabling uncertainty estimation","Dropout replaces Bayesian methods entirely","Bayesian networks don't use dropout"],"correctIndex":1,"explanation":"MC Dropout: run multiple forward passes with dropout enabled at test time. The variance across predictions approximates posterior uncertainty. Cheap Bayesian approximation.","randomize":true},{"id":"q11","type":"multiple-choice","prompt":"Why is Monte Carlo's dimension-independent convergence important?","options":["It isn't — low-dimensional problems are most common","Numerical integration grids grow exponentially with dimensions (curse of dimensionality). MC's O(1/√n) rate is the same regardless of dimension.","MC only works in 1D","Higher dimensions converge faster"],"correctIndex":1,"explanation":"A 100-point grid in 10D needs 100¹⁰ = 10²⁰ evaluations. MC needs only ~10⁴ samples for similar accuracy regardless of dimension. This makes high-dimensional integration feasible.","randomize":true},{"id":"q12","type":"fill-blank","prompt":"In the pi estimation, π ≈ ___ × (points_inside / total_points). The factor comes from the ratio of ___ area to ___ area.","options":["4, circle, square","2, circle, triangle","π, square, circle","1, circle, rectangle"],"correctIndex":0,"explanation":"Square area = 4 (from -1 to 1 on each axis). Circle area = π·r² = π. Ratio = π/4. So π = 4 × (inside/total).","randomize":true},{"id":"q13","type":"multiple-choice","prompt":"What is the reparameterization trick in VAEs?","options":["Changing the activation function","Rewriting z ~ N(μ,σ²) as z = μ + σ·ε where ε ~ N(0,1), making the sampling operation differentiable w.r.t. μ and σ","Using a different optimizer","Removing the KL term"],"correctIndex":1,"explanation":"Direct sampling z ~ N(μ,σ²) blocks gradients. Reparameterization moves randomness to ε (fixed noise), allowing backprop through μ and σ. Essential for training VAEs.","randomize":true},{"id":"q14","type":"multiple-choice","prompt":"How do diffusion models use Monte Carlo?","options":["They don't","Generation is iterative denoising starting from random Gaussian noise — each step is guided by a learned score function, and the initial noise is an MC sample","Only for loss computation","For weight initialization only"],"correctIndex":1,"explanation":"Diffusion models learn to reverse a noise process. Generation starts from z ~ N(0,I) (MC sample) and iteratively denoises. Each generated image is one MC sample from the data distribution.","randomize":true},{"id":"q15","type":"multiple-choice","prompt":"You estimate E[x²] for x~N(0,1) with 1000 samples and get 0.95. With 10000 samples you get 1.01. What explains the difference?","options":["Bug in the code","Monte Carlo estimates are noisy — finite samples give approximate results that fluctuate around the true value (1.0)","The distribution changed","10000 samples is too many"],"correctIndex":1,"explanation":"MC estimates have variance ∝ 1/n. Both 0.95 and 1.01 are reasonable estimates of 1.0. More samples reduce but never eliminate noise.","randomize":true},{"id":"q16","type":"multiple-choice","prompt":"What distinguishes Monte Carlo methods from deterministic numerical integration?","options":["MC is always more accurate","MC uses random sampling with probabilistic convergence; deterministic methods use fixed grids/quadrature with guaranteed error bounds but suffer from dimensionality","They're identical","Deterministic methods are randomized"],"correctIndex":1,"explanation":"MC trades deterministic guarantees for dimension-independence. In low dimensions, quadrature wins. In high dimensions (>5), MC is often the only feasible approach.","randomize":true},{"id":"q17","type":"multiple-choice","prompt":"In Bayesian neural networks, what does Monte Carlo approximate?","options":["Forward pass speed","The posterior predictive distribution: integrating over all possible weight configurations weighted by their posterior probability","Learning rate scheduling","Batch normalization"],"correctIndex":1,"explanation":"P(y|x,D) = ∫P(y|x,w)P(w|D)dw. This integral is intractable. MC approximates it by sampling weights from the posterior and averaging predictions.","randomize":true},{"id":"q18","type":"fill-blank","prompt":"Beam search approximates the ___ of the output distribution. Temperature sampling approximates the ___ distribution.","options":["mode, full","mean, partial","variance, full","median, truncated"],"correctIndex":0,"explanation":"Beam search finds the highest-probability sequence (mode). Sampling draws diverse sequences from the full distribution. Mode-seeking vs distribution-covering.","randomize":true},{"id":"q19","type":"multiple-choice","prompt":"Why does the pi estimation use uniform(-1, 1) instead of uniform(0, 1)?","options":["No reason — either works equally","The unit circle is centered at origin, spanning [-1,1] on both axes. Using [0,1] would only cover one quadrant and need a different formula.","uniform(0,1) is slower","Negative numbers improve precision"],"correctIndex":1,"explanation":"Circle x²+y²≤1 spans [-1,1]². Sampling from [0,1]² covers only the first quadrant. You could use [0,1] with π≈4×ratio, but [-1,1] is the natural domain.","randomize":true},{"id":"q20","type":"multiple-choice","prompt":"Which statement best summarizes when to use Monte Carlo?","options":["Always prefer analytical solutions","Use MC when analytical integration is impossible or impractical (high dimensions, complex distributions, no closed form) — accept noisy estimates that improve with more samples","Never use MC in production","MC only works for estimating pi"],"correctIndex":1,"explanation":"MC is the tool of last resort AND first choice for high-dimensional problems. It's ubiquitous in modern ML precisely because most interesting quantities lack closed forms.","randomize":true}]</script>
+
+      </div>
+
+      <!-- Prev / Next -->
+      <nav class="mt-16 flex items-center justify-between pt-8" style="border-top: 1px solid var(--border-subtle);" aria-label="Chapter navigation">
+        <a href="/chapters/057-probability-distributions.html" class="btn-ghost" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">← Previous</a>
+        <a href="/chapters/059-noise-and-data-augmentation.html" class="btn-primary" style="font-size: 0.8125rem; padding: 0.5rem 1rem;">Next →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script type="module" src="/js/chapter.js"></script>
+  <script>lucide.createIcons()</script>
+</body>
+</html>
