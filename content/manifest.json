@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "totalChapters": 88,
+  "version": 5,
+  "totalChapters": 112,
   "modules": [
     {
       "id": "neural-networks",
@@ -232,6 +232,72 @@
             "129-security-architecture-design",
             "130-social-engineering-defense",
             "131-careers-and-next-steps"
+          ]
+        },
+        {
+          "id": "crypto-protocol",
+          "title": "Cryptography & Protocol Security",
+          "icon": "lock",
+          "chapters": [
+            "132-tls-internals",
+            "133-pki-and-certificates",
+            "134-protocol-attacks",
+            "135-post-quantum-crypto"
+          ]
+        },
+        {
+          "id": "reverse-binary",
+          "title": "Reverse Engineering & Binary Exploitation",
+          "icon": "cpu",
+          "chapters": [
+            "136-assembly-fundamentals",
+            "137-debugging-and-disassembly",
+            "138-buffer-overflows",
+            "139-rop-and-modern-exploits"
+          ]
+        },
+        {
+          "id": "cloud-redteam",
+          "title": "Cloud Native & Red Team Ops",
+          "icon": "cloud-lightning",
+          "chapters": [
+            "140-aws-attack-paths",
+            "141-azure-ad-exploitation",
+            "142-container-escape-techniques",
+            "143-active-directory-attacks"
+          ]
+        },
+        {
+          "id": "blue-detection",
+          "title": "Blue Team Detection Engineering",
+          "icon": "radar",
+          "chapters": [
+            "144-sigma-rules-detection-as-code",
+            "145-threat-hunting-methodology",
+            "146-purple-teaming",
+            "147-edr-evasion-and-defense"
+          ]
+        },
+        {
+          "id": "real-world-labs",
+          "title": "Real-World Case Studies & Labs",
+          "icon": "flask-conical",
+          "chapters": [
+            "148-solarwinds-supply-chain",
+            "149-log4shell-deep-dive",
+            "150-colonial-pipeline-ransomware",
+            "151-equifax-data-breach"
+          ]
+        },
+        {
+          "id": "research-mastery",
+          "title": "Security Research & Career Mastery",
+          "icon": "microscope",
+          "chapters": [
+            "152-vulnerability-research-fuzzing",
+            "153-bug-bounty-methodology",
+            "154-cve-writing-and-disclosure",
+            "155-specialization-roadmaps"
           ]
         }
       ]
